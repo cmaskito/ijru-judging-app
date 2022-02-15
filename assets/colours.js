@@ -6,7 +6,6 @@ const colours = {
   highlight: "#F9F871",
   undo: "#A9EEEE",
   headerColour: "#e2e2e2",
-  undoButton: "#A9EEEE",
 };
 
 export default colours;
