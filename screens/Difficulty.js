@@ -21,36 +21,36 @@ export default function Difficulty() {
       title: "Level 1",
       counter: 0,
     })),
-    ([levelTwoCounter, setLevelTwoCounter] = useState({
-      title: "Level 2",
-      counter: 0,
-    })),
-    ([levelThreeCounter, setLevelThreeCounter] = useState({
-      title: "Level 3",
+    ([levelHalfCounter, setLevelHalfCounter] = useState({
+      title: "Level 0.5",
       counter: 0,
     })),
     ([levelFourCounter, setLevelFourCounter] = useState({
       title: "Level 4",
       counter: 0,
     })),
-    ([levelFiveCounter, setLevelFiveCounter] = useState({
-      title: "Level 5",
-      counter: 0,
-    })),
-    ([levelSixCounter, setLevelSixCounter] = useState({
-      title: "Level 6",
+    ([levelTwoCounter, setLevelTwoCounter] = useState({
+      title: "Level 2",
       counter: 0,
     })),
     ([levelSevenCounter, setLevelSevenCounter] = useState({
       title: "Level 7",
       counter: 0,
     })),
+    ([levelFiveCounter, setLevelFiveCounter] = useState({
+      title: "Level 5",
+      counter: 0,
+    })),
+    ([levelThreeCounter, setLevelThreeCounter] = useState({
+      title: "Level 3",
+      counter: 0,
+    })),
     ([levelEightCounter, setLevelEightCounter] = useState({
       title: "Level 8",
       counter: 0,
     })),
-    ([levelHalfCounter, setLevelHalfCounter] = useState({
-      title: "Level 0.5",
+    ([levelSixCounter, setLevelSixCounter] = useState({
+      title: "Level 6",
       counter: 0,
     })),
   ];
