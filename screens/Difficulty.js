@@ -55,52 +55,13 @@ export default function Difficulty() {
     })),
   ];
 
-  // [levelOneCounter, setLevelOneCounter] = useState({
-  //   title: "Level 1",
-  //   counter: 0,
-  // });
-  // [levelTwoCounter, setLevelTwoCounter] = useState({
-  //   title: "Level 2",
-  //   counter: 0,
-  // });
-  // [levelThreeCounter, setLevelThreeCounter] = useState({
-  //   title: "Level 3",
-  //   counter: 0,
-  // });
-  // [levelFourCounter, setLevelFourCounter] = useState({
-  //   title: "Level 4",
-  //   counter: 0,
-  // });
-  // [levelFiveCounter, setLevelFiveCounter] = useState({
-  //   title: "Level 5",
-  //   counter: 0,
-  // });
-  // [levelSixCounter, setLevelSixCounter] = useState({
-  //   title: "Level 6",
-  //   counter: 0,
-  // });
-  // [levelSevenCounter, setLevelSevenCounter] = useState({
-  //   title: "Level 7",
-  //   counter: 0,
-  // });
-  // [levelEightCounter, setLevelEightCounter] = useState({
-  //   title: "Level 8",
-  //   counter: 0,
-  // });
-  // [levelHalfCounter, setLevelHalfCounter] = useState({
-  //   title: "Level 0.5",
-  //   counter: 0,
-  // });
-
   const [selectedButton, setSelecteButton] = useState(null);
 
   const onJudgingButtonPress = (counter) => {
     Vibration.vibrate(70);
-    const newCounter = {
-      ...counter.counterState,
-      counter: counter.counterState.counter + 1,
-    };
-    counter.setCounterState(newCounter);
+    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
+    console.log(newCounter);
+    counter[1](newCounter);
   };
 
   const onResetButtonPress = () => {
@@ -153,7 +114,6 @@ export default function Difficulty() {
       {/* Level Buttons */}
       <View style={styles.levelButtonsWrapper}>
         {levelCounters.map((counter, index) => {
-          console.log(counter);
           return (
             <CustomButton
               key={index}
