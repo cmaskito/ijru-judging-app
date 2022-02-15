@@ -1,4 +1,4 @@
-import { Roboto_400Regular } from "@expo-google-fonts/roboto";
+import { Roboto_400Regular, Roboto_500Medium } from "@expo-google-fonts/roboto";
 import {
   StyleSheet,
   View,
@@ -125,6 +125,15 @@ export default function Difficulty() {
           );
         })}
       </View>
+
+      {/* Undo Button */}
+      <View style={styles.undoButtonWrapper}>
+        <CustomButton
+          text="UNDO"
+          style={styles.undoButton}
+          textStyle={styles.buttonText}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -155,20 +164,31 @@ const styles = StyleSheet.create({
     alignSelf: "stretch",
   },
   buttonText: {
-    fontFamily: "Roboto_400Regular",
-    fontSize: 16,
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
   },
   levelButtonsWrapper: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
     marginTop: 16,
-    marginHorizontal: 10,
+    marginHorizontal: 15,
   },
   levelButton: {
     width: dimensions.width * 0.29,
     height: dimensions.height * 0.2,
     marginBottom: 8,
     borderRadius: 9,
+  },
+  undoButtonWrapper: {
+    justifyContent: "center",
+    flexDirection: "row",
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  undoButton: {
+    width: dimensions.width - 30,
+    height: dimensions.height * 0.115,
+    backgroundColor: colours.undoButton,
   },
 });
