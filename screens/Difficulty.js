@@ -74,7 +74,7 @@ export default function Difficulty() {
         text: "Yes",
         onPress: () => {
           levelCounters.forEach((item) => {
-            item[1](0);
+            item[1]({ ...item[0], counter: 0 });
           });
         },
       },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontFamily: "Roboto_400Regular",
-    fontSize: 10,
+    fontSize: 16,
   },
   levelButtonsWrapper: {
     flexDirection: "row",
