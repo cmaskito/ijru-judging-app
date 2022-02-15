@@ -55,13 +55,13 @@ export default function Difficulty() {
     })),
   ];
 
-  const [selectedButton, setSelecteButton] = useState(null);
+  const [selectedButton, setSelectedButton] = useState(null);
 
   const onJudgingButtonPress = (counter) => {
     Vibration.vibrate(70);
     const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    console.log(newCounter);
     counter[1](newCounter);
+    setSelectedButton(counter[0].title);
   };
 
   const onResetButtonPress = () => {
@@ -76,6 +76,7 @@ export default function Difficulty() {
           levelCounters.forEach((item) => {
             item[1]({ ...item[0], counter: 0 });
           });
+          setSelectedButton(null);
         },
       },
     ]);
@@ -117,7 +118,18 @@ export default function Difficulty() {
           return (
             <CustomButton
               key={index}
-              style={styles.levelButton}
+              style={{
+                ...styles.levelButton,
+                backgroundColor:
+                  selectedButton === counter[0].title
+                    ? `${colours.button}30`
+                    : colours.button,
+                borderColor:
+                  selectedButton === counter[0].title
+                    ? `${colours.highlight}`
+                    : colours.button,
+                borderWidth: 7,
+              }}
               text={`${counter[0].title}\n${counter[0].counter}`}
               textStyle={styles.buttonText}
               onPressHandler={() => onJudgingButtonPress(counter)}
