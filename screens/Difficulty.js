@@ -14,8 +14,9 @@ import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import { NavigationRouteContext } from "@react-navigation/native";
 
-export default function Difficulty() {
+export default function Difficulty({ navigation }) {
   const levelCounters = [
     ([levelOneCounter, setLevelOneCounter] = useState({
       title: "Level 1",
@@ -82,6 +83,23 @@ export default function Difficulty() {
     ]);
   };
 
+  const onCancelButtonPress = () => {
+    Vibration.vibrate(200);
+    Alert.alert(
+      "Cancel?",
+      "Are you sure you want to cancel this judging session? Data will not be saved.",
+      [
+        { text: "No" },
+        {
+          text: "Yes",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
@@ -103,6 +121,7 @@ export default function Difficulty() {
           style={styles.redButton}
           textStyle={styles.buttonText}
           text="CANCEL"
+          onPressHandler={onCancelButtonPress}
         />
         <CustomButton
           style={styles.redButton}
@@ -196,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
     marginHorizontal: 10,
-    marginTop: 10,
+    marginTop: 2,
   },
   undoButton: {
     width: dimensions.width - 30,
