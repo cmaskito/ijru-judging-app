@@ -6,13 +6,13 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
-  FlatList,
+  BackHandler,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { NavigationRouteContext } from "@react-navigation/native";
 
@@ -99,6 +99,29 @@ export default function Difficulty({ navigation }) {
       ]
     );
   };
+
+  const onHardwareBackPress = () => {
+    Alert.alert(
+      "Cancel?",
+      "Are you sure you want to cancel this judging session? Data will not be saved.",
+      [
+        { text: "No" },
+        {
+          text: "Yes",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]
+    );
+  };
+
+  useEffect(() => {
+    BackHandler.addEventListener("hardwareBackPress", onHardwareBackPress);
+
+    return () =>
+      BackHandler.removeEventListener("hardwareBackPress", onHardwareBackPress);
+  }, []);
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>

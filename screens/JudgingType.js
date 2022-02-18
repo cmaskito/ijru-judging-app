@@ -23,7 +23,6 @@ export default function JudgingType({ navigation }) {
   const onPressHandler = (value) => {
     switch (value) {
       case "difficulty":
-        console.log(value);
         navigation.navigate("Difficulty");
         break;
 
