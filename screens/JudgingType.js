@@ -25,6 +25,9 @@ export default function JudgingType({ navigation }) {
       case "difficulty":
         navigation.navigate("Difficulty");
         break;
+      case "presentation":
+        navigation.navigate("Presentation");
+        break;
 
       default:
         break;

@@ -6,7 +6,6 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
-  BackHandler,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -15,6 +14,7 @@ import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
+import Header from "../components/Header";
 
 export default function Difficulty({ navigation }) {
   const levelCounters = [
@@ -133,11 +133,12 @@ export default function Difficulty({ navigation }) {
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
-      <View style={styles.headerWrapper}>
-        <Text style={styles.headerText}>
-          Event Name - Bracket - Difficulty - Skipper Name
-        </Text>
-      </View>
+      <Header
+        eventName="Event Name"
+        bracket="Bracket"
+        judgingType="Difficulty"
+        skipperName="Skipper Name"
+      />
 
       {/* Red Buttons */}
 

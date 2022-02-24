@@ -25,6 +25,7 @@ import AndroidSafeArea from "./assets/SafeArea";
 import Connect from "./screens/Connect";
 import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
+import Presentation from "./screens/Presentation";
 
 const Stack = createStackNavigator();
 
@@ -56,6 +57,7 @@ export default function App() {
         <Stack.Screen name="Connect" component={Connect} />
         <Stack.Screen name="JudgingType" component={JudgingType} />
         <Stack.Screen name="Difficulty" component={Difficulty} />
+        <Stack.Screen name="Presentation" component={Presentation} />
       </Stack.Navigator>
     </NavigationContainer>
   );
