@@ -13,7 +13,7 @@ import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
-import { v4 as uuidv4 } from "uuid";
+import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
 
 export default function Difficulty({ navigation }) {
@@ -57,6 +57,7 @@ export default function Difficulty({ navigation }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
+  let hasUnsavedChanges = true;
 
   const onJudgingButtonPress = (counter) => {
     Vibration.vibrate(70);
@@ -85,43 +86,30 @@ export default function Difficulty({ navigation }) {
 
   const onCancelButtonPress = () => {
     Vibration.vibrate(200);
-    Alert.alert(
-      "Cancel?",
-      "Are you sure you want to cancel this judging session? Data will not be saved.",
-      [
-        { text: "No" },
-        {
-          text: "Yes",
-          onPress: () => {
-            navigation.goBack();
-          },
-        },
-      ]
-    );
-  };
-
-  const onHardwareBackPress = () => {
-    Alert.alert(
-      "Cancel?",
-      "Are you sure you want to cancel this judging session? Data will not be saved.",
-      [
-        { text: "No" },
-        {
-          text: "Yes",
-          onPress: () => {
-            navigation.goBack();
-          },
-        },
-      ]
-    );
+    navigation.goBack();
   };
 
   useEffect(() => {
-    BackHandler.addEventListener("hardwareBackPress", onHardwareBackPress);
+    navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) return;
 
-    return () =>
-      BackHandler.removeEventListener("hardwareBackPress", onHardwareBackPress);
-  }, []);
+      e.preventDefault();
+      Alert.alert(
+        "Cancel?",
+        "Are you sure you want to cancel this judging session? Data will not be saved.",
+        [
+          { text: "No" },
+          {
+            text: "Yes",
+            onPress: () => {
+              hasUnsavedChanges = false;
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -159,7 +147,7 @@ export default function Difficulty({ navigation }) {
         {levelCounters.map((counter, index) => {
           return (
             <CustomButton
-              key={index}
+              key={nextId()}
               style={{
                 ...styles.levelButton,
                 backgroundColor:
