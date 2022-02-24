@@ -89,6 +89,22 @@ export default function Difficulty({ navigation }) {
     navigation.goBack();
   };
 
+  const onUndoButtonPress = () => {
+    let counter = null;
+    levelCounters.forEach((levelCounter) => {
+      if (levelCounter[0].title === selectedButton) {
+        counter = levelCounter;
+      }
+    });
+    if (counter[0].counter > 0) {
+      counter[1]({
+        ...counter[0],
+        counter: counter[0].counter - 1,
+      });
+    }
+  };
+
+  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
       if (!hasUnsavedChanges) return;
@@ -174,6 +190,7 @@ export default function Difficulty({ navigation }) {
           text="UNDO"
           style={styles.undoButton}
           textStyle={styles.buttonText}
+          onPressHandler={() => onUndoButtonPress(selectedButton)}
         />
       </View>
     </SafeAreaView>
