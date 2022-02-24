@@ -90,6 +90,8 @@ export default function Difficulty({ navigation }) {
   };
 
   const onUndoButtonPress = () => {
+    Vibration.vibrate(150);
+    if (selectedButton === null) return;
     let counter = null;
     levelCounters.forEach((levelCounter) => {
       if (levelCounter[0].title === selectedButton) {
@@ -101,6 +103,7 @@ export default function Difficulty({ navigation }) {
         ...counter[0],
         counter: counter[0].counter - 1,
       });
+      setSelectedButton(null);
     }
   };
 
