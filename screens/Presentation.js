@@ -68,7 +68,6 @@ export default function Presentation({ navigation }) {
         skipperName="Skipper Name"
       />
 
-      <Text>Presentation</Text>
       {/* Red Buttons */}
 
       <View style={styles.redButtonsWrapper}>
