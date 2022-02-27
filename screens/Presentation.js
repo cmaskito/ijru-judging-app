@@ -16,6 +16,7 @@ import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
+import UndoButton from "../components/UndoButton";
 
 export default function Presentation({ navigation }) {
   const counters = [
@@ -31,47 +32,19 @@ export default function Presentation({ navigation }) {
       title: "-",
       counter: 0,
     })),
+    ([mistakeCounter, setMistakeCounter] = useState({
+      title: "Mistakes",
+      counter: 0,
+    })),
   ];
 
-  const onResetButtonPress = () => {
-    Vibration.vibrate(200);
-    Alert.alert("Reset?", "Are you sure you want to reset?", [
-      {
-        text: "Cancel",
-      },
-      {
-        text: "Yes",
-        onPress: () => {
-          levelCounters.forEach((item) => {
-            item[1]({ ...item[0], counter: 0 });
-          });
-          setSelectedButton(null);
-        },
-      },
-    ]);
-  };
+  const [selectedButton, setSelectedButton] = useState(null);
 
-  const onCancelButtonPress = () => {
-    Vibration.vibrate(200);
-    navigation.goBack();
-  };
-
-  const onUndoButtonPress = () => {
-    Vibration.vibrate(150);
-    if (selectedButton === null) return;
-    let counter = null;
-    levelCounters.forEach((levelCounter) => {
-      if (levelCounter[0].title === selectedButton) {
-        counter = levelCounter;
-      }
-    });
-    if (counter[0].counter > 0) {
-      counter[1]({
-        ...counter[0],
-        counter: counter[0].counter - 1,
-      });
-      setSelectedButton(null);
-    }
+  const onJudgingButtonPress = (counter) => {
+    Vibration.vibrate(70);
+    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
+    counter[1](newCounter);
+    setSelectedButton(counter[0].title);
   };
 
   let hasUnsavedChanges = true;
@@ -110,12 +83,44 @@ export default function Presentation({ navigation }) {
       />
 
       {/* Red Buttons */}
-      <RedButtons navigation={navigation} />
+      <RedButtons
+        navigation={navigation}
+        countersToReset={counters}
+        setSelectedButton={setSelectedButton}
+      />
 
       {/* Counters */}
-      <View style={styles.countersWrapper}></View>
+      <View style={styles.countersButtonsWrapper}>
+        {counters.map((counter) => {
+          return (
+            <CustomButton
+              key={nextId()}
+              style={{
+                ...styles.counterButton,
+                backgroundColor:
+                  selectedButton === counter[0].title
+                    ? `${colours.button}30`
+                    : colours.button,
+                borderColor:
+                  selectedButton === counter[0].title
+                    ? `${colours.highlight}`
+                    : colours.button,
+                borderWidth: 7,
+              }}
+              text={`${counter[0].title}\n${counter[0].counter}`}
+              textStyle={styles.buttonText}
+              onPressHandler={() => onJudgingButtonPress(counter)}
+            />
+          );
+        })}
+      </View>
 
       {/* Undo Button */}
+      <UndoButton
+        counters={counters}
+        selectedButton={selectedButton}
+        setSelectedButton={setSelectedButton}
+      />
     </SafeAreaView>
   );
 }
@@ -136,5 +141,21 @@ const styles = StyleSheet.create({
   buttonText: {
     fontFamily: "Roboto_500Medium",
     fontSize: 18,
+  },
+  countersButtonsWrapper: {
+    marginTop: 16,
+    marginHorizontal: 15,
+    marginBottom: 0,
+    paddingBottom: 0,
+    flexWrap: "wrap-reverse",
+    flexDirection: "row",
+    backgroundColor: "red",
+    flex: 1,
+  },
+  counterButton: {
+    width: dimensions.width * 0.29,
+    height: dimensions.height * 0.2,
+    marginBottom: 8,
+    borderRadius: 9,
   },
 });

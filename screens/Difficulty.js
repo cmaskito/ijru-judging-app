@@ -152,7 +152,7 @@ export default function Difficulty({ navigation }) {
 
       {/* Level Buttons */}
       <View style={styles.levelButtonsWrapper}>
-        {levelCounters.map((counter, index) => {
+        {levelCounters.map((counter) => {
           return (
             <CustomButton
               key={nextId()}
@@ -227,16 +227,5 @@ const styles = StyleSheet.create({
     height: dimensions.height * 0.2,
     marginBottom: 8,
     borderRadius: 9,
-  },
-  undoButtonWrapper: {
-    justifyContent: "center",
-    flexDirection: "row",
-    marginHorizontal: 10,
-    marginTop: 2,
-  },
-  undoButton: {
-    width: dimensions.width - 30,
-    height: dimensions.height * 0.115,
-    backgroundColor: colours.undoButton,
   },
 });
