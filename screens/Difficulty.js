@@ -16,6 +16,7 @@ import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
+import UndoButton from "../components/UndoButton";
 
 export default function Difficulty({ navigation }) {
   const levelCounters = [
@@ -195,14 +196,19 @@ export default function Difficulty({ navigation }) {
       </View>
 
       {/* Undo Button */}
-      <View style={styles.undoButtonWrapper}>
+      {/* <View style={styles.undoButtonWrapper}>
         <CustomButton
           text="UNDO"
           style={styles.undoButton}
           textStyle={styles.buttonText}
           onPressHandler={() => onUndoButtonPress(selectedButton)}
         />
-      </View>
+      </View> */}
+      <UndoButton
+        counters={levelCounters}
+        setSelectedButton={setSelectedButton}
+        selectedButton={selectedButton}
+      />
     </SafeAreaView>
   );
 }

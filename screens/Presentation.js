@@ -71,6 +71,8 @@ export default function Presentation({ navigation }) {
 
       {/* Red Buttons */}
       <RedButtons />
+
+      {/* Undo Button */}
     </SafeAreaView>
   );
 }
