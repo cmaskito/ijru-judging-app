@@ -3,8 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Vibration,
+  TouchableOpacity,
 } from "react-native";
 import colours from "../assets/colours";
 
@@ -15,7 +15,7 @@ export default function CustomButton({
   textStyle,
 }) {
   return (
-    <TouchableOpacity onPress={onPressHandler}>
+    <TouchableOpacity onPressIn={onPressHandler}>
       <View style={[styles.buttonContainer, { ...style }]}>
         <Text style={[styles.buttonText, { ...textStyle }]}>{text}</Text>
       </View>

@@ -6,16 +6,19 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
-  FlatList,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
-import { useState } from "react";
-import { v4 as uuidv4 } from "uuid";
+import { useState, useEffect } from "react";
+import nextId from "react-id-generator";
+import { NavigationRouteContext } from "@react-navigation/native";
+import Header from "../components/Header";
+import RedButtons from "../components/RedButtons";
+import UndoButton from "../components/UndoButton";
 
-export default function Difficulty() {
+export default function Difficulty({ navigation }) {
   const levelCounters = [
     ([levelOneCounter, setLevelOneCounter] = useState({
       title: "Level 1",
@@ -56,6 +59,7 @@ export default function Difficulty() {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
+  let hasUnsavedChanges = true;
 
   const onJudgingButtonPress = (counter) => {
     Vibration.vibrate(70);
@@ -64,7 +68,7 @@ export default function Difficulty() {
     setSelectedButton(counter[0].title);
   };
 
-  const onResetButtonPress = () => {
+  const onResetButtonPress = (counters) => {
     Vibration.vibrate(200);
     Alert.alert("Reset?", "Are you sure you want to reset?", [
       {
@@ -73,7 +77,7 @@ export default function Difficulty() {
       {
         text: "Yes",
         onPress: () => {
-          levelCounters.forEach((item) => {
+          counters.forEach((item) => {
             item[1]({ ...item[0], counter: 0 });
           });
           setSelectedButton(null);
@@ -82,42 +86,76 @@ export default function Difficulty() {
     ]);
   };
 
+  const onCancelButtonPress = () => {
+    Vibration.vibrate(200);
+    navigation.goBack();
+  };
+
+  const onUndoButtonPress = () => {
+    Vibration.vibrate(150);
+    if (selectedButton === null) return;
+    let counter = null;
+    levelCounters.forEach((levelCounter) => {
+      if (levelCounter[0].title === selectedButton) {
+        counter = levelCounter;
+      }
+    });
+    if (counter[0].counter > 0) {
+      counter[1]({
+        ...counter[0],
+        counter: counter[0].counter - 1,
+      });
+      setSelectedButton(null);
+    }
+  };
+
+  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) return;
+
+      e.preventDefault();
+      Alert.alert(
+        "Cancel?",
+        "Are you sure you want to cancel this judging session? Data will not be saved.",
+        [
+          { text: "No" },
+          {
+            text: "Yes",
+            onPress: () => {
+              hasUnsavedChanges = false;
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
-      <View style={styles.headerWrapper}>
-        <Text style={styles.headerText}>
-          Event Name - Bracket - Difficulty - Skipper Name
-        </Text>
-      </View>
+      <Header
+        eventName="Event Name"
+        bracket="Bracket"
+        judgingType="Difficulty"
+        skipperName="Skipper Name"
+      />
 
       {/* Red Buttons */}
 
-      <View style={styles.redButtonsWrapper}>
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="DONE"
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="CANCEL"
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="RESET"
-          onPressHandler={onResetButtonPress}
-        />
-      </View>
+      <RedButtons
+        countersToReset={levelCounters}
+        setSelectedButton={setSelectedButton}
+        navigation={navigation}
+      />
 
       {/* Level Buttons */}
       <View style={styles.levelButtonsWrapper}>
-        {levelCounters.map((counter, index) => {
+        {levelCounters.map((counter) => {
           return (
             <CustomButton
-              key={index}
+              key={nextId()}
               style={{
                 ...styles.levelButton,
                 backgroundColor:
@@ -136,14 +174,12 @@ export default function Difficulty() {
             />
           );
         })}
-      </View>
 
-      {/* Undo Button */}
-      <View style={styles.undoButtonWrapper}>
-        <CustomButton
-          text="UNDO"
-          style={styles.undoButton}
-          textStyle={styles.buttonText}
+        {/* Undo Button */}
+        <UndoButton
+          counters={levelCounters}
+          setSelectedButton={setSelectedButton}
+          selectedButton={selectedButton}
         />
       </View>
     </SafeAreaView>
@@ -191,16 +227,5 @@ const styles = StyleSheet.create({
     height: dimensions.height * 0.2,
     marginBottom: 8,
     borderRadius: 9,
-  },
-  undoButtonWrapper: {
-    justifyContent: "center",
-    flexDirection: "row",
-    marginHorizontal: 10,
-    marginTop: 10,
-  },
-  undoButton: {
-    width: dimensions.width - 30,
-    height: dimensions.height * 0.115,
-    backgroundColor: colours.undoButton,
   },
 });
