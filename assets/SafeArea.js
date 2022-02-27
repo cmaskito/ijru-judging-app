@@ -4,6 +4,7 @@ const AndroidSafeArea = StyleSheet.create({
   AndroidSafeArea: {
     flex: 1,
     backgroundColor: "white",
+    flexDirection: "column",
     paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
   },
 });

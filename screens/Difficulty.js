@@ -174,14 +174,14 @@ export default function Difficulty({ navigation }) {
             />
           );
         })}
-      </View>
 
-      {/* Undo Button */}
-      <UndoButton
-        counters={levelCounters}
-        setSelectedButton={setSelectedButton}
-        selectedButton={selectedButton}
-      />
+        {/* Undo Button */}
+        <UndoButton
+          counters={levelCounters}
+          setSelectedButton={setSelectedButton}
+          selectedButton={selectedButton}
+        />
+      </View>
     </SafeAreaView>
   );
 }

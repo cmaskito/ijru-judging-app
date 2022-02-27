@@ -7,6 +7,7 @@ export default function UndoButton({
   counters,
   setSelectedButton,
   selectedButton,
+  wrapperStyle,
 }) {
   const onUndoButtonPress = () => {
     Vibration.vibrate(150);
@@ -27,7 +28,7 @@ export default function UndoButton({
   };
 
   return (
-    <View style={styles.undoButtonWrapper}>
+    <View style={[styles.undoButtonWrapper, { ...wrapperStyle }]}>
       <CustomButton
         text="UNDO"
         style={styles.undoButton}
@@ -42,7 +43,6 @@ const styles = StyleSheet.create({
   undoButtonWrapper: {
     justifyContent: "center",
     flexDirection: "row",
-    marginHorizontal: 10,
     marginTop: 2,
   },
   undoButton: {

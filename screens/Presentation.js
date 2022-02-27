@@ -17,6 +17,7 @@ import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 export default function Presentation({ navigation }) {
   const counters = [
@@ -41,6 +42,7 @@ export default function Presentation({ navigation }) {
   const [selectedButton, setSelectedButton] = useState(null);
 
   const onJudgingButtonPress = (counter) => {
+    console.log(counter);
     Vibration.vibrate(70);
     const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
     counter[1](newCounter);
@@ -90,37 +92,71 @@ export default function Presentation({ navigation }) {
       />
 
       {/* Counters */}
-      <View style={styles.countersButtonsWrapper}>
-        {counters.map((counter) => {
+
+      <Grid style={styles.countersButtonsWrapper}>
+        {counters.map((counter, index) => {
+          if (counter[0].title === "Mistakes") return;
           return (
-            <CustomButton
-              key={nextId()}
-              style={{
-                ...styles.counterButton,
-                backgroundColor:
-                  selectedButton === counter[0].title
-                    ? `${colours.button}30`
-                    : colours.button,
-                borderColor:
-                  selectedButton === counter[0].title
-                    ? `${colours.highlight}`
-                    : colours.button,
-                borderWidth: 7,
-              }}
-              text={`${counter[0].title}\n${counter[0].counter}`}
-              textStyle={styles.buttonText}
-              onPressHandler={() => onJudgingButtonPress(counter)}
-            />
+            <Row key={nextId()} size={26.5}>
+              <Col>
+                {
+                  <CustomButton
+                    style={{
+                      ...styles.counterButton,
+                      backgroundColor:
+                        selectedButton === counter[0].title
+                          ? `${colours.button}30`
+                          : colours.button,
+                      borderColor:
+                        selectedButton === counter[0].title
+                          ? `${colours.highlight}`
+                          : colours.button,
+                      borderWidth: 7,
+                    }}
+                    text={`${counter[0].title}\n${counter[0].counter}`}
+                    textStyle={styles.buttonText}
+                    onPressHandler={() => onJudgingButtonPress(counter)}
+                  />
+                }
+              </Col>
+              <Col></Col>
+              <Col>
+                {index === 2 ? (
+                  <CustomButton
+                    style={{
+                      ...styles.counterButton,
+                      backgroundColor:
+                        selectedButton === mistakeCounter.title
+                          ? `${colours.button}30`
+                          : colours.button,
+                      borderColor:
+                        selectedButton === mistakeCounter.title
+                          ? `${colours.highlight}`
+                          : colours.button,
+                      borderWidth: 7,
+                      alignSelf: "flex-end",
+                    }}
+                    text={`${mistakeCounter.title}\n${mistakeCounter.counter}`}
+                    textStyle={styles.buttonText}
+                    onPressHandler={() =>
+                      onJudgingButtonPress(counters[counters.length - 1])
+                    }
+                  />
+                ) : null}
+              </Col>
+            </Row>
           );
         })}
-      </View>
-
-      {/* Undo Button */}
-      <UndoButton
-        counters={counters}
-        selectedButton={selectedButton}
-        setSelectedButton={setSelectedButton}
-      />
+        <Row size={20.5}>
+          {
+            <UndoButton
+              counters={counters}
+              selectedButton={selectedButton}
+              setSelectedButton={setSelectedButton}
+            />
+          }
+        </Row>
+      </Grid>
     </SafeAreaView>
   );
 }
@@ -147,10 +183,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 0,
     paddingBottom: 0,
-    flexWrap: "wrap-reverse",
-    flexDirection: "row",
-    backgroundColor: "red",
-    flex: 1,
   },
   counterButton: {
     width: dimensions.width * 0.29,
