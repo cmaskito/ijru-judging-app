@@ -3,8 +3,8 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableOpacity,
   Vibration,
+  TouchableOpacity,
 } from "react-native";
 import colours from "../assets/colours";
 
