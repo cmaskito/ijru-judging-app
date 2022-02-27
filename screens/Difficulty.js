@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
+import RedButtons from "../components/RedButtons";
 
 export default function Difficulty({ navigation }) {
   const levelCounters = [
@@ -66,7 +67,7 @@ export default function Difficulty({ navigation }) {
     setSelectedButton(counter[0].title);
   };
 
-  const onResetButtonPress = () => {
+  const onResetButtonPress = (counters) => {
     Vibration.vibrate(200);
     Alert.alert("Reset?", "Are you sure you want to reset?", [
       {
@@ -75,7 +76,7 @@ export default function Difficulty({ navigation }) {
       {
         text: "Yes",
         onPress: () => {
-          levelCounters.forEach((item) => {
+          counters.forEach((item) => {
             item[1]({ ...item[0], counter: 0 });
           });
           setSelectedButton(null);
@@ -142,7 +143,7 @@ export default function Difficulty({ navigation }) {
 
       {/* Red Buttons */}
 
-      <View style={styles.redButtonsWrapper}>
+      {/* <View style={styles.redButtonsWrapper}>
         <CustomButton
           style={styles.redButton}
           textStyle={styles.buttonText}
@@ -158,9 +159,14 @@ export default function Difficulty({ navigation }) {
           style={styles.redButton}
           textStyle={styles.buttonText}
           text="RESET"
-          onPressHandler={onResetButtonPress}
+          onPressHandler={() => onResetButtonPress(level)}
         />
-      </View>
+      </View> */}
+      <RedButtons
+        countersToReset={levelCounters}
+        setSelectedButton={setSelectedButton}
+        navigation={navigation}
+      />
 
       {/* Level Buttons */}
       <View style={styles.levelButtonsWrapper}>

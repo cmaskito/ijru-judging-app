@@ -1,8 +1,14 @@
 import CustomButton from "./CustomButton";
 import colours from "../assets/colours";
+import { View, Text, StyleSheet, Vibration, Alert } from "react-native";
+import dimensions from "../assets/Dimensions";
 
-export default function RedButtons() {
-     const onResetButtonPress = () => {
+export default function RedButtons({
+  countersToReset,
+  navigation,
+  setSelectedButton,
+}) {
+  const onResetButtonPress = () => {
     Vibration.vibrate(200);
     Alert.alert("Reset?", "Are you sure you want to reset?", [
       {
@@ -11,7 +17,7 @@ export default function RedButtons() {
       {
         text: "Yes",
         onPress: () => {
-          levelCounters.forEach((item) => {
+          countersToReset.forEach((item) => {
             item[1]({ ...item[0], counter: 0 });
           });
           setSelectedButton(null);
@@ -24,23 +30,44 @@ export default function RedButtons() {
     Vibration.vibrate(200);
     navigation.goBack();
   };
-    return(
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="DONE"
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="CANCEL"
-          onPressHandler={onCancelButtonPress}
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="RESET"
-          onPressHandler={onResetButtonPress}
-        />
-    )
+  return (
+    <View style={styles.redButtonsWrapper}>
+      <CustomButton
+        style={styles.redButton}
+        textStyle={styles.buttonText}
+        text="DONE"
+      />
+      <CustomButton
+        style={styles.redButton}
+        textStyle={styles.buttonText}
+        text="CANCEL"
+        onPressHandler={onCancelButtonPress}
+      />
+      <CustomButton
+        style={styles.redButton}
+        textStyle={styles.buttonText}
+        text="RESET"
+        onPressHandler={onResetButtonPress}
+      />
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  redButtonsWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    marginTop: 15,
+    marginHorizontal: 10,
+  },
+  redButton: {
+    backgroundColor: colours.lightRed,
+    width: dimensions.width * 0.29,
+    height: 45,
+    alignSelf: "stretch",
+  },
+  buttonText: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+  },
+});

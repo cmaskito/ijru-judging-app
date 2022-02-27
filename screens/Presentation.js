@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
 import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
+import RedButtons from "../components/RedButtons";
 
 export default function Presentation({ navigation }) {
   const onResetButtonPress = () => {
@@ -69,26 +70,7 @@ export default function Presentation({ navigation }) {
       />
 
       {/* Red Buttons */}
-
-      <View style={styles.redButtonsWrapper}>
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="DONE"
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="CANCEL"
-          onPressHandler={onCancelButtonPress}
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="RESET"
-          onPressHandler={onResetButtonPress}
-        />
-      </View>
+      <RedButtons />
     </SafeAreaView>
   );
 }
