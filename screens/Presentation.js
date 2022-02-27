@@ -18,6 +18,21 @@ import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 
 export default function Presentation({ navigation }) {
+  const counters = [
+    ([plusCounter, setPlusCounter] = useState({
+      title: "+",
+      counter: 0,
+    })),
+    ([tickCounter, setTickCounter] = useState({
+      title: "✓",
+      counter: 0,
+    })),
+    ([minusCounter, setMinusCounter] = useState({
+      title: "-",
+      counter: 0,
+    })),
+  ];
+
   const onResetButtonPress = () => {
     Vibration.vibrate(200);
     Alert.alert("Reset?", "Are you sure you want to reset?", [
@@ -59,6 +74,31 @@ export default function Presentation({ navigation }) {
     }
   };
 
+  let hasUnsavedChanges = true;
+
+  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) return;
+
+      e.preventDefault();
+      Alert.alert(
+        "Cancel?",
+        "Are you sure you want to cancel this judging session? Data will not be saved.",
+        [
+          { text: "No" },
+          {
+            text: "Yes",
+            onPress: () => {
+              hasUnsavedChanges = false;
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+    });
+  }, [navigation]);
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
@@ -70,7 +110,10 @@ export default function Presentation({ navigation }) {
       />
 
       {/* Red Buttons */}
-      <RedButtons />
+      <RedButtons navigation={navigation} />
+
+      {/* Counters */}
+      <View style={styles.countersWrapper}></View>
 
       {/* Undo Button */}
     </SafeAreaView>

@@ -144,25 +144,6 @@ export default function Difficulty({ navigation }) {
 
       {/* Red Buttons */}
 
-      {/* <View style={styles.redButtonsWrapper}>
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="DONE"
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="CANCEL"
-          onPressHandler={onCancelButtonPress}
-        />
-        <CustomButton
-          style={styles.redButton}
-          textStyle={styles.buttonText}
-          text="RESET"
-          onPressHandler={() => onResetButtonPress(level)}
-        />
-      </View> */}
       <RedButtons
         countersToReset={levelCounters}
         setSelectedButton={setSelectedButton}
@@ -196,14 +177,6 @@ export default function Difficulty({ navigation }) {
       </View>
 
       {/* Undo Button */}
-      {/* <View style={styles.undoButtonWrapper}>
-        <CustomButton
-          text="UNDO"
-          style={styles.undoButton}
-          textStyle={styles.buttonText}
-          onPressHandler={() => onUndoButtonPress(selectedButton)}
-        />
-      </View> */}
       <UndoButton
         counters={levelCounters}
         setSelectedButton={setSelectedButton}
