@@ -18,6 +18,7 @@ export default function JudgingType({ navigation }) {
   const [items, setItems] = useState([
     { label: "Difficulty", value: "difficulty" },
     { label: "Presentation", value: "presentation" },
+    { label: "Required Elements", value: "requiredElements" },
   ]);
 
   const onPressHandler = (value) => {
@@ -28,7 +29,9 @@ export default function JudgingType({ navigation }) {
       case "presentation":
         navigation.navigate("Presentation");
         break;
-
+      case "requiredElements":
+        navigation.navigate("RequiredElements");
+        break;
       default:
         break;
     }

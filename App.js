@@ -26,6 +26,7 @@ import Connect from "./screens/Connect";
 import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import Presentation from "./screens/Presentation";
+import RequiredElements from "./screens/RequiredElements";
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,7 @@ export default function App() {
         <Stack.Screen name="JudgingType" component={JudgingType} />
         <Stack.Screen name="Difficulty" component={Difficulty} />
         <Stack.Screen name="Presentation" component={Presentation} />
+        <Stack.Screen name="RequiredElements" component={RequiredElements} />
       </Stack.Navigator>
     </NavigationContainer>
   );
