@@ -122,25 +122,11 @@ export default function Presentation({ navigation }) {
               <Col></Col>
               <Col>
                 {index === 2 ? (
-                  <CustomButton
-                    style={{
-                      ...styles.counterButton,
-                      backgroundColor:
-                        selectedButton === mistakeCounter.title
-                          ? `${colours.button}30`
-                          : colours.button,
-                      borderColor:
-                        selectedButton === mistakeCounter.title
-                          ? `${colours.highlight}`
-                          : colours.button,
-                      borderWidth: 7,
-                      alignSelf: "flex-end",
-                    }}
-                    text={`${mistakeCounter.title}\n${mistakeCounter.counter}`}
-                    textStyle={styles.buttonText}
-                    onPressHandler={() =>
-                      onJudgingButtonPress(counters[counters.length - 1])
-                    }
+                  <CounterButton
+                    selectedButton={selectedButton}
+                    counter={counter}
+                    index={index}
+                    setSelectedButton={setSelectedButton}
                   />
                 ) : null}
               </Col>
