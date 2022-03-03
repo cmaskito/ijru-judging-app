@@ -17,6 +17,7 @@ import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
+import CounterButton from "../components/CounterButton";
 
 export default function Difficulty({ navigation }) {
   const levelCounters = [
@@ -113,23 +114,11 @@ export default function Difficulty({ navigation }) {
       <View style={styles.levelButtonsWrapper}>
         {levelCounters.map((counter) => {
           return (
-            <CustomButton
+            <CounterButton
               key={nextId()}
-              style={{
-                ...styles.levelButton,
-                backgroundColor:
-                  selectedButton === counter[0].title
-                    ? `${colours.button}30`
-                    : colours.button,
-                borderColor:
-                  selectedButton === counter[0].title
-                    ? `${colours.highlight}`
-                    : colours.button,
-                borderWidth: 7,
-              }}
-              text={`${counter[0].title}\n${counter[0].counter}`}
-              textStyle={styles.buttonText}
-              onPressHandler={() => onJudgingButtonPress(counter)}
+              selectedButton={selectedButton}
+              counter={counter}
+              setSelectedButton={setSelectedButton}
             />
           );
         })}
