@@ -27,21 +27,9 @@ import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import Presentation from "./screens/Presentation";
 import RequiredElements from "./screens/RequiredElements";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyDdNAcu8hC_byZZiYNsr29IiO7W8qMhmbA",
-  authDomain: "ijru-judging.firebaseapp.com",
-  projectId: "ijru-judging",
-  storageBucket: "ijru-judging.appspot.com",
-  messagingSenderId: "913527365011",
-  appId: "1:913527365011:web:ddf8317e770f0ba24f1c66",
-  measurementId: "G-J5WWL2X9MD",
-};
-
-// Initialize Firebase
-const firebaseApp = initializeApp(firebaseConfig);
+import { useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase-config";
 
 const Stack = createStackNavigator();
 
@@ -60,6 +48,16 @@ export default function App() {
     Roboto_900Black,
     Roboto_900Black_Italic,
   });
+
+  const skippersColRef = collection(db, "skippers");
+
+  useEffect(() => {
+    const getSkippers = async () => {
+      const data = await getDocs(skippersColRef);
+      console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+    };
+    getSkippers();
+  }, []);
 
   if (!fontsLoaded) {
     return <AppLoading />;
