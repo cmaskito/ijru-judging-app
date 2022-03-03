@@ -12,7 +12,6 @@ import DropDownPicker from "react-native-dropdown-picker";
 import CustomButton from "../components/CustomButton";
 
 export default function JudgingType({ navigation }) {
-  const [selectedJudgingType, setSeletectedJudgingType] = useState();
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([

@@ -18,8 +18,9 @@ import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
+import CounterButton from "../components/CounterButton";
 
-export default function RequiredElements() {
+export default function RequiredElements({ navigation }) {
   const counters = [
     ([repeatedSkills, setRepeatedSkills] = useState({
       title: "Repeated Skills",
@@ -29,12 +30,12 @@ export default function RequiredElements() {
       title: "Gymnastics / Power",
       counter: 0,
     })),
-    ([mistakes, setMistakes] = useState({
-      title: "Mistakes",
-      counter: 0,
-    })),
     ([spaceViolations, setSpaceViolations] = useState({
       title: "Space Violations",
+      counter: 0,
+    })),
+    ([mistakes, setMistakes] = useState({
+      title: "Mistakes",
       counter: 0,
     })),
     ([timeViolations, setTimeViolations] = useState({
@@ -53,13 +54,30 @@ export default function RequiredElements() {
 
   const [selectedButton, setSelectedButton] = useState(null);
 
-  const onJudgingButtonPress = (counter) => {
-    console.log(counter);
-    Vibration.vibrate(70);
-    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    counter[1](newCounter);
-    setSelectedButton(counter[0].title);
-  };
+  let hasUnsavedChanges = true;
+
+  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
+  useEffect(() => {
+    navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) return;
+
+      e.preventDefault();
+      Alert.alert(
+        "Cancel?",
+        "Are you sure you want to cancel this judging session? Data will not be saved.",
+        [
+          { text: "No" },
+          {
+            text: "Yes",
+            onPress: () => {
+              hasUnsavedChanges = false;
+              navigation.goBack();
+            },
+          },
+        ]
+      );
+    });
+  }, [navigation]);
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -72,35 +90,43 @@ export default function RequiredElements() {
       />
 
       {/* Red Buttons */}
-      <RedButtons />
+      <RedButtons countersToReset={counters} navigation={navigation} />
 
       {/* Counter Grid */}
       <Grid style={styles.countersButtonsWrapper}>
         <Row size={26.5}>
-          {counters.slice(0, 3).map((counter, index) => (
-            <Col>
-              <CustomButton
-                style={{
-                  ...styles.counterButton,
-                  backgroundColor:
-                    selectedButton === counter[0].title
-                      ? `${colours.button}30`
-                      : colours.button,
-                  borderColor:
-                    selectedButton === counter[0].title
-                      ? `${colours.highlight}`
-                      : colours.button,
-                  borderWidth: 7,
-                  alignSelf:
-                    index === 0
-                      ? "flex-start"
-                      : index === 1
-                      ? "center"
-                      : "flex-end",
-                }}
-                text={`${counter[0].title}\n${counter[0].counter}`}
-                textStyle={styles.buttonText}
-                onPressHandler={() => onJudgingButtonPress(counter)}
+          {counters.slice(0, 1).map((counter, index) => (
+            <Col key={nextId()}>
+              <CounterButton
+                selectedButton={selectedButton}
+                counter={counter}
+                index={index}
+                setSelectedButton={setSelectedButton}
+                style={{ alignSelf: "center" }}
+              />
+            </Col>
+          ))}
+        </Row>
+        <Row size={26.5}>
+          {counters.slice(1, 4).map((counter, index) => (
+            <Col key={nextId()}>
+              <CounterButton
+                selectedButton={selectedButton}
+                counter={counter}
+                index={index}
+                setSelectedButton={setSelectedButton}
+              />
+            </Col>
+          ))}
+        </Row>
+        <Row size={26.5}>
+          {counters.slice(4, 7).map((counter, index) => (
+            <Col key={nextId()}>
+              <CounterButton
+                selectedButton={selectedButton}
+                counter={counter}
+                index={index}
+                setSelectedButton={setSelectedButton}
               />
             </Col>
           ))}
@@ -141,11 +167,5 @@ const styles = StyleSheet.create({
     marginHorizontal: 15,
     marginBottom: 0,
     paddingBottom: 0,
-  },
-  counterButton: {
-    width: dimensions.width * 0.29,
-    height: dimensions.height * 0.2,
-    marginBottom: 8,
-    borderRadius: 9,
   },
 });

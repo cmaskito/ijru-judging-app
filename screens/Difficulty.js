@@ -68,47 +68,6 @@ export default function Difficulty({ navigation }) {
     setSelectedButton(counter[0].title);
   };
 
-  const onResetButtonPress = (counters) => {
-    Vibration.vibrate(200);
-    Alert.alert("Reset?", "Are you sure you want to reset?", [
-      {
-        text: "Cancel",
-      },
-      {
-        text: "Yes",
-        onPress: () => {
-          counters.forEach((item) => {
-            item[1]({ ...item[0], counter: 0 });
-          });
-          setSelectedButton(null);
-        },
-      },
-    ]);
-  };
-
-  const onCancelButtonPress = () => {
-    Vibration.vibrate(200);
-    navigation.goBack();
-  };
-
-  const onUndoButtonPress = () => {
-    Vibration.vibrate(150);
-    if (selectedButton === null) return;
-    let counter = null;
-    levelCounters.forEach((levelCounter) => {
-      if (levelCounter[0].title === selectedButton) {
-        counter = levelCounter;
-      }
-    });
-    if (counter[0].counter > 0) {
-      counter[1]({
-        ...counter[0],
-        counter: counter[0].counter - 1,
-      });
-      setSelectedButton(null);
-    }
-  };
-
   // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
