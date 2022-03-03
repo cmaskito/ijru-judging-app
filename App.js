@@ -27,6 +27,21 @@ import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import Presentation from "./screens/Presentation";
 import RequiredElements from "./screens/RequiredElements";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDdNAcu8hC_byZZiYNsr29IiO7W8qMhmbA",
+  authDomain: "ijru-judging.firebaseapp.com",
+  projectId: "ijru-judging",
+  storageBucket: "ijru-judging.appspot.com",
+  messagingSenderId: "913527365011",
+  appId: "1:913527365011:web:ddf8317e770f0ba24f1c66",
+  measurementId: "G-J5WWL2X9MD",
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
 
 const Stack = createStackNavigator();
 
