@@ -34,16 +34,16 @@ export default function RequiredElements({ navigation }) {
       title: "Space Violations",
       counter: 0,
     })),
+    ([multiples, setMultiples] = useState({
+      title: "Multiples",
+      counter: 0,
+    })),
     ([mistakes, setMistakes] = useState({
       title: "Mistakes",
       counter: 0,
     })),
     ([timeViolations, setTimeViolations] = useState({
       title: "Time Violations",
-      counter: 0,
-    })),
-    ([multiples, setMultiples] = useState({
-      title: "Multiples",
       counter: 0,
     })),
     ([wrapsReleases, setWrapsReleases] = useState({
@@ -90,7 +90,11 @@ export default function RequiredElements({ navigation }) {
       />
 
       {/* Red Buttons */}
-      <RedButtons countersToReset={counters} navigation={navigation} />
+      <RedButtons
+        countersToReset={counters}
+        navigation={navigation}
+        setSelectedButton={setSelectedButton}
+      />
 
       {/* Counter Grid */}
       <Grid style={styles.countersButtonsWrapper}>

@@ -10,8 +10,8 @@ export default function UndoButton({
   wrapperStyle,
 }) {
   const onUndoButtonPress = () => {
-    Vibration.vibrate(150);
     if (selectedButton === null) return;
+    Vibration.vibrate(150);
     let counter = null;
     counters.forEach((counter_) => {
       if (counter_[0].title === selectedButton) {
@@ -31,9 +31,16 @@ export default function UndoButton({
     <View style={[styles.undoButtonWrapper, { ...wrapperStyle }]}>
       <CustomButton
         text="UNDO"
-        style={styles.undoButton}
+        style={{
+          ...styles.undoButton,
+          backgroundColor:
+            selectedButton === null
+              ? colours.undoHighlight
+              : colours.undoButton,
+        }}
         textStyle={styles.buttonText}
         onPressHandler={() => onUndoButtonPress(selectedButton)}
+        activeOpacity={selectedButton === null ? 100 : 0.2}
       />
     </View>
   );

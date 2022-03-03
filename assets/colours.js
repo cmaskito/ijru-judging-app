@@ -7,6 +7,7 @@ const colours = {
   undo: "#A9EEEE",
   headerColour: "#e2e2e2",
   undoButton: "#A9EEEE",
+  undoHighlight: "#cee5e5",
 };
 
 export default colours;

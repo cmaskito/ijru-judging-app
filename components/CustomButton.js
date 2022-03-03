@@ -13,9 +13,10 @@ export default function CustomButton({
   style,
   onPressHandler,
   textStyle,
+  activeOpacity,
 }) {
   return (
-    <TouchableOpacity onPressIn={onPressHandler}>
+    <TouchableOpacity onPressIn={onPressHandler} activeOpacity={activeOpacity}>
       <View style={[styles.buttonContainer, { ...style }]}>
         <Text style={[styles.buttonText, { ...textStyle }]}>{text}</Text>
       </View>
