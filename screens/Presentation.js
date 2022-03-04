@@ -18,6 +18,9 @@ import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
+import CounterButton from "../components/CounterButton";
+import { db } from "../firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
 export default function Presentation({ navigation }) {
   const counters = [
@@ -51,11 +54,21 @@ export default function Presentation({ navigation }) {
 
   let hasUnsavedChanges = true;
 
+  const skippersColRef = collection(db, "skippers");
+
+  let skippers = [];
+
   // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
+    const getSkippers = async () => {
+      const data = await getDocs(skippersColRef);
+      skippers.push(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      console.log(skippers[0][0].firstName);
+    };
+    getSkippers();
+
     navigation.addListener("beforeRemove", (e) => {
       if (!hasUnsavedChanges) return;
-
       e.preventDefault();
       Alert.alert(
         "Cancel?",
@@ -81,7 +94,7 @@ export default function Presentation({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Presentation"
-        skipperName="Skipper Name"
+        skipperName={() => console.log(skippers)}
       />
 
       {/* Red Buttons */}
@@ -124,7 +137,7 @@ export default function Presentation({ navigation }) {
                 {index === 2 ? (
                   <CounterButton
                     selectedButton={selectedButton}
-                    counter={counter}
+                    counter={counters[3]}
                     index={index}
                     setSelectedButton={setSelectedButton}
                   />
