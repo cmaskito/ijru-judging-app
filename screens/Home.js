@@ -13,13 +13,22 @@ export default function Home({ navigation }) {
     navigation.navigate("JudgingType", { practice: true });
   };
 
+  const onPressCreateButton = () => {
+    navigation.navigate("CreateTournament");
+  };
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       <View style={styles.container}>
         <Text style={styles.titleText}>IJRU JUDGING</Text>
         <CustomButton
+          text="CREATE TOURNAMENT"
+          onPressHandler={onPressCreateButton}
+        />
+        <CustomButton
           text="CONNECT TO COMPETITION"
           onPressHandler={onPressConnectButton}
+          style={{ marginTop: 60 }}
         />
         <CustomButton
           text={"PRACTICE\nJUDGING"}
@@ -43,7 +52,7 @@ const styles = StyleSheet.create({
     width: 290,
     alignSelf: "center",
     paddingTop: 80,
-    marginBottom: 130,
+    marginBottom: 100,
     letterSpacing: 8,
   },
 });

@@ -10,6 +10,7 @@ import AndroidSafeArea from "../assets/SafeArea";
 import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import CustomButton from "../components/CustomButton";
+import BackButton from "../components/BackButton";
 
 export default function JudgingType({ navigation, route }) {
   const [open, setOpen] = useState(false);
@@ -40,6 +41,7 @@ export default function JudgingType({ navigation, route }) {
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+      <BackButton />
       <View style={styles.container}>
         <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
         <View style={styles.pickerWrapper}>
@@ -75,17 +77,18 @@ export default function JudgingType({ navigation, route }) {
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    marginTop: 80,
   },
   titleText: {
     fontFamily: "Roboto_700Bold",
     fontSize: 36,
     textAlign: "center",
     letterSpacing: 6,
+    color: colours.textDark,
+    paddingTop: 60,
   },
   pickerWrapper: {
     width: "85%",
-    marginTop: 160,
+    marginTop: 130,
   },
   picker: {
     backgroundColor: colours.lightGrey,

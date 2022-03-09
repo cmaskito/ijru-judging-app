@@ -11,7 +11,7 @@ import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import BackButton from "../components/BackButton";
 
-export default function Connect({ navigation, route }) {
+export default function CreateTournament({ navigation, route }) {
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
@@ -20,7 +20,7 @@ export default function Connect({ navigation, route }) {
         style={styles.dismissKeyboard}
       >
         <View style={styles.container}>
-          <Text style={styles.titleText}>CONNECT TO COMPETITION</Text>
+          <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
           <View style={styles.textInputWrapper}>
             <Text style={styles.textInputLabel}>TOURNAMENT ID</Text>
             <TextInput
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 316,
     alignSelf: "center",
-    paddingTop: 80,
+    paddingTop: 60,
     letterSpacing: 6,
   },
   textInputWrapper: {

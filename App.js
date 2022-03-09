@@ -27,6 +27,7 @@ import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import Presentation from "./screens/Presentation";
 import RequiredElements from "./screens/RequiredElements";
+import CreateTournament from "./screens/CreateTournament";
 import { useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase-config";
@@ -51,14 +52,6 @@ export default function App() {
 
   const skippersColRef = collection(db, "skippers");
 
-  // useEffect(() => {
-  //   const getSkippers = async () => {
-  //     const data = await getDocs(skippersColRef);
-  //     console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-  //   };
-  //   getSkippers();
-  // }, []);
-
   if (!fontsLoaded) {
     return <AppLoading />;
   }
@@ -73,6 +66,7 @@ export default function App() {
         <Stack.Screen name="Difficulty" component={Difficulty} />
         <Stack.Screen name="Presentation" component={Presentation} />
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
+        <Stack.Screen name="CreateTournament" component={CreateTournament} />
       </Stack.Navigator>
     </NavigationContainer>
   );
