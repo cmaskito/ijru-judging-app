@@ -10,8 +10,18 @@ import {
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import BackButton from "../components/BackButton";
+import XLSX from "xlsx";
+import { FileSystem } from "react-native-file-access";
 
 export default function CreateTournament({ navigation, route }) {
+  let XLSX = require("xlsx");
+  const b64 = FileSystem.readFile(
+    "/storage/emulated/0/Download/Telegram/Skipper Details test data.xlsx",
+    "base64"
+  );
+  /* b64 is a base64 string */
+  const workbook = XLSX.read(b64, { type: "base64" });
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
