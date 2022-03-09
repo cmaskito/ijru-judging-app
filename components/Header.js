@@ -11,7 +11,7 @@ export default function Header({
   return (
     <View style={styles.headerWrapper}>
       <Text style={styles.headerText}>
-        {`${eventName} - ${bracket} - ${judgingType} ${skipperName}`}
+        {`${eventName} - ${bracket} - ${judgingType} - ${skipperName}`}
       </Text>
     </View>
   );

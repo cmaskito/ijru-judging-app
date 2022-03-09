@@ -22,7 +22,7 @@ import CounterButton from "../components/CounterButton";
 import { db } from "../firebase-config";
 import { collection, getDocs } from "firebase/firestore";
 
-export default function Presentation({ navigation }) {
+export default function Presentation({ navigation, route }) {
   const counters = [
     ([plusCounter, setPlusCounter] = useState({
       title: "+",
@@ -44,6 +44,7 @@ export default function Presentation({ navigation }) {
 
   const [selectedButton, setSelectedButton] = useState(null);
   const [skipper, setSkipper] = useState(null);
+  const { practice } = route.params;
 
   // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
@@ -95,7 +96,11 @@ export default function Presentation({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Presentation"
-        skipperName={skipper[0].firstName}
+        skipperName={
+          practice
+            ? "Practice"
+            : `${skipper[0].firstName} ${skipper[0].lastName}`
+        }
       />
 
       {/* Red Buttons */}

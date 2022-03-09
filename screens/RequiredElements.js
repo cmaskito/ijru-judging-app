@@ -20,7 +20,7 @@ import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CounterButton from "../components/CounterButton";
 
-export default function RequiredElements({ navigation }) {
+export default function RequiredElements({ navigation, route }) {
   const counters = [
     ([repeatedSkills, setRepeatedSkills] = useState({
       title: "Repeated Skills",
@@ -52,6 +52,7 @@ export default function RequiredElements({ navigation }) {
     })),
   ];
 
+  const { practice } = route.params;
   const [selectedButton, setSelectedButton] = useState(null);
 
   let hasUnsavedChanges = true;
@@ -86,7 +87,11 @@ export default function RequiredElements({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Elements"
-        skipperName="Skipper Name"
+        skipperName={
+          practice
+            ? "Practice"
+            : `${skipper[0].firstName} ${skipper[0].lastName}`
+        }
       />
 
       {/* Red Buttons */}

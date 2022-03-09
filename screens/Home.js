@@ -10,7 +10,7 @@ export default function Home({ navigation }) {
   };
 
   const onPressPracticeButton = () => {
-    navigation.navigate("JudgingType");
+    navigation.navigate("JudgingType", { practice: true });
   };
 
   return (

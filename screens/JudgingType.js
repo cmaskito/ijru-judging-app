@@ -11,7 +11,7 @@ import { useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import CustomButton from "../components/CustomButton";
 
-export default function JudgingType({ navigation }) {
+export default function JudgingType({ navigation, route }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState(null);
   const [items, setItems] = useState([
@@ -20,16 +20,18 @@ export default function JudgingType({ navigation }) {
     { label: "Required Elements", value: "requiredElements" },
   ]);
 
+  const { practice } = route.params;
+
   const onPressHandler = (value) => {
     switch (value) {
       case "difficulty":
-        navigation.navigate("Difficulty");
+        navigation.navigate("Difficulty", { practice });
         break;
       case "presentation":
-        navigation.navigate("Presentation");
+        navigation.navigate("Presentation", { practice });
         break;
       case "requiredElements":
-        navigation.navigate("RequiredElements");
+        navigation.navigate("RequiredElements", { practice });
         break;
       default:
         break;
