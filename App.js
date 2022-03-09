@@ -51,13 +51,13 @@ export default function App() {
 
   const skippersColRef = collection(db, "skippers");
 
-  useEffect(() => {
-    const getSkippers = async () => {
-      const data = await getDocs(skippersColRef);
-      console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-    };
-    getSkippers();
-  }, []);
+  // useEffect(() => {
+  //   const getSkippers = async () => {
+  //     const data = await getDocs(skippersColRef);
+  //     console.log(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  //   };
+  //   getSkippers();
+  // }, []);
 
   if (!fontsLoaded) {
     return <AppLoading />;

@@ -43,30 +43,10 @@ export default function Presentation({ navigation }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-
-  const onJudgingButtonPress = (counter) => {
-    console.log(counter);
-    Vibration.vibrate(70);
-    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    counter[1](newCounter);
-    setSelectedButton(counter[0].title);
-  };
-
-  let hasUnsavedChanges = true;
-
-  const skippersColRef = collection(db, "skippers");
-
-  let skippers = [];
+  const [skipper, setSkipper] = useState(null);
 
   // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
-    const getSkippers = async () => {
-      const data = await getDocs(skippersColRef);
-      skippers.push(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
-      console.log(skippers[0][0].firstName);
-    };
-    getSkippers();
-
     navigation.addListener("beforeRemove", (e) => {
       if (!hasUnsavedChanges) return;
       e.preventDefault();
@@ -87,6 +67,27 @@ export default function Presentation({ navigation }) {
     });
   }, [navigation]);
 
+  useEffect(() => {
+    getSkippers();
+  }, []);
+
+  const onJudgingButtonPress = (counter) => {
+    Vibration.vibrate(70);
+    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
+    counter[1](newCounter);
+    setSelectedButton(counter[0].title);
+    console.log(skipper);
+  };
+
+  let hasUnsavedChanges = true;
+
+  const skippersColRef = collection(db, "skippers");
+
+  const getSkippers = async () => {
+    const data = await getDocs(skippersColRef);
+    setSkipper(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
@@ -94,7 +95,7 @@ export default function Presentation({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Presentation"
-        skipperName={() => console.log(skippers)}
+        skipperName={skipper[0].firstName}
       />
 
       {/* Red Buttons */}
