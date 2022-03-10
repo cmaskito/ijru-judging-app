@@ -11,16 +11,14 @@ import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import BackButton from "../components/BackButton";
 import XLSX from "xlsx";
-import { FileSystem } from "react-native-file-access";
+import * as DocumentPicker from "expo-document-picker";
+import CustomButton from "../components/CustomButton";
 
 export default function CreateTournament({ navigation, route }) {
-  let XLSX = require("xlsx");
-  const b64 = FileSystem.readFile(
-    "/storage/emulated/0/Download/Telegram/Skipper Details test data.xlsx",
-    "base64"
-  );
-  /* b64 is a base64 string */
-  const workbook = XLSX.read(b64, { type: "base64" });
+  const onPress = async () => {
+    const doc = await DocumentPicker.getDocumentAsync();
+    console.log(doc);
+  };
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -32,12 +30,7 @@ export default function CreateTournament({ navigation, route }) {
         <View style={styles.container}>
           <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
           <View style={styles.textInputWrapper}>
-            <Text style={styles.textInputLabel}>TOURNAMENT ID</Text>
-            <TextInput
-              style={styles.textInput}
-              autoCapitalize={"characters"}
-              placeholder="TOURNAMENT ID"
-            ></TextInput>
+            <CustomButton onPressHandler={onPress} />
           </View>
         </View>
       </TouchableWithoutFeedback>
