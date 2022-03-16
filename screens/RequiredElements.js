@@ -38,16 +38,16 @@ export default function RequiredElements({ navigation, route }) {
       title: "Multiples",
       counter: 0,
     })),
-    ([mistakes, setMistakes] = useState({
-      title: "Mistakes",
+    ([wrapsReleases, setWrapsReleases] = useState({
+      title: "Wraps / Releases",
       counter: 0,
     })),
     ([timeViolations, setTimeViolations] = useState({
       title: "Time Violations",
       counter: 0,
     })),
-    ([wrapsReleases, setWrapsReleases] = useState({
-      title: "Wraps / Releases",
+    ([mistakes, setMistakes] = useState({
+      title: "Mistakes",
       counter: 0,
     })),
   ];

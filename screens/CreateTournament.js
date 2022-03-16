@@ -13,11 +13,13 @@ import BackButton from "../components/BackButton";
 import XLSX from "xlsx";
 import * as DocumentPicker from "expo-document-picker";
 import CustomButton from "../components/CustomButton";
+import { base64 } from "@firebase/util";
 
 export default function CreateTournament({ navigation, route }) {
   const onPress = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
-    console.log(doc);
+    const workbook = await XLSX.readFile(doc.uri);
+    console.log(workbook);
   };
 
   return (
