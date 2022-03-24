@@ -18,7 +18,10 @@ import { base64 } from "@firebase/util";
 export default function CreateTournament({ navigation, route }) {
   const onPress = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
-    const workbook = await XLSX.readFile(doc.uri);
+    console.log(doc, "doc");
+    const workbook = await XLSX.readFile(
+      "/storage/emulated/0/Download/skipperDetails.csv"
+    );
     console.log(workbook);
   };
 

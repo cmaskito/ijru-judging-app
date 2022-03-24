@@ -77,7 +77,6 @@ export default function Presentation({ navigation, route }) {
     const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
     counter[1](newCounter);
     setSelectedButton(counter[0].title);
-    console.log(skipper);
   };
 
   let hasUnsavedChanges = true;

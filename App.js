@@ -50,8 +50,6 @@ export default function App() {
     Roboto_900Black_Italic,
   });
 
-  const skippersColRef = collection(db, "skippers");
-
   if (!fontsLoaded) {
     return <AppLoading />;
   }
