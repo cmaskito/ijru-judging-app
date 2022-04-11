@@ -7,31 +7,26 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import BackButton from "../components/BackButton";
+import GreyTextInput from "../components/GreyTextInput";
 
 export default function Connect({ navigation, route }) {
   return (
-    <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
-      <BackButton />
-      <TouchableWithoutFeedback
-        onPressIn={() => Keyboard.dismiss()}
-        style={styles.dismissKeyboard}
-      >
+    <TouchableWithoutFeedback
+      onPressIn={() => Keyboard.dismiss()}
+      style={{ color: "red" }}
+    >
+      <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+        <BackButton />
         <View style={styles.container}>
           <Text style={styles.titleText}>CONNECT TO COMPETITION</Text>
-          <View style={styles.textInputWrapper}>
-            <Text style={styles.textInputLabel}>TOURNAMENT ID</Text>
-            <TextInput
-              style={styles.textInput}
-              autoCapitalize={"characters"}
-              placeholder="TOURNAMENT ID"
-            ></TextInput>
-          </View>
+          <GreyTextInput wrapperStyle={{ marginTop: 150 }} />
         </View>
-      </TouchableWithoutFeedback>
-    </SafeAreaView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
 
@@ -49,30 +44,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingTop: 80,
     letterSpacing: 6,
-  },
-  textInputWrapper: {
-    width: "85%",
-    marginTop: 160,
-  },
-  textInput: {
-    backgroundColor: colours.lightGrey,
-    borderWidth: 0,
-    borderRadius: 15,
-    height: 50,
-    color: colours.textDark,
-    paddingLeft: 10,
-    fontSize: 14,
-    fontFamily: "Roboto_400Regular",
-    letterSpacing: 0.5,
-  },
-  textInputLabel: {
-    paddingLeft: 5,
-    letterSpacing: 1.5,
-    fontFamily: "Roboto_400Regular",
-    fontSize: 14,
-    marginBottom: 3,
-  },
-  dismissKeyboard: {
-    color: "red",
   },
 });

@@ -10,14 +10,12 @@ import {
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import BackButton from "../components/BackButton";
-import { csv } from "csvtojson";
 import * as DocumentPicker from "expo-document-picker";
 import CustomButton from "../components/CustomButton";
 import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
 
 export default function CreateTournament({ navigation, route }) {
-  const converter = csv();
   const onPress = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
     console.log(doc, "doc");
@@ -27,11 +25,13 @@ export default function CreateTournament({ navigation, route }) {
     Papa.parse(docContents, {
       header: true,
       dynamicTyping: true,
-      error: function (error, file) {
+      error: function (error) {
         console.log("error:", error);
       },
       complete: function (results) {
-        console.log("parsing complete:", results, doc.uri);
+        console.log("parsing complete:", results);
+        const parsedSkipperDetails = results.data;
+        console.log(parsedSkipperDetails);
       },
     });
   };
