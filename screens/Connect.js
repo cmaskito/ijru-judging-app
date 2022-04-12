@@ -1,11 +1,48 @@
-import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  SafeAreaView,
+  TextInput,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
+import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
+import BackButton from "../components/BackButton";
+import GreyTextInput from "../components/GreyTextInput";
 
-export default function Connect() {
+export default function Connect({ navigation, route }) {
   return (
-    <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
-      <Text>Connect Screen</Text>
-    </SafeAreaView>
+    <TouchableWithoutFeedback
+      onPressIn={() => Keyboard.dismiss()}
+      style={{ color: "red" }}
+    >
+      <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+        <BackButton />
+        <View style={styles.container}>
+          <Text style={styles.titleText}>CONNECT TO COMPETITION</Text>
+          <GreyTextInput wrapperStyle={{ marginTop: 150 }} />
+        </View>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    flex: 1,
+  },
+  titleText: {
+    fontSize: 36,
+    color: colours.textDark,
+    fontFamily: "Roboto_700Bold",
+    textAlign: "center",
+    width: 316,
+    alignSelf: "center",
+    paddingTop: 80,
+    letterSpacing: 6,
+  },
+});

@@ -19,7 +19,7 @@ import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
 import CounterButton from "../components/CounterButton";
 
-export default function Difficulty({ navigation }) {
+export default function Difficulty({ navigation, route }) {
   const levelCounters = [
     ([levelOneCounter, setLevelOneCounter] = useState({
       title: "Level 1",
@@ -60,6 +60,7 @@ export default function Difficulty({ navigation }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
+  const { practice } = route.params;
   let hasUnsavedChanges = true;
 
   const onJudgingButtonPress = (counter) => {
@@ -99,7 +100,11 @@ export default function Difficulty({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Difficulty"
-        skipperName="Skipper Name"
+        skipperName={
+          practice
+            ? "Practice"
+            : `${skipper[0].firstName} ${skipper[0].lastName}`
+        }
       />
 
       {/* Red Buttons */}

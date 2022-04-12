@@ -27,6 +27,10 @@ import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import Presentation from "./screens/Presentation";
 import RequiredElements from "./screens/RequiredElements";
+import CreateTournament from "./screens/CreateTournament";
+import { useEffect } from "react";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./firebase-config";
 
 const Stack = createStackNavigator();
 
@@ -60,6 +64,7 @@ export default function App() {
         <Stack.Screen name="Difficulty" component={Difficulty} />
         <Stack.Screen name="Presentation" component={Presentation} />
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
+        <Stack.Screen name="CreateTournament" component={CreateTournament} />
       </Stack.Navigator>
     </NavigationContainer>
   );

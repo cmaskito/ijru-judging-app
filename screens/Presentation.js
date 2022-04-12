@@ -18,8 +18,11 @@ import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
+import CounterButton from "../components/CounterButton";
+import { db } from "../firebase-config";
+import { collection, getDocs } from "firebase/firestore";
 
-export default function Presentation({ navigation }) {
+export default function Presentation({ navigation, route }) {
   const counters = [
     ([plusCounter, setPlusCounter] = useState({
       title: "+",
@@ -40,22 +43,13 @@ export default function Presentation({ navigation }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-
-  const onJudgingButtonPress = (counter) => {
-    console.log(counter);
-    Vibration.vibrate(70);
-    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    counter[1](newCounter);
-    setSelectedButton(counter[0].title);
-  };
-
-  let hasUnsavedChanges = true;
+  const [skipper, setSkipper] = useState(null);
+  const { practice } = route.params;
 
   // Makes an alert pop up if the user tries to leave the screen with unsaved changes
   useEffect(() => {
     navigation.addListener("beforeRemove", (e) => {
       if (!hasUnsavedChanges) return;
-
       e.preventDefault();
       Alert.alert(
         "Cancel?",
@@ -74,6 +68,26 @@ export default function Presentation({ navigation }) {
     });
   }, [navigation]);
 
+  useEffect(() => {
+    getSkippers();
+  }, []);
+
+  const onJudgingButtonPress = (counter) => {
+    Vibration.vibrate(70);
+    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
+    counter[1](newCounter);
+    setSelectedButton(counter[0].title);
+  };
+
+  let hasUnsavedChanges = true;
+
+  const skippersColRef = collection(db, "skippers");
+
+  const getSkippers = async () => {
+    const data = await getDocs(skippersColRef);
+    setSkipper(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+  };
+
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       {/* Header */}
@@ -81,7 +95,11 @@ export default function Presentation({ navigation }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Presentation"
-        skipperName="Skipper Name"
+        skipperName={
+          practice
+            ? "Practice"
+            : `${skipper[0].firstName} ${skipper[0].lastName}`
+        }
       />
 
       {/* Red Buttons */}
@@ -124,7 +142,7 @@ export default function Presentation({ navigation }) {
                 {index === 2 ? (
                   <CounterButton
                     selectedButton={selectedButton}
-                    counter={counter}
+                    counter={counters[3]}
                     index={index}
                     setSelectedButton={setSelectedButton}
                   />
