@@ -23,7 +23,11 @@ export default function Connect({ navigation, route }) {
         <BackButton />
         <View style={styles.container}>
           <Text style={styles.titleText}>CONNECT TO COMPETITION</Text>
-          <GreyTextInput wrapperStyle={{ marginTop: 150 }} />
+          <GreyTextInput
+            wrapperStyle={{ marginTop: 150 }}
+            placeholder={"TOURNAMENT ID"}
+            label={"TOURNAMENT ID"}
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

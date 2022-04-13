@@ -14,6 +14,8 @@ import * as DocumentPicker from "expo-document-picker";
 import CustomButton from "../components/CustomButton";
 import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
+import GreyTextInput from "../components/GreyTextInput";
+import dimensions from "../assets/Dimensions";
 
 export default function CreateTournament({ navigation, route }) {
   const onPress = async () => {
@@ -45,8 +47,33 @@ export default function CreateTournament({ navigation, route }) {
       >
         <View style={styles.container}>
           <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
-          <View style={styles.textInputWrapper}>
-            <CustomButton onPressHandler={onPress} />
+          <GreyTextInput
+            wrapperStyle={{ marginTop: 150 }}
+            label={"TOURNAMENT NAME"}
+            placeholder={"TOURNAMENT NAME"}
+          />
+          <View style={styles.buttonWrapper}>
+            <View style={{ width: "100%", paddingHorizontal: "7.5%" }}>
+              <Text style={styles.buttonLabel}>SKIPPER DETAILS</Text>
+              <CustomButton
+                style={{
+                  backgroundColor: colours.lightGrey,
+                  borderRadius: 15,
+                  width: "100%",
+                  height: 50,
+                }}
+                touchableOpacityStyle={{
+                  height: 50,
+                }}
+                text={"SELECT .CSV FILE WITH SKIPPERS DETAILS"}
+                textStyle={{
+                  fontSize: 14,
+                  fontFamily: "Roboto_400Regular",
+                  letterSpacing: 0.5,
+                  color: colours.placeholderText,
+                }}
+              />
+            </View>
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -90,6 +117,18 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_400Regular",
     fontSize: 14,
     marginBottom: 3,
+  },
+  buttonLabel: {
+    paddingLeft: 5,
+    letterSpacing: 1.5,
+    fontFamily: "Roboto_400Regular",
+    fontSize: 14,
+    marginBottom: 3,
+  },
+  buttonWrapper: {
+    marginTop: 50,
+    width: "100%",
+    alignItems: "center",
   },
   dismissKeyboard: {
     color: "red",

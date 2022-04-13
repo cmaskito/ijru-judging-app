@@ -8,6 +8,7 @@ const colours = {
   headerColour: "#e2e2e2",
   undoButton: "#A9EEEE",
   undoHighlight: "#cee5e5",
+  placeholderText: "#919191",
 };
 
 export default colours;
