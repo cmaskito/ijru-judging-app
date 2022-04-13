@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: "Roboto_400Regular",
     letterSpacing: 0.5,
+    textAlign: "left",
   },
   textInputLabel: {
     paddingLeft: 5,

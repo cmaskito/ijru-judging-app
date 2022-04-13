@@ -16,11 +16,17 @@ import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
 import GreyTextInput from "../components/GreyTextInput";
 import dimensions from "../assets/Dimensions";
+import { useState } from "react";
 
 export default function CreateTournament({ navigation, route }) {
-  const onPress = async () => {
+  const [fileName, setFileName] = useState(null);
+
+  const getSkipperDetailsCSV = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
     console.log(doc, "doc");
+
+    setFileName(doc.name);
+    console.log(fileName);
 
     const docContents = await FileSystem.readAsStringAsync(doc.uri);
 
@@ -61,17 +67,23 @@ export default function CreateTournament({ navigation, route }) {
                   borderRadius: 15,
                   width: "100%",
                   height: 50,
+                  alignItems: "flex-start",
                 }}
                 touchableOpacityStyle={{
                   height: 50,
                 }}
-                text={"SELECT .CSV FILE WITH SKIPPERS DETAILS"}
+                text={fileName === null ? "Sp" : fileName}
                 textStyle={{
                   fontSize: 14,
                   fontFamily: "Roboto_400Regular",
                   letterSpacing: 0.5,
-                  color: colours.placeholderText,
+                  color:
+                    fileName === null
+                      ? colours.placeholderText
+                      : colours.textDark,
+                  paddingLeft: 10,
                 }}
+                onPressHandler={getSkipperDetailsCSV}
               />
             </View>
           </View>
@@ -128,9 +140,5 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 50,
     width: "100%",
-    alignItems: "center",
-  },
-  dismissKeyboard: {
-    color: "red",
   },
 });
