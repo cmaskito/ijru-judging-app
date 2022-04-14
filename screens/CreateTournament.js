@@ -3,9 +3,9 @@ import {
   View,
   Text,
   SafeAreaView,
-  TextInput,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -23,24 +23,33 @@ export default function CreateTournament({ navigation, route }) {
 
   const getSkipperDetailsCSV = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
-    console.log(doc, "doc");
 
-    setFileName(doc.name);
+    if (doc.type !== "cancel") {
+      if (doc.mimeType !== "text/comma-separated-values") {
+        setFileName(undefined);
+        Alert.alert(
+          "That file is not a .csv file",
+          "You must select a .csv file"
+        );
+        return;
+      }
 
-    const docContents = await FileSystem.readAsStringAsync(doc.uri);
+      setFileName(doc.name);
+      const docContents = await FileSystem.readAsStringAsync(doc.uri);
 
-    Papa.parse(docContents, {
-      header: true,
-      dynamicTyping: true,
-      error: function (error) {
-        console.log("error:", error);
-      },
-      complete: function (results) {
-        console.log("parsing complete:", results);
-        const parsedSkipperDetails = results.data;
-        console.log(parsedSkipperDetails);
-      },
-    });
+      Papa.parse(docContents, {
+        header: true,
+        dynamicTyping: true,
+        error: function (error) {
+          console.log("error:", error);
+        },
+        complete: function (results) {
+          console.log("parsing complete:", results);
+          const parsedSkipperDetails = results.data;
+          console.log(parsedSkipperDetails);
+        },
+      });
+    }
   };
 
   return (
