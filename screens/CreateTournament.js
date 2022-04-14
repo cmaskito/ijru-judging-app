@@ -15,18 +15,17 @@ import CustomButton from "../components/CustomButton";
 import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
 import GreyTextInput from "../components/GreyTextInput";
-import dimensions from "../assets/Dimensions";
 import { useState } from "react";
+import { doc } from "firebase/firestore";
 
 export default function CreateTournament({ navigation, route }) {
-  const [fileName, setFileName] = useState(null);
+  const [fileName, setFileName] = useState(undefined);
 
   const getSkipperDetailsCSV = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
     console.log(doc, "doc");
 
     setFileName(doc.name);
-    console.log(fileName);
 
     const docContents = await FileSystem.readAsStringAsync(doc.uri);
 
@@ -72,13 +71,13 @@ export default function CreateTournament({ navigation, route }) {
                 touchableOpacityStyle={{
                   height: 50,
                 }}
-                text={fileName === null ? "Sp" : fileName}
+                text={fileName === undefined ? "SELECT A .CSV FILE" : fileName}
                 textStyle={{
                   fontSize: 14,
                   fontFamily: "Roboto_400Regular",
                   letterSpacing: 0.5,
                   color:
-                    fileName === null
+                    fileName === undefined
                       ? colours.placeholderText
                       : colours.textDark,
                   paddingLeft: 10,
