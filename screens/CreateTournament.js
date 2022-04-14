@@ -62,7 +62,7 @@ export default function CreateTournament({ navigation, route }) {
         <View style={styles.container}>
           <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
           <GreyTextInput
-            wrapperStyle={{ marginTop: 150 }}
+            wrapperStyle={{ marginTop: 100 }}
             label={"TOURNAMENT NAME"}
             placeholder={"TOURNAMENT NAME"}
           />
@@ -95,6 +95,7 @@ export default function CreateTournament({ navigation, route }) {
               />
             </View>
           </View>
+          <CustomButton text="CREATE TOURNAMENT" style={{ marginTop: 70 }} />
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
