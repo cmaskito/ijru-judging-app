@@ -18,6 +18,7 @@ import GreyTextInput from "../components/GreyTextInput";
 import { useState } from "react";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase-config";
+import generateTournamentId from "../assets/tournamentIdGenerator";
 
 export default function CreateTournament({ navigation, route }) {
   const [fileName, setFileName] = useState(undefined);
@@ -59,9 +60,10 @@ export default function CreateTournament({ navigation, route }) {
   const onSubmit = async () => {
     if (tournamentName !== "" && fileName !== undefined) {
       console.log("parsed: ", parsedSkipperDetails);
+      const tournamentId = await generateTournamentId();
       try {
         const tournamentDocRef = await addDoc(collection(db, "tournaments"), {
-          tournamentID: "123456",
+          tournamentId: tournamentId,
           tournamentName: tournamentName,
         });
         const skipperDetialsCollection = await addDoc(
@@ -124,6 +126,11 @@ export default function CreateTournament({ navigation, route }) {
             text="CREATE TOURNAMENT"
             style={{ marginTop: 70 }}
             onPressHandler={onSubmit}
+          />
+          <CustomButton
+            onPressHandler={() =>
+              generateTournamentId().then((value) => console.log(value))
+            }
           />
         </View>
       </TouchableWithoutFeedback>
