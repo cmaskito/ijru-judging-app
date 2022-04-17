@@ -9,7 +9,12 @@ import {
 } from "react-native";
 import colours from "../assets/colours";
 
-export default function GreyTextInput({ label, placeholder, wrapperStyle }) {
+export default function GreyTextInput({
+  label,
+  placeholder,
+  wrapperStyle,
+  onChangeText,
+}) {
   return (
     <View style={[styles.textInputWrapper, { ...wrapperStyle }]}>
       <Text style={styles.textInputLabel}>{label}</Text>
@@ -18,6 +23,7 @@ export default function GreyTextInput({ label, placeholder, wrapperStyle }) {
         autoCapitalize={"characters"}
         placeholder={placeholder}
         placeholderTextColor={colours.placeholderText}
+        onChangeText={onChangeText}
       ></TextInput>
     </View>
   );

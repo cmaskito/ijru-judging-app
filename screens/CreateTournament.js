@@ -16,10 +16,13 @@ import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
 import GreyTextInput from "../components/GreyTextInput";
 import { useState } from "react";
-import { doc } from "firebase/firestore";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../firebase-config";
 
 export default function CreateTournament({ navigation, route }) {
   const [fileName, setFileName] = useState(undefined);
+  const [tournamentName, setTournamentName] = useState("");
+  const [parsedSkipperDetails, setParsedSkipperDetails] = useState([]);
 
   const getSkipperDetailsCSV = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
@@ -44,11 +47,32 @@ export default function CreateTournament({ navigation, route }) {
           console.log("error:", error);
         },
         complete: function (results) {
-          console.log("parsing complete:", results);
-          const parsedSkipperDetails = results.data;
+          // console.log(results.data);
+          setParsedSkipperDetails(results.data);
+          console.log("parsed: ", parsedSkipperDetails);
           console.log(parsedSkipperDetails);
         },
       });
+    }
+  };
+
+  const onSubmit = async () => {
+    if (tournamentName !== "" && fileName !== undefined) {
+      console.log("parsed: ", parsedSkipperDetails);
+      try {
+        const tournamentDocRef = await addDoc(collection(db, "tournaments"), {
+          tournamentID: "123456",
+          tournamentName: tournamentName,
+        });
+        const skipperDetialsCollection = await addDoc(
+          collection(db, `tournaments/${tournamentDocRef.id}/skippers`),
+          { ...parsedSkipperDetails[0] }
+        );
+        console.log("good", tournamentDocRef.id);
+        console.log("great", skipperDetialsCollection.id);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
@@ -65,6 +89,7 @@ export default function CreateTournament({ navigation, route }) {
             wrapperStyle={{ marginTop: 100 }}
             label={"TOURNAMENT NAME"}
             placeholder={"TOURNAMENT NAME"}
+            onChangeText={(value) => setTournamentName(value)}
           />
           <View style={styles.buttonWrapper}>
             <View style={{ width: "100%", paddingHorizontal: "7.5%" }}>
@@ -95,7 +120,11 @@ export default function CreateTournament({ navigation, route }) {
               />
             </View>
           </View>
-          <CustomButton text="CREATE TOURNAMENT" style={{ marginTop: 70 }} />
+          <CustomButton
+            text="CREATE TOURNAMENT"
+            style={{ marginTop: 70 }}
+            onPressHandler={onSubmit}
+          />
         </View>
       </TouchableWithoutFeedback>
     </SafeAreaView>
