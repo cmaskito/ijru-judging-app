@@ -50,8 +50,6 @@ export default function CreateTournament({ navigation, route }) {
         complete: function (results) {
           // console.log(results.data);
           setParsedSkipperDetails(results.data);
-          console.log("parsed: ", parsedSkipperDetails);
-          console.log(parsedSkipperDetails);
         },
       });
     }
@@ -66,12 +64,12 @@ export default function CreateTournament({ navigation, route }) {
           tournamentId: tournamentId,
           tournamentName: tournamentName,
         });
-        const skipperDetialsCollection = await addDoc(
-          collection(db, `tournaments/${tournamentDocRef.id}/skippers`),
-          { ...parsedSkipperDetails[0] }
-        );
-        console.log("good", tournamentDocRef.id);
-        console.log("great", skipperDetialsCollection.id);
+        parsedSkipperDetails.forEach((skipper) => {
+          addDoc(
+            collection(db, `tournaments/${tournamentDocRef.id}/skippers`),
+            { ...skipper }
+          );
+        });
       } catch (e) {
         console.error(e);
       }
@@ -126,11 +124,6 @@ export default function CreateTournament({ navigation, route }) {
             text="CREATE TOURNAMENT"
             style={{ marginTop: 70 }}
             onPressHandler={onSubmit}
-          />
-          <CustomButton
-            onPressHandler={() =>
-              generateTournamentId().then((value) => console.log(value))
-            }
           />
         </View>
       </TouchableWithoutFeedback>
