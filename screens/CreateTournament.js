@@ -25,6 +25,8 @@ export default function CreateTournament({ navigation }) {
   const [tournamentName, setTournamentName] = useState("");
   const [parsedSkipperDetails, setParsedSkipperDetails] = useState([]);
 
+  const [attemptedSubmitError, setAttemptedSubmitError] = useState(false);
+
   const getSkipperDetailsCSV = async () => {
     const doc = await DocumentPicker.getDocumentAsync();
 
@@ -77,6 +79,8 @@ export default function CreateTournament({ navigation }) {
       } catch (e) {
         console.error(e);
       }
+    } else {
+      setAttemptedSubmitError(true);
     }
   };
 
@@ -89,6 +93,7 @@ export default function CreateTournament({ navigation }) {
       >
         <View style={styles.container}>
           <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
+
           <GreyTextInput
             wrapperStyle={{ marginTop: 100 }}
             label={"TOURNAMENT NAME"}
@@ -124,9 +129,14 @@ export default function CreateTournament({ navigation }) {
               />
             </View>
           </View>
+          {attemptedSubmitError && (
+            <Text style={styles.errorLabel}>
+              INVALID TOURNAMENT NAME OR FILE
+            </Text>
+          )}
           <CustomButton
             text="CREATE TOURNAMENT"
-            style={{ marginTop: 70 }}
+            style={{ marginTop: 60 }}
             onPressHandler={onSubmit}
           />
         </View>
@@ -182,5 +192,12 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     marginTop: 50,
     width: "100%",
+  },
+  errorLabel: {
+    paddingLeft: 5,
+    letterSpacing: 1.5,
+    fontFamily: "Roboto_400Regular",
+    fontSize: 14,
+    color: "red",
   },
 });

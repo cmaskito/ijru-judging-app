@@ -52,7 +52,4 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 3,
   },
-  dismissKeyboard: {
-    color: "red",
-  },
 });
