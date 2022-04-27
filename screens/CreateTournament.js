@@ -20,7 +20,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { db } from "../firebase-config";
 import generateTournamentId from "../assets/tournamentIdGenerator";
 
-export default function CreateTournament({ navigation, route }) {
+export default function CreateTournament({ navigation }) {
   const [fileName, setFileName] = useState(undefined);
   const [tournamentName, setTournamentName] = useState("");
   const [parsedSkipperDetails, setParsedSkipperDetails] = useState([]);
@@ -69,6 +69,10 @@ export default function CreateTournament({ navigation, route }) {
             collection(db, `tournaments/${tournamentDocRef.id}/skippers`),
             { ...skipper }
           );
+        });
+        navigation.navigate("TournamentCreated", {
+          tournamentName,
+          tournamentId,
         });
       } catch (e) {
         console.error(e);
@@ -143,7 +147,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 316,
     alignSelf: "center",
-    paddingTop: 60,
+    paddingTop: 20,
     letterSpacing: 6,
   },
   textInputWrapper: {

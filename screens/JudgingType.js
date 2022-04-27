@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     letterSpacing: 6,
     color: colours.textDark,
-    paddingTop: 60,
+    paddingTop: 20,
   },
   pickerWrapper: {
     width: "85%",

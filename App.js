@@ -31,6 +31,7 @@ import CreateTournament from "./screens/CreateTournament";
 import { useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase-config";
+import TournamentCreated from "./screens/TournamentCreated";
 
 const Stack = createStackNavigator();
 
@@ -65,6 +66,7 @@ export default function App() {
         <Stack.Screen name="Presentation" component={Presentation} />
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
         <Stack.Screen name="CreateTournament" component={CreateTournament} />
+        <Stack.Screen name="TournamentCreated" component={TournamentCreated} />
       </Stack.Navigator>
     </NavigationContainer>
   );
