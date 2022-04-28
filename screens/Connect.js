@@ -23,7 +23,12 @@ export default function Connect({ navigation, route }) {
     console.log("press");
     try {
       const tournamentDoc = await getDoc(doc(db, "tournaments", userInput));
-      console.log(tournamentDoc.data());
+      if (tournamentDoc.data() === undefined) {
+        setIncorrectId(true);
+      } else {
+        console.log(tournamentDoc.data());
+        navigation.navigate("JudgeOrView", tournamentDoc.data());
+      }
     } catch (e) {
       console.log("error:", e);
       setIncorrectId(true);
@@ -83,5 +88,6 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_400Regular",
     fontSize: 14,
     color: "red",
+    marginBottom: -14,
   },
 });

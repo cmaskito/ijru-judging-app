@@ -32,6 +32,7 @@ import { useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase-config";
 import TournamentCreated from "./screens/TournamentCreated";
+import JudgeOrView from "./screens/JudgeOrView";
 
 const Stack = createStackNavigator();
 
@@ -67,6 +68,7 @@ export default function App() {
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
         <Stack.Screen name="CreateTournament" component={CreateTournament} />
         <Stack.Screen name="TournamentCreated" component={TournamentCreated} />
+        <Stack.Screen name="JudgeOrView" component={JudgeOrView} />
       </Stack.Navigator>
     </NavigationContainer>
   );

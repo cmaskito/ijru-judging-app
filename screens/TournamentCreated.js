@@ -1,17 +1,6 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
-import { backgroundColor } from "react-native/Libraries/Components/View/ReactNativeStyleAttributes";
+import { StyleSheet, View, Text } from "react-native";
 import AndroidSafeArea from "../assets/SafeArea";
 import colours from "../assets/colours";
-import BackButton from "../components/BackButton";
-import { Roboto_400Regular, Roboto_700Bold } from "@expo-google-fonts/roboto";
 import CustomButton from "../components/CustomButton";
 
 export default function TournamentCreated({ navigation, route }) {
