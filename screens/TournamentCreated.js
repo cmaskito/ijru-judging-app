@@ -24,9 +24,11 @@ export default function TournamentCreated({ navigation, route }) {
       <View style={styles.tournamentDetailsWrapper}>
         <Text
           style={styles.tournamentDetailsText}
+          selectable
         >{`Tournament Name: ${tournamentName}`}</Text>
         <Text
           style={styles.tournamentDetailsText}
+          selectable
         >{`Tournament ID: ${tournamentId}`}</Text>
       </View>
       <CustomButton

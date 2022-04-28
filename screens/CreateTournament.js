@@ -50,7 +50,6 @@ export default function CreateTournament({ navigation }) {
           console.log("error:", error);
         },
         complete: function (results) {
-          // console.log(results.data);
           setParsedSkipperDetails(results.data);
         },
       });

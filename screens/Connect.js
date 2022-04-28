@@ -13,24 +13,20 @@ import BackButton from "../components/BackButton";
 import CustomButton from "../components/CustomButton";
 import GreyTextInput from "../components/GreyTextInput";
 import { db } from "../firebase-config";
-import { query, where, collection, getDocs } from "firebase/firestore";
+import { getDoc, doc } from "firebase/firestore";
 
 export default function Connect({ navigation, route }) {
   const [userInput, setUserInput] = useState("");
+  const [incorrectId, setIncorrectId] = useState(false);
 
   const onConnectButtonPress = async () => {
     console.log("press");
-    const tournamentsColRef = collection(db, "tournaments");
-    const q = query(
-      tournamentsColRef,
-      where("tournamentId", "==", parseInt(userInput))
-    );
     try {
-      const tournamentDocs = await getDocs(q);
-      console.log(tournamentDocs);
-      tournamentDocs.forEach((doc) => console.log(doc.data()));
+      const tournamentDoc = await getDoc(doc(db, "tournaments", userInput));
+      console.log(tournamentDoc.data());
     } catch (e) {
-      console.log(e);
+      console.log("error:", e);
+      setIncorrectId(true);
     }
   };
 
@@ -46,6 +42,11 @@ export default function Connect({ navigation, route }) {
             label={"TOURNAMENT ID"}
             onChangeText={(value) => setUserInput(value)}
           />
+          {incorrectId && (
+            <Text style={styles.errorLabel}>
+              THAT TOURNAMENT DOES NOT EXIST
+            </Text>
+          )}
           <CustomButton
             touchableOpacityStyle={styles.connectButton}
             text="CONNECT"
@@ -75,5 +76,12 @@ const styles = StyleSheet.create({
   connectButton: {
     alignSelf: "center",
     marginTop: 150,
+  },
+  errorLabel: {
+    paddingLeft: 5,
+    letterSpacing: 1.5,
+    fontFamily: "Roboto_400Regular",
+    fontSize: 14,
+    color: "red",
   },
 });
