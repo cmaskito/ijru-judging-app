@@ -25,9 +25,9 @@ export default function Connect({ navigation, route }) {
       tournamentsColRef,
       where("tournamentId", "==", parseInt(userInput))
     );
-    console.log(userInput, typeof parseInt(userInput));
     try {
       const tournamentDocs = await getDocs(q);
+      console.log(tournamentDocs);
       tournamentDocs.forEach((doc) => console.log(doc.data()));
     } catch (e) {
       console.log(e);

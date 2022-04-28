@@ -16,7 +16,7 @@ import Papa from "papaparse";
 import * as FileSystem from "expo-file-system";
 import GreyTextInput from "../components/GreyTextInput";
 import { useState } from "react";
-import { collection, addDoc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "../firebase-config";
 import generateTournamentId from "../assets/tournamentIdGenerator";
 
@@ -62,15 +62,14 @@ export default function CreateTournament({ navigation }) {
       console.log("parsed: ", parsedSkipperDetails);
       const tournamentId = await generateTournamentId();
       try {
-        const tournamentDocRef = await addDoc(collection(db, "tournaments"), {
+        await setDoc(doc(db, "tournaments", `${tournamentId}`), {
           tournamentId: tournamentId,
           tournamentName: tournamentName,
         });
         parsedSkipperDetails.forEach((skipper) => {
-          addDoc(
-            collection(db, `tournaments/${tournamentDocRef.id}/skippers`),
-            { ...skipper }
-          );
+          addDoc(collection(db, `tournaments/${tournamentId}/skippers`), {
+            ...skipper,
+          });
         });
         navigation.navigate("TournamentCreated", {
           tournamentName,
