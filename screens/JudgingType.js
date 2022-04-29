@@ -13,12 +13,19 @@ import CustomButton from "../components/CustomButton";
 import BackButton from "../components/BackButton";
 
 export default function JudgingType({ navigation, route }) {
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
-  const [items, setItems] = useState([
+  const [judgingTypeOpen, setJudgingTypeOpen] = useState(false);
+  const [judgingTypeValue, setJudgingTypeValue] = useState(null);
+  const [judgingTypeItems, setJudgingTypeItems] = useState([
     { label: "Difficulty", value: "difficulty" },
     { label: "Presentation", value: "presentation" },
     { label: "Required Elements", value: "requiredElements" },
+  ]);
+  const [eventOpen, setEventOpen] = useState(false);
+  const [eventValue, setEventValue] = useState(null);
+  const [eventItems, setEventItems] = useState([
+    { label: "30s Speed", value: "30s" },
+    { label: "3min Speed", value: "3min" },
+    { label: "Individual Freestyle", value: "freestyle" },
   ]);
 
   const { practice } = route.params;
@@ -38,40 +45,97 @@ export default function JudgingType({ navigation, route }) {
         break;
     }
   };
-
-  return (
-    <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
-      <BackButton />
-      <View style={styles.container}>
-        <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
-        <View style={styles.pickerWrapper}>
-          <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
-          <DropDownPicker
-            style={styles.picker}
-            textStyle={styles.pickerText}
-            labelStyle={styles.pickerText}
-            open={open}
-            value={value}
-            items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
-            placeholder="Select Judging Type"
-            placeholderStyle={styles.pickerText}
-            dropDownContainerStyle={{
-              backgroundColor: "#fafafa",
-              borderWidth: 0,
-            }}
+  if (practice === true) {
+    return (
+      <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+        <BackButton />
+        <View style={styles.container}>
+          <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
+          <View style={styles.pickerWrapper}>
+            <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
+            <DropDownPicker
+              style={styles.picker}
+              textStyle={styles.pickerText}
+              labelStyle={styles.pickerText}
+              open={judgingTypeOpen}
+              value={judgingTypeValue}
+              items={judgingTypeItems}
+              setOpen={setJudgingTypeOpen}
+              setValue={setJudgingTypeValue}
+              setItems={setJudgingTypeItems}
+              placeholder="Select Judging Type"
+              placeholderStyle={styles.pickerText}
+              dropDownContainerStyle={{
+                backgroundColor: "#fafafa",
+                borderWidth: 0,
+              }}
+            />
+          </View>
+          <CustomButton
+            style={{ marginTop: 190 }}
+            text="START JUDGING"
+            onPressHandler={() => onPressHandler(value)}
           />
         </View>
-        <CustomButton
-          style={{ marginTop: 190 }}
-          text="START JUDGING"
-          onPressHandler={() => onPressHandler(value)}
-        />
-      </View>
-    </SafeAreaView>
-  );
+      </SafeAreaView>
+    );
+  } else {
+    return (
+      <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
+        <BackButton />
+        <View style={styles.container}>
+          <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
+          <View style={styles.pickerWrapper}>
+            <Text style={styles.pickerLabelText}>EVENT</Text>
+            <DropDownPicker
+              style={styles.picker}
+              textStyle={styles.pickerText}
+              labelStyle={styles.pickerText}
+              open={eventOpen}
+              value={eventValue}
+              items={eventItems}
+              setOpen={setEventOpen}
+              setValue={setEventValue}
+              setItems={setEventItems}
+              placeholder="Select Event"
+              placeholderStyle={styles.pickerText}
+              dropDownContainerStyle={{
+                backgroundColor: "#fafafa",
+                borderWidth: 0,
+              }}
+              maxHeight={70}
+            />
+          </View>
+          <View style={styles.pickerWrapper}>
+            <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
+            <DropDownPicker
+              style={styles.picker}
+              textStyle={styles.pickerText}
+              labelStyle={styles.pickerText}
+              open={judgingTypeOpen}
+              value={judgingTypeValue}
+              items={judgingTypeItems}
+              setOpen={setJudgingTypeOpen}
+              setValue={setJudgingTypeValue}
+              setItems={setJudgingTypeItems}
+              placeholder="Select Judging Type"
+              placeholderStyle={styles.pickerText}
+              dropDownContainerStyle={{
+                backgroundColor: "#fafafa",
+                borderWidth: 0,
+              }}
+              maxHeight={70}
+            />
+          </View>
+          <CustomButton
+            style={{ marginTop: 50 }}
+            text="START JUDGING"
+            onPressHandler={() => onPressHandler(value)}
+          />
+        </View>
+      </SafeAreaView>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
@@ -88,7 +152,7 @@ const styles = StyleSheet.create({
   },
   pickerWrapper: {
     width: "85%",
-    marginTop: 130,
+    marginTop: 50,
   },
   picker: {
     backgroundColor: colours.lightGrey,
