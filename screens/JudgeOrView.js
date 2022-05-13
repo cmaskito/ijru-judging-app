@@ -30,7 +30,7 @@ export default function JudgeOrView({ navigation, route }) {
           text="JUDGE"
           touchableOpacityStyle={styles.touchableOpacityStyle}
           onPressHandler={() =>
-            navigation.navigate("JudgingType", { practice })
+            navigation.navigate("JudgingType", { practice, tournamentId })
           }
         />
         <CustomButton
