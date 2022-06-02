@@ -42,8 +42,11 @@ export default function CreateTournament({ navigation }) {
 
       setFileName(doc.name);
       const docContents = await FileSystem.readAsStringAsync(doc.uri);
+      const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, "");
 
-      Papa.parse(docContents, {
+      console.log(fixedContents);
+
+      Papa.parse(fixedContents, {
         header: true,
         dynamicTyping: true,
         error: function (error) {
@@ -58,7 +61,6 @@ export default function CreateTournament({ navigation }) {
 
   const onSubmit = async () => {
     if (tournamentName !== "" && fileName !== undefined) {
-      console.log("parsed: ", parsedSkipperDetails);
       const tournamentId = await generateTournamentId();
       try {
         await setDoc(doc(db, "tournaments", `${tournamentId}`), {

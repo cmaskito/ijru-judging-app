@@ -16,8 +16,8 @@ import CustomButton from "../components/CustomButton";
 import BackButton from "../components/BackButton";
 import { db } from "../firebase-config";
 import { getDocs, collection } from "firebase/firestore";
-import { async } from "@firebase/util";
 import dimensions from "../assets/Dimensions";
+import { FlatList } from "react-native-gesture-handler";
 
 export default function JudgingType({ navigation, route }) {
   const [judgingTypeOpen, setJudgingTypeOpen] = useState(false);
@@ -45,8 +45,12 @@ export default function JudgingType({ navigation, route }) {
     const allSkippers = await getDocs(
       collection(db, `tournaments/${tournamentId}/skippers`)
     );
+
     allSkippers.forEach((skipper) => {
-      setSkippersList([...skippersList, skipper.data()]);
+      setSkippersList((prevState) => [
+        ...prevState,
+        { ...skipper.data(), id: skipper.id },
+      ]);
     });
     console.log(skippersList);
   };
@@ -54,6 +58,19 @@ export default function JudgingType({ navigation, route }) {
   useEffect(() => {
     fetchSkipperDetails();
   }, []);
+
+  const updateQuery = (input) => {
+    setSearch(input);
+  };
+
+  const filterNames = (skipperName) => {
+    let query = search.toLowerCase().replace(/ /g, "_");
+
+    if (skipperName.startsWith(query)) {
+      return skipperName;
+    } else {
+    }
+  };
 
   const onPressHandler = (value) => {
     switch (value) {
@@ -114,7 +131,7 @@ export default function JudgingType({ navigation, route }) {
             <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
             <SearchBar
               value={search}
-              onChangeText={(search) => setSearch(search)}
+              onChangeText={updateQuery}
               placeholder="SKIPPER NAME"
               round={true}
               lightTheme
@@ -137,7 +154,14 @@ export default function JudgingType({ navigation, route }) {
               placeholderStyle={styles.pickerText}
               inputStyle={{ ...styles.pickerText, color: colours.textDark }}
             />
-
+            <FlatList
+              data={skippersList}
+              keyExtractor={(i) => i.id}
+              extraData={search}
+              renderItem={({ item }) => {
+                return <Text>{`${item.firstName} ${item.lastName}`}</Text>;
+              }}
+            />
             <View style={styles.pickerWrapper}>
               <Text style={styles.pickerLabelText}>EVENT</Text>
               <DropDownPicker
