@@ -44,8 +44,6 @@ export default function CreateTournament({ navigation }) {
       const docContents = await FileSystem.readAsStringAsync(doc.uri);
       const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, "");
 
-      console.log(fixedContents);
-
       Papa.parse(fixedContents, {
         header: true,
         dynamicTyping: true,

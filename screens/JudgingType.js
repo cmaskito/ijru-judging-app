@@ -36,7 +36,7 @@ export default function JudgingType({ navigation, route }) {
   ]);
 
   const [search, setSearch] = useState("");
-
+  const [filteredSkippersList, setFilteredSkippersList] = useState([]);
   const [skippersList, setSkippersList] = useState([]);
 
   const { practice, tournamentId } = route.params;
@@ -52,7 +52,6 @@ export default function JudgingType({ navigation, route }) {
         { ...skipper.data(), id: skipper.id },
       ]);
     });
-    console.log(skippersList);
   };
 
   useEffect(() => {
@@ -60,16 +59,17 @@ export default function JudgingType({ navigation, route }) {
   }, []);
 
   const updateQuery = (input) => {
+    console.log("input: ", input);
+    setFilteredSkippersList(skippersList);
     setSearch(input);
-  };
-
-  const filterNames = (skipperName) => {
-    let query = search.toLowerCase().replace(/ /g, "_");
-
-    if (skipperName.startsWith(query)) {
-      return skipperName;
-    } else {
-    }
+    let query = input.toLowerCase().replace(/ /g, "");
+    const filtered = skippersList.filter((skipper) => {
+      return (
+        skipper.firstName.toLowerCase().includes(query) ||
+        skipper.lastName.toLowerCase().includes(query)
+      );
+    });
+    setFilteredSkippersList(filtered);
   };
 
   const onPressHandler = (value) => {
@@ -155,11 +155,18 @@ export default function JudgingType({ navigation, route }) {
               inputStyle={{ ...styles.pickerText, color: colours.textDark }}
             />
             <FlatList
-              data={skippersList}
+              data={filteredSkippersList}
               keyExtractor={(i) => i.id}
               extraData={search}
+              style={{ width: "85%" }}
               renderItem={({ item }) => {
-                return <Text>{`${item.firstName} ${item.lastName}`}</Text>;
+                return (
+                  <View style={styles.flatListWrapper}>
+                    <Text
+                      style={styles.flatList}
+                    >{`${item.firstName} ${item.lastName}`}</Text>
+                  </View>
+                );
               }}
             />
             <View style={styles.pickerWrapper}>
@@ -250,5 +257,16 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_400Regular",
     fontSize: 14,
     marginBottom: 3,
+  },
+  flatList: {
+    fontSize: 14,
+    fontFamily: "Roboto_400Regular",
+    letterSpacing: 0.5,
+  },
+  flatListWrapper: {
+    paddingVertical: 5,
+    backgroundColor: colours.lightGrey,
+    borderColor: colours.textDark,
+    borderWidth: 1,
   },
 });
