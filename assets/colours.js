@@ -9,6 +9,7 @@ const colours = {
   undoButton: "#A9EEEE",
   undoHighlight: "#cee5e5",
   placeholderText: "#919191",
+  lighterGrey: "#f5f5f5",
 };
 
 export default colours;

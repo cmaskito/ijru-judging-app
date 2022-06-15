@@ -41,6 +41,8 @@ export default function JudgingType({ navigation, route }) {
   const [filteredSkippersList, setFilteredSkippersList] = useState([]);
   const [skippersList, setSkippersList] = useState([]);
 
+  const [selectedSkipper, setSelectedSkipper] = useState(null);
+
   const { practice, tournamentId } = route.params;
 
   const fetchSkipperDetails = async () => {
@@ -79,23 +81,33 @@ export default function JudgingType({ navigation, route }) {
   const startJudgingPress = (value) => {
     switch (value) {
       case "difficulty":
-        navigation.navigate("Difficulty", { practice });
+        navigation.navigate("Difficulty", {
+          practice,
+          skipper: selectedSkipper,
+        });
         break;
       case "presentation":
-        navigation.navigate("Presentation", { practice });
+        navigation.navigate("Presentation", {
+          practice,
+          skipper: selectedSkipper,
+        });
         break;
       case "requiredElements":
-        navigation.navigate("RequiredElements", { practice });
+        navigation.navigate("RequiredElements", {
+          practice,
+          skipper: selectedSkipper,
+        });
         break;
       default:
         break;
     }
   };
 
-  const onAutoFillNamePress = (name) => {
-    console.log("clicked ", name);
-    setSearch(name);
+  const onAutoFillNamePress = (skipper) => {
+    console.log("clicked ", skipper);
+    setSearch(`${skipper.firstName} ${skipper.lastName}`);
     setShowNames(false);
+    setSelectedSkipper(skipper);
   };
 
   if (practice === true) {
@@ -137,34 +149,35 @@ export default function JudgingType({ navigation, route }) {
       <TouchableWithoutFeedback onPressIn={() => Keyboard.dismiss()}>
         <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
           <BackButton />
-
           <View style={styles.container}>
             <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
-            <SearchBar
-              value={search}
-              onChangeText={updateQuery}
-              placeholder="SKIPPER NAME"
-              round={true}
-              lightTheme
-              containerStyle={{
-                backgroundColor: "white",
-                borderColor: "white",
-                width: dimensions.width * 0.85,
-                padding: 0,
-                borderBottomColor: "transparent",
-                borderTopColor: "transparent",
-                marginTop: 50,
-              }}
-              inputContainerStyle={{
-                backgroundColor: colours.lightGrey,
-                padding: 0,
-                borderWidth: 0,
-                height: 50,
-              }}
-              placeholderTextColor={colours.placeholderText}
-              placeholderStyle={styles.pickerText}
-              inputStyle={{ ...styles.pickerText, color: colours.textDark }}
-            />
+            <View style={styles.searchBarWrapper}>
+              <Text style={styles.pickerLabelText}>SKIPPER NAME</Text>
+              <SearchBar
+                value={search}
+                onChangeText={updateQuery}
+                placeholder="SKIPPER NAME"
+                round={true}
+                lightTheme
+                containerStyle={{
+                  backgroundColor: "white",
+                  borderColor: "white",
+                  width: dimensions.width * 0.85,
+                  padding: 0,
+                  borderBottomColor: "transparent",
+                  borderTopColor: "transparent",
+                }}
+                inputContainerStyle={{
+                  backgroundColor: colours.lightGrey,
+                  padding: 0,
+                  borderWidth: 0,
+                  height: 50,
+                }}
+                placeholderTextColor={colours.placeholderText}
+                placeholderStyle={styles.pickerText}
+                inputStyle={{ ...styles.pickerText, color: colours.textDark }}
+              />
+            </View>
             {showNames && (
               <View style={styles.flatListWrapper}>
                 <FlatList
@@ -175,11 +188,7 @@ export default function JudgingType({ navigation, route }) {
                   renderItem={({ item }) => {
                     return (
                       <TouchableOpacity
-                        onPressIn={() =>
-                          onAutoFillNamePress(
-                            `${item.firstName} ${item.lastName}`
-                          )
-                        }
+                        onPressIn={() => onAutoFillNamePress(item)}
                         style={{
                           ...styles.flatListItemWrapper,
                           flex: 1,
@@ -194,7 +203,7 @@ export default function JudgingType({ navigation, route }) {
                 />
               </View>
             )}
-            <View style={styles.pickerWrapper}>
+            {/* <View style={styles.pickerWrapper}>
               <Text style={styles.pickerLabelText}>EVENT</Text>
               <DropDownPicker
                 style={styles.picker}
@@ -214,7 +223,7 @@ export default function JudgingType({ navigation, route }) {
                 }}
                 maxHeight={70}
               />
-            </View>
+            </View> */}
             <View style={styles.pickerWrapper}>
               <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
               <DropDownPicker
@@ -291,14 +300,14 @@ const styles = StyleSheet.create({
   flatListItemWrapper: {
     paddingVertical: 10,
     paddingLeft: 10,
-    backgroundColor: colours.lightGrey,
-    borderColor: colours.textDark,
-    // borderWidth: 1,
-    // borderRadius: 10,
+    backgroundColor: colours.lighterGrey,
   },
   flatListWrapper: {
     width: "85%",
     borderRadius: 10,
     overflow: "hidden",
+  },
+  searchBarWrapper: {
+    marginTop: 50,
   },
 });

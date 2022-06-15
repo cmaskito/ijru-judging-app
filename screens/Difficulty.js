@@ -60,7 +60,7 @@ export default function Difficulty({ navigation, route }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-  const { practice } = route.params;
+  const { practice, skipper } = route.params;
   let hasUnsavedChanges = true;
 
   const onJudgingButtonPress = (counter) => {
@@ -101,9 +101,7 @@ export default function Difficulty({ navigation, route }) {
         bracket="Bracket"
         judgingType="Difficulty"
         skipperName={
-          practice
-            ? "Practice"
-            : `${skipper[0].firstName} ${skipper[0].lastName}`
+          practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
         }
       />
 
