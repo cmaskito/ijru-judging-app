@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
+  TouchableOpacity,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -35,6 +36,7 @@ export default function JudgingType({ navigation, route }) {
     { label: "Individual Freestyle", value: "freestyle" },
   ]);
 
+  const [showNames, setShowNames] = useState(false);
   const [search, setSearch] = useState("");
   const [filteredSkippersList, setFilteredSkippersList] = useState([]);
   const [skippersList, setSkippersList] = useState([]);
@@ -56,23 +58,25 @@ export default function JudgingType({ navigation, route }) {
 
   useEffect(() => {
     fetchSkipperDetails();
+    setFilteredSkippersList(skippersList);
   }, []);
 
   const updateQuery = (input) => {
     console.log("input: ", input);
-    setFilteredSkippersList(skippersList);
+
+    const showList = input.length == 0 ? false : true;
+    setShowNames(showList);
+
     setSearch(input);
     let query = input.toLowerCase().replace(/ /g, "");
     const filtered = skippersList.filter((skipper) => {
-      return (
-        skipper.firstName.toLowerCase().includes(query) ||
-        skipper.lastName.toLowerCase().includes(query)
-      );
+      const fullName = `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}`;
+      return fullName.includes(query);
     });
     setFilteredSkippersList(filtered);
   };
 
-  const onPressHandler = (value) => {
+  const startJudgingPress = (value) => {
     switch (value) {
       case "difficulty":
         navigation.navigate("Difficulty", { practice });
@@ -87,6 +91,13 @@ export default function JudgingType({ navigation, route }) {
         break;
     }
   };
+
+  const onAutoFillNamePress = (name) => {
+    console.log("clicked ", name);
+    setSearch(name);
+    setShowNames(false);
+  };
+
   if (practice === true) {
     return (
       <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -116,7 +127,7 @@ export default function JudgingType({ navigation, route }) {
           <CustomButton
             style={{ marginTop: 190 }}
             text="START JUDGING"
-            onPressHandler={() => onPressHandler(value)}
+            onPressHandler={() => startJudgingPress(judgingTypeValue)}
           />
         </View>
       </SafeAreaView>
@@ -154,21 +165,35 @@ export default function JudgingType({ navigation, route }) {
               placeholderStyle={styles.pickerText}
               inputStyle={{ ...styles.pickerText, color: colours.textDark }}
             />
-            <FlatList
-              data={filteredSkippersList}
-              keyExtractor={(i) => i.id}
-              extraData={search}
-              style={{ width: "85%" }}
-              renderItem={({ item }) => {
-                return (
-                  <View style={styles.flatListWrapper}>
-                    <Text
-                      style={styles.flatList}
-                    >{`${item.firstName} ${item.lastName}`}</Text>
-                  </View>
-                );
-              }}
-            />
+            {showNames && (
+              <View style={styles.flatListWrapper}>
+                <FlatList
+                  data={filteredSkippersList}
+                  keyExtractor={(i) => i.id}
+                  extraData={search}
+                  // style={styles.flatList}
+                  renderItem={({ item }) => {
+                    return (
+                      <TouchableOpacity
+                        onPressIn={() =>
+                          onAutoFillNamePress(
+                            `${item.firstName} ${item.lastName}`
+                          )
+                        }
+                        style={{
+                          ...styles.flatListItemWrapper,
+                          flex: 1,
+                        }}
+                      >
+                        <Text
+                          style={styles.flatListText}
+                        >{`${item.firstName} ${item.lastName}`}</Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                />
+              </View>
+            )}
             <View style={styles.pickerWrapper}>
               <Text style={styles.pickerLabelText}>EVENT</Text>
               <DropDownPicker
@@ -212,9 +237,9 @@ export default function JudgingType({ navigation, route }) {
               />
             </View>
             <CustomButton
-              style={{ marginTop: 50 }}
+              style={{ marginTop: 80 }}
               text="START JUDGING"
-              onPressHandler={() => onPressHandler(value)}
+              onPressHandler={() => startJudgingPress(judgingTypeValue)}
             />
           </View>
         </SafeAreaView>
@@ -258,15 +283,22 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginBottom: 3,
   },
-  flatList: {
+  flatListText: {
     fontSize: 14,
     fontFamily: "Roboto_400Regular",
     letterSpacing: 0.5,
   },
-  flatListWrapper: {
-    paddingVertical: 5,
+  flatListItemWrapper: {
+    paddingVertical: 10,
+    paddingLeft: 10,
     backgroundColor: colours.lightGrey,
     borderColor: colours.textDark,
-    borderWidth: 1,
+    // borderWidth: 1,
+    // borderRadius: 10,
+  },
+  flatListWrapper: {
+    width: "85%",
+    borderRadius: 10,
+    overflow: "hidden",
   },
 });
