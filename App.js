@@ -33,6 +33,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "./firebase-config";
 import TournamentCreated from "./screens/TournamentCreated";
 import JudgeOrView from "./screens/JudgeOrView";
+import ScoreSummary from "./screens/ScoreSummary";
 
 const Stack = createStackNavigator();
 
@@ -69,6 +70,7 @@ export default function App() {
         <Stack.Screen name="CreateTournament" component={CreateTournament} />
         <Stack.Screen name="TournamentCreated" component={TournamentCreated} />
         <Stack.Screen name="JudgeOrView" component={JudgeOrView} />
+        <Stack.Screen name="ScoreSummary" component={ScoreSummary} />
       </Stack.Navigator>
     </NavigationContainer>
   );

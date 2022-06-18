@@ -108,9 +108,10 @@ export default function Difficulty({ navigation, route }) {
       {/* Red Buttons */}
 
       <RedButtons
-        countersToReset={levelCounters}
+        counters={levelCounters}
         setSelectedButton={setSelectedButton}
         navigation={navigation}
+        practice={practice}
       />
 
       {/* Level Buttons */}

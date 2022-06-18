@@ -4,9 +4,10 @@ import { View, Text, StyleSheet, Vibration, Alert } from "react-native";
 import dimensions from "../assets/Dimensions";
 
 export default function RedButtons({
-  countersToReset,
+  counters,
   navigation,
   setSelectedButton,
+  practice,
 }) {
   const onResetButtonPress = () => {
     Vibration.vibrate(200);
@@ -17,7 +18,7 @@ export default function RedButtons({
       {
         text: "Yes",
         onPress: () => {
-          countersToReset.forEach((item) => {
+          counters.forEach((item) => {
             item[1]({ ...item[0], counter: 0 });
           });
           setSelectedButton(null);
@@ -30,12 +31,22 @@ export default function RedButtons({
     Vibration.vibrate(200);
     navigation.goBack();
   };
+
+  const onDoneButtonPress = () => {
+    const counterValues = [];
+    counters.forEach((counter) => {
+      counterValues.push(counter[0]);
+    });
+    navigation.navigate("ScoreSummary", { practice, counters: counterValues });
+  };
+
   return (
     <View style={styles.redButtonsWrapper}>
       <CustomButton
         style={styles.redButton}
         textStyle={styles.buttonText}
         text="DONE"
+        onPressHandler={onDoneButtonPress}
       />
       <CustomButton
         style={styles.redButton}

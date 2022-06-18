@@ -79,6 +79,19 @@ export default function JudgingType({ navigation, route }) {
   };
 
   const startJudgingPress = (value) => {
+    if (selectedSkipper === null) {
+      const query = search.toLowerCase().replace(/ /g, "");
+      skippersList.forEach((skipper) => {
+        if (
+          `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}` ==
+          query
+        ) {
+          setSelectedSkipper(skipper);
+          console.log(skipper);
+        }
+      });
+    }
+
     switch (value) {
       case "difficulty":
         navigation.navigate("Difficulty", {
