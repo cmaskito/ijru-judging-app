@@ -8,6 +8,7 @@ export default function RedButtons({
   navigation,
   setSelectedButton,
   practice,
+  eventDetails,
 }) {
   const onResetButtonPress = () => {
     Vibration.vibrate(200);
@@ -37,7 +38,11 @@ export default function RedButtons({
     counters.forEach((counter) => {
       counterValues.push(counter[0]);
     });
-    navigation.navigate("ScoreSummary", { practice, counters: counterValues });
+    navigation.navigate("ScoreSummary", {
+      practice,
+      counters: counterValues,
+      eventDetails,
+    });
   };
 
   return (

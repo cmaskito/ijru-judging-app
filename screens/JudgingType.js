@@ -43,7 +43,7 @@ export default function JudgingType({ navigation, route }) {
 
   const [selectedSkipper, setSelectedSkipper] = useState(null);
 
-  const { practice, tournamentId } = route.params;
+  const { practice, tournamentId, tournamentName } = route.params;
 
   const fetchSkipperDetails = async () => {
     const allSkippers = await getDocs(
@@ -97,18 +97,24 @@ export default function JudgingType({ navigation, route }) {
         navigation.navigate("Difficulty", {
           practice,
           skipper: selectedSkipper,
+          tournamentName,
+          tournamentId,
         });
         break;
       case "presentation":
         navigation.navigate("Presentation", {
           practice,
           skipper: selectedSkipper,
+          tournamentName,
+          tournamentId,
         });
         break;
       case "requiredElements":
         navigation.navigate("RequiredElements", {
           practice,
           skipper: selectedSkipper,
+          tournamentName,
+          tournamentId,
         });
         break;
       default:

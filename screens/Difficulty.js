@@ -60,7 +60,7 @@ export default function Difficulty({ navigation, route }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-  const { practice, skipper } = route.params;
+  const { practice, skipper, tournamentName, tournamentId } = route.params;
   let hasUnsavedChanges = true;
 
   const onJudgingButtonPress = (counter) => {
@@ -112,6 +112,12 @@ export default function Difficulty({ navigation, route }) {
         setSelectedButton={setSelectedButton}
         navigation={navigation}
         practice={practice}
+        eventDetails={{
+          tournamentName: tournamentName,
+          judgingType: "Difficulty",
+          skipper: skipper,
+          tournamentId: tournamentId,
+        }}
       />
 
       {/* Level Buttons */}

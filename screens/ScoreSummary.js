@@ -1,29 +1,48 @@
-﻿import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-} from "react-native";
+﻿import { StyleSheet, View, Text, SafeAreaView, FlatList } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 
-import { useState, useEffect } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
 import CustomButton from "../components/CustomButton";
 import BackButton from "../components/BackButton";
 import { db } from "../firebase-config";
-import { getDocs, collection } from "firebase/firestore";
+import { getDocs, collection, addDoc, doc } from "firebase/firestore";
 import dimensions from "../assets/Dimensions";
 import { Edit3 } from "react-native-feather";
-import { Roboto_400Regular } from "@expo-google-fonts/roboto";
 
 export default function ScoreSummary({ route }) {
-  const { practice, counters } = route.params;
+  const { practice, counters, eventDetails } = route.params;
+
+  const onSubmitPress = async () => {
+    let scores = {};
+    try {
+      counters.forEach((counter) => {
+        scores[counter.title] = counter.counter;
+      });
+      console.log(scores);
+      const scoresDocRef = await addDoc(
+        collection(db, `tournaments/${eventDetails.tournamentId}/scores`),
+        {
+          ...scores,
+          skipperId: eventDetails.skipper.id,
+          judgingType: "difficulty",
+          difficultyScore: calcDifficultyScore(),
+        }
+      );
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const calcDifficultyScore = () => {
+    let difficultyScore = 0;
+    counters.forEach((counter) => {
+      const level = parseFloat(counter.title.split(" ")[1]);
+      difficultyScore +=
+        (Math.round(0.1 * 1.8 ** level * 100) / 100) * counter.counter;
+    });
+    console.log(difficultyScore);
+    return difficultyScore;
+  };
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -42,10 +61,18 @@ export default function ScoreSummary({ route }) {
               />
             </View>
             <View style={styles.listWrapper}>
-              <Text style={styles.listText}>EVENT NAME</Text>
-              <Text style={styles.listText}>EVENT NAME</Text>
-              <Text style={styles.listText}>EVENT NAME</Text>
-              <Text style={styles.listText}>EVENT NAME</Text>
+              <Text
+                style={styles.listText}
+              >{`Tournament Name: ${eventDetails.tournamentName}`}</Text>
+              <Text
+                style={styles.listText}
+              >{`Tournament ID: ${eventDetails.tournamentId}`}</Text>
+              <Text
+                style={styles.listText}
+              >{`Judging Type: ${eventDetails.judgingType}`}</Text>
+              <Text style={styles.listText}>
+                {`Skipper Name: ${eventDetails.skipper.firstName} ${eventDetails.skipper.lastName}`}{" "}
+              </Text>
             </View>
             <View style={styles.subHeadingWrapper}>
               <Text style={styles.subHeading}>SCORES</Text>
@@ -60,15 +87,14 @@ export default function ScoreSummary({ route }) {
         ListFooterComponent={
           <CustomButton
             touchableOpacityStyle={styles.connectButton}
-            text="CONNECT"
-            onPressHandler={() => onConnectButtonPress(userInput)}
+            text="SUBMIT SCORES"
+            onPressHandler={() => onSubmitPress()}
           />
         }
         scrollEnabled
         data={counters}
         keyExtractor={(item) => item.title}
         renderItem={(item) => {
-          console.log(item);
           return (
             <Text
               style={{ ...styles.listText, marginLeft: 40 }}
