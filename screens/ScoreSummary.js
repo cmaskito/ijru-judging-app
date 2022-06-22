@@ -29,13 +29,7 @@ import { useEffect } from "react";
 export default function ScoreSummary({ route, navigation }) {
   const { counters, eventDetails } = route.params;
 
-  // useEffect(() => {
-  //   const resetAction = navigation.reset({
-  //     index: 0,
-  //     routes: [{ name: "ScoreSummary" }],
-  //   });
-  // }, []);
-
+  let categoryScore = 0;
   const onSubmitPress = async () => {
     let scores = {};
     try {
@@ -48,8 +42,15 @@ export default function ScoreSummary({ route, navigation }) {
         where("skipperId", "==", eventDetails.skipper.id)
       );
       const querySnapshot = await getDocs(q);
+      switch (eventDetails.judgingType.toLowerCase()) {
+        case "difficulty":
+          categoryScore = calcDifficultyScore();
+          break;
+        case "presentation":
+          categoryScore = calcPresentationScore();
+          break;
+      }
 
-      querySnapshot.forEach((doc) => console.log("doc", doc.data()));
       if (!querySnapshot.empty) {
         Alert.alert(
           "Submit Scores",
@@ -68,8 +69,9 @@ export default function ScoreSummary({ route, navigation }) {
                   {
                     ...scores,
                     skipperId: eventDetails.skipper.id,
-                    judgingType: "difficulty",
-                    difficultyScore: calcDifficultyScore(),
+                    judgingType: eventDetails.judgingType.toLowerCase(),
+                    [`${eventDetails.judgingType.toLowerCase()}Score`]:
+                      categoryScore,
                   }
                 );
                 navigation.navigate("ScoresSubmitted", {
@@ -86,7 +88,7 @@ export default function ScoreSummary({ route, navigation }) {
             ...scores,
             skipperId: eventDetails.skipper.id,
             judgingType: "difficulty",
-            difficultyScore: calcDifficultyScore(),
+            [`${eventDetails.judgingType.toLowerCase()}Score`]: categoryScore,
           }
         );
 
@@ -106,9 +108,11 @@ export default function ScoreSummary({ route, navigation }) {
       difficultyScore +=
         (Math.round(0.1 * 1.8 ** level * 100) / 100) * counter.counter;
     });
-    console.log(difficultyScore);
+    console.log("diff", difficultyScore);
     return difficultyScore;
   };
+
+  const calcPresentationScore = () => {};
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>

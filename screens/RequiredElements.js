@@ -56,8 +56,6 @@ export default function RequiredElements({ navigation, route }) {
   const { practice } = route.params;
   const [selectedButton, setSelectedButton] = useState(null);
 
-  let hasUnsavedChanges = true;
-
   // Makes an alert pop up if the user tries to leave the screen
   useEffect(() => {
     const backAction = () => {

@@ -25,7 +25,7 @@ import AndroidSafeArea from "./assets/SafeArea";
 import Connect from "./screens/Connect";
 import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
-import Presentation from "./screens/Presentation";
+import PresentationForm from "./screens/PresentationForm";
 import RequiredElements from "./screens/RequiredElements";
 import CreateTournament from "./screens/CreateTournament";
 import { useEffect } from "react";
@@ -66,7 +66,7 @@ export default function App() {
         <Stack.Screen name="Connect" component={Connect} />
         <Stack.Screen name="JudgingType" component={JudgingType} />
         <Stack.Screen name="Difficulty" component={Difficulty} />
-        <Stack.Screen name="Presentation" component={Presentation} />
+        <Stack.Screen name="PresentationForm" component={PresentationForm} />
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
         <Stack.Screen name="CreateTournament" component={CreateTournament} />
         <Stack.Screen name="TournamentCreated" component={TournamentCreated} />

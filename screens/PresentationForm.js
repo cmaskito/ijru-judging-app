@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
-import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
@@ -20,7 +19,7 @@ import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CounterButton from "../components/CounterButton";
 
-export default function Presentation({ navigation, route }) {
+export default function PresentationForm({ navigation, route }) {
   const counters = [
     ([plusCounter, setPlusCounter] = useState({
       title: "+",
@@ -41,8 +40,7 @@ export default function Presentation({ navigation, route }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-  const [skipper, setSkipper] = useState(null);
-  const { practice } = route.params;
+  const { practice, skipper, tournamentName, tournamentId } = route.params;
 
   // Makes an alert pop up if the user tries to leave the screen
   useEffect(() => {
@@ -85,19 +83,24 @@ export default function Presentation({ navigation, route }) {
       <Header
         eventName="Event Name"
         bracket="Bracket"
-        judgingType="Presentation"
+        judgingType="Presentation Form"
         skipperName={
-          practice
-            ? "Practice"
-            : `${skipper[0].firstName} ${skipper[0].lastName}`
+          practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
         }
       />
 
       {/* Red Buttons */}
       <RedButtons
         navigation={navigation}
-        countersToReset={counters}
+        counters={counters}
         setSelectedButton={setSelectedButton}
+        practice={practice}
+        eventDetails={{
+          tournamentName: tournamentName,
+          judgingType: "Presentation Form",
+          skipper: skipper,
+          tournamentId: tournamentId,
+        }}
       />
 
       {/* Counters */}
@@ -109,22 +112,12 @@ export default function Presentation({ navigation, route }) {
             <Row key={nextId()} size={26.5}>
               <Col>
                 {
-                  <CustomButton
-                    style={{
-                      ...styles.counterButton,
-                      backgroundColor:
-                        selectedButton === counter[0].title
-                          ? `${colours.button}30`
-                          : colours.button,
-                      borderColor:
-                        selectedButton === counter[0].title
-                          ? `${colours.highlight}`
-                          : colours.button,
-                      borderWidth: 7,
-                    }}
-                    text={`${counter[0].title}\n${counter[0].counter}`}
-                    textStyle={styles.buttonText}
-                    onPressHandler={() => onJudgingButtonPress(counter)}
+                  <CounterButton
+                    selectedButton={selectedButton}
+                    counter={counter}
+                    index={index}
+                    setSelectedButton={setSelectedButton}
+                    style={{ alignSelf: "flex-start" }}
                   />
                 }
               </Col>

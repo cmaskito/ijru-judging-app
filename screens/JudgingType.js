@@ -25,7 +25,7 @@ export default function JudgingType({ navigation, route }) {
   const [judgingTypeValue, setJudgingTypeValue] = useState(null);
   const [judgingTypeItems, setJudgingTypeItems] = useState([
     { label: "Difficulty", value: "difficulty" },
-    { label: "Presentation", value: "presentation" },
+    { label: "Presentation Form", value: "presentationForm" },
     { label: "Required Elements", value: "requiredElements" },
   ]);
   const [eventOpen, setEventOpen] = useState(false);
@@ -101,8 +101,8 @@ export default function JudgingType({ navigation, route }) {
           tournamentId,
         });
         break;
-      case "presentation":
-        navigation.navigate("Presentation", {
+      case "presentationForm":
+        navigation.navigate("PresentationForm", {
           practice,
           skipper: selectedSkipper,
           tournamentName,
