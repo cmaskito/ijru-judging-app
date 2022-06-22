@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
+  BackHandler,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -57,12 +58,10 @@ export default function RequiredElements({ navigation, route }) {
 
   let hasUnsavedChanges = true;
 
-  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
+  // Makes an alert pop up if the user tries to leave the screen
   useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
-      if (!hasUnsavedChanges) return;
-
-      e.preventDefault();
+    const backAction = () => {
+      Vibration.vibrate(200);
       Alert.alert(
         "Cancel?",
         "Are you sure you want to cancel this judging session? Data will not be saved.",
@@ -71,14 +70,21 @@ export default function RequiredElements({ navigation, route }) {
           {
             text: "Yes",
             onPress: () => {
-              hasUnsavedChanges = false;
               navigation.goBack();
             },
           },
         ]
       );
-    });
-  }, [navigation]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>

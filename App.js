@@ -34,6 +34,7 @@ import { db } from "./firebase-config";
 import TournamentCreated from "./screens/TournamentCreated";
 import JudgeOrView from "./screens/JudgeOrView";
 import ScoreSummary from "./screens/ScoreSummary";
+import ScoresSubmitted from "./screens/ScoresSubmitted";
 
 const Stack = createStackNavigator();
 
@@ -71,6 +72,7 @@ export default function App() {
         <Stack.Screen name="TournamentCreated" component={TournamentCreated} />
         <Stack.Screen name="JudgeOrView" component={JudgeOrView} />
         <Stack.Screen name="ScoreSummary" component={ScoreSummary} />
+        <Stack.Screen name="ScoresSubmitted" component={ScoresSubmitted} />
       </Stack.Navigator>
     </NavigationContainer>
   );

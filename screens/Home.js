@@ -6,7 +6,7 @@ import CustomButton from "../components/CustomButton";
 
 export default function Home({ navigation }) {
   const onPressConnectButton = () => {
-    navigation.navigate("Connect");
+    navigation.navigate("Connect", { tournamentId: "" });
   };
 
   const onPressPracticeButton = () => {

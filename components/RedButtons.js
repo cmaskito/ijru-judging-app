@@ -30,7 +30,20 @@ export default function RedButtons({
 
   const onCancelButtonPress = () => {
     Vibration.vibrate(200);
-    navigation.goBack();
+    Alert.alert(
+      "Cancel?",
+      "Are you sure you want to cancel this judging session? Data will not be saved.",
+      [
+        { text: "No" },
+        {
+          text: "Yes",
+          onPress: () => {
+            hasUnsavedChanges = false;
+            navigation.goBack();
+          },
+        },
+      ]
+    );
   };
 
   const onDoneButtonPress = () => {

@@ -6,6 +6,7 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
+  BackHandler,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -13,7 +14,7 @@ import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
-import { NavigationRouteContext } from "@react-navigation/native";
+import React from "react";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
@@ -61,21 +62,11 @@ export default function Difficulty({ navigation, route }) {
 
   const [selectedButton, setSelectedButton] = useState(null);
   const { practice, skipper, tournamentName, tournamentId } = route.params;
-  let hasUnsavedChanges = true;
 
-  const onJudgingButtonPress = (counter) => {
-    Vibration.vibrate(70);
-    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    counter[1](newCounter);
-    setSelectedButton(counter[0].title);
-  };
-
-  // Makes an alert pop up if the user tries to leave the screen with unsaved changes
+  // Makes an alert pop up if the user tries to leave the screen
   useEffect(() => {
-    navigation.addListener("beforeRemove", (e) => {
-      if (!hasUnsavedChanges) return;
-
-      e.preventDefault();
+    const backAction = () => {
+      Vibration.vibrate(200);
       Alert.alert(
         "Cancel?",
         "Are you sure you want to cancel this judging session? Data will not be saved.",
@@ -84,14 +75,21 @@ export default function Difficulty({ navigation, route }) {
           {
             text: "Yes",
             onPress: () => {
-              hasUnsavedChanges = false;
               navigation.goBack();
             },
           },
         ]
       );
-    });
-  }, [navigation]);
+      return true;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      backAction
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -106,7 +104,6 @@ export default function Difficulty({ navigation, route }) {
       />
 
       {/* Red Buttons */}
-
       <RedButtons
         counters={levelCounters}
         setSelectedButton={setSelectedButton}

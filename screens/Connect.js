@@ -14,10 +14,17 @@ import CustomButton from "../components/CustomButton";
 import GreyTextInput from "../components/GreyTextInput";
 import { db } from "../firebase-config";
 import { getDoc, doc } from "firebase/firestore";
+import { useEffect } from "react";
 
 export default function Connect({ navigation, route }) {
   const [userInput, setUserInput] = useState("");
   const [incorrectId, setIncorrectId] = useState(false);
+
+  const { tournamentId } = route.params;
+
+  useEffect(() => {
+    setUserInput[tournamentId];
+  }, []);
 
   const onConnectButtonPress = async () => {
     console.log("press");
