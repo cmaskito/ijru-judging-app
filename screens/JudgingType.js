@@ -43,6 +43,8 @@ export default function JudgingType({ navigation, route }) {
 
   const [selectedSkipper, setSelectedSkipper] = useState(null);
 
+  const [incorrectId, setIncorrectId] = useState(false);
+
   const { practice, tournamentId, tournamentName } = route.params;
 
   const fetchSkipperDetails = async () => {
@@ -90,6 +92,10 @@ export default function JudgingType({ navigation, route }) {
           console.log(skipper);
         }
       });
+      if (selectedSkipper === null) {
+        setIncorrectId(true);
+        return;
+      }
     }
 
     switch (value) {
@@ -264,6 +270,11 @@ export default function JudgingType({ navigation, route }) {
                 maxHeight={70}
               />
             </View>
+            {incorrectId && (
+              <Text style={styles.errorLabel}>
+                THAT TOURNAMENT DOES NOT EXIST
+              </Text>
+            )}
             <CustomButton
               style={{ marginTop: 80 }}
               text="START JUDGING"
@@ -328,5 +339,13 @@ const styles = StyleSheet.create({
   },
   searchBarWrapper: {
     marginTop: 50,
+  },
+  errorLabel: {
+    paddingLeft: 5,
+    letterSpacing: 1.5,
+    fontFamily: "Roboto_400Regular",
+    fontSize: 14,
+    color: "red",
+    marginBottom: -14,
   },
 });

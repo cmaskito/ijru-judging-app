@@ -135,6 +135,18 @@ export default function SelectSkpperToView({ navigation, route }) {
               </View>
             )}
           </View>
+
+          <CustomButton
+            text={"VIEW SCORES"}
+            style={{ marginTop: 100 }}
+            onPressHandler={() =>
+              navigation.navigate("ViewScores", {
+                tournamentId,
+                tournamentName,
+                skipper: selectedSkipper,
+              })
+            }
+          />
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

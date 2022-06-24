@@ -36,6 +36,7 @@ import JudgeOrView from "./screens/JudgeOrView";
 import ScoreSummary from "./screens/ScoreSummary";
 import ScoresSubmitted from "./screens/ScoresSubmitted";
 import SelectSkipperToView from "./screens/SelectSkipperToView";
+import ViewScores from "./screens/ViewScores";
 
 const Stack = createStackNavigator();
 
@@ -78,6 +79,7 @@ export default function App() {
           name="SelectSkipperToView"
           component={SelectSkipperToView}
         />
+        <Stack.Screen name="ViewScores" component={ViewScores} />
       </Stack.Navigator>
     </NavigationContainer>
   );
