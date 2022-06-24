@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@expo-google-fonts/roboto": "^0.2.2",
+    "@react-native-firebase/app": "^15.0.0",
+    "@react-native-firebase/functions": "^15.0.0",
     "@react-navigation/native": "^6.0.8",
     "@react-navigation/stack": "^6.1.1",
     "csvtojson": "^2.0.10",

@@ -3,6 +3,7 @@ import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
+import functions from "@react-native-firebase/functions";
 
 export default function Home({ navigation }) {
   const onPressConnectButton = () => {

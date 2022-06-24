@@ -70,6 +70,7 @@ export default function ScoreSummary({ route, navigation }) {
                     ...scores,
                     skipperId: eventDetails.skipper.id,
                     judgingType: eventDetails.judgingType.toLowerCase(),
+                    // Make sure to replace spaces
                     [`${eventDetails.judgingType.toLowerCase()}Score`]:
                       categoryScore,
                   }
@@ -87,7 +88,7 @@ export default function ScoreSummary({ route, navigation }) {
           {
             ...scores,
             skipperId: eventDetails.skipper.id,
-            judgingType: "difficulty",
+            judgingType: eventDetails.judgingType.toLowerCase(),
             [`${eventDetails.judgingType.toLowerCase()}Score`]: categoryScore,
           }
         );
