@@ -20,7 +20,7 @@ import { db } from "../firebase-config";
 import { getDocs, collection } from "firebase/firestore";
 import dimensions from "../assets/Dimensions";
 
-export default function ViewScores({ navigation, route }) {
+export default function SelectSkpperToView({ navigation, route }) {
   const { practice, tournamentId, tournamentName } = route.params;
 
   const [showNames, setShowNames] = useState(false);

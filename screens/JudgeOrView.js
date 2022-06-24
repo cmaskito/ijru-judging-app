@@ -41,7 +41,7 @@ export default function JudgeOrView({ navigation, route }) {
           text="VIEW SCORES"
           touchableOpacityStyle={styles.touchableOpacityStyle}
           onPressHandler={() =>
-            navigation.navigate("ViewScores", {
+            navigation.navigate("SelectSkipperToView", {
               practice,
               tournamentId,
               tournamentName,
