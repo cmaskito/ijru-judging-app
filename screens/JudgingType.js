@@ -19,6 +19,7 @@ import { db } from "../firebase-config";
 import { getDocs, collection } from "firebase/firestore";
 import dimensions from "../assets/Dimensions";
 import { FlatList } from "react-native-gesture-handler";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function JudgingType({ navigation, route }) {
   const [judgingTypeOpen, setJudgingTypeOpen] = useState(false);
@@ -65,6 +66,17 @@ export default function JudgingType({ navigation, route }) {
     setFilteredSkippersList(skippersList);
   }, []);
 
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     setSelectedSkipper(null);
+  //     console.log(selectedSkipper);
+  //   }, [search])
+  // );
+
+  useEffect(() => {
+    setSelectedSkipper(null);
+  });
+
   const updateQuery = (input) => {
     console.log("input: ", input);
 
@@ -81,6 +93,7 @@ export default function JudgingType({ navigation, route }) {
   };
 
   const startJudgingPress = (value) => {
+    console.log("select", selectedSkipper);
     if (selectedSkipper === null) {
       const query = search.toLowerCase().replace(/ /g, "");
       skippersList.forEach((skipper) => {
@@ -201,6 +214,10 @@ export default function JudgingType({ navigation, route }) {
                 placeholderTextColor={colours.placeholderText}
                 placeholderStyle={styles.pickerText}
                 inputStyle={{ ...styles.pickerText, color: colours.textDark }}
+                onFocus={() => {
+                  setSelectedSkipper(null);
+                  console.log(selectedSkipper);
+                }}
               />
             </View>
             {showNames && (
@@ -271,9 +288,7 @@ export default function JudgingType({ navigation, route }) {
               />
             </View>
             {incorrectId && (
-              <Text style={styles.errorLabel}>
-                THAT TOURNAMENT DOES NOT EXIST
-              </Text>
+              <Text style={styles.errorLabel}>THAT SKIPPER DOES NOT EXIST</Text>
             )}
             <CustomButton
               style={{ marginTop: 80 }}
