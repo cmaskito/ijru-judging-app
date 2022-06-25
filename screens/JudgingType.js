@@ -48,6 +48,8 @@ export default function JudgingType({ navigation, route }) {
 
   const { practice, tournamentId, tournamentName } = route.params;
 
+  let input_ = "";
+
   const fetchSkipperDetails = async () => {
     const allSkippers = await getDocs(
       collection(db, `tournaments/${tournamentId}/skippers`)
@@ -75,15 +77,13 @@ export default function JudgingType({ navigation, route }) {
 
   useEffect(() => {
     setSelectedSkipper(null);
-  });
+  }, []);
 
   const updateQuery = (input) => {
-    console.log("input: ", input);
-
+    setSearch(input);
     const showList = input.length == 0 ? false : true;
     setShowNames(showList);
 
-    setSearch(input);
     let query = input.toLowerCase().replace(/ /g, "");
     const filtered = skippersList.filter((skipper) => {
       const fullName = `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}`;
@@ -93,59 +93,70 @@ export default function JudgingType({ navigation, route }) {
   };
 
   const startJudgingPress = (value) => {
-    console.log("select", selectedSkipper);
-    if (selectedSkipper === null) {
-      const query = search.toLowerCase().replace(/ /g, "");
-      skippersList.forEach((skipper) => {
-        if (
-          `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}` ==
-          query
-        ) {
-          setSelectedSkipper(skipper);
-          console.log(skipper);
-        }
-      });
-      if (selectedSkipper === null) {
-        setIncorrectId(true);
-        return;
-      }
-    }
+    setSelectedSkipper(null);
+    console.log("search", search);
+    const query = search.toLowerCase().replace(/ /g, "");
+    let foundSkipper = false;
+    console.log(query);
 
-    switch (value) {
-      case "difficulty":
-        navigation.navigate("Difficulty", {
-          practice,
-          skipper: selectedSkipper,
-          tournamentName,
-          tournamentId,
-        });
-        break;
-      case "presentationForm":
-        navigation.navigate("PresentationForm", {
-          practice,
-          skipper: selectedSkipper,
-          tournamentName,
-          tournamentId,
-        });
-        break;
-      case "requiredElements":
-        navigation.navigate("RequiredElements", {
-          practice,
-          skipper: selectedSkipper,
-          tournamentName,
-          tournamentId,
-        });
-        break;
-      default:
-        break;
+    skippersList.forEach((skipper) => {
+      if (
+        `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}` ==
+        query
+      ) {
+        console.log(skipper);
+        setSelectedSkipper(skipper);
+        foundSkipper = true;
+      }
+    });
+    if (!foundSkipper) {
+      setIncorrectId(true);
+      return;
     }
   };
+
+  useEffect(() => {
+    if (selectedSkipper !== null) {
+      setIncorrectId(false);
+      switch (judgingTypeValue) {
+        case "difficulty":
+          console.log(selectedSkipper);
+          navigation.navigate("Difficulty", {
+            practice,
+            skipper: selectedSkipper,
+            tournamentName,
+            tournamentId,
+          });
+          break;
+        case "presentationForm":
+          navigation.navigate("PresentationForm", {
+            practice,
+            skipper: selectedSkipper,
+            tournamentName,
+            tournamentId,
+          });
+          break;
+        case "requiredElements":
+          navigation.navigate("RequiredElements", {
+            practice,
+            skipper: selectedSkipper,
+            tournamentName,
+            tournamentId,
+          });
+          break;
+        default:
+          break;
+      }
+    }
+  }, [selectedSkipper]);
 
   const onAutoFillNamePress = (skipper) => {
     console.log("clicked ", skipper);
     setSearch(`${skipper.firstName} ${skipper.lastName}`);
+    input_ = `${skipper.firstName} ${skipper.lastName}`;
+    console.log(input_);
+    console.log(search);
     setShowNames(false);
-    setSelectedSkipper(skipper);
   };
 
   if (practice === true) {
@@ -215,7 +226,6 @@ export default function JudgingType({ navigation, route }) {
                 placeholderStyle={styles.pickerText}
                 inputStyle={{ ...styles.pickerText, color: colours.textDark }}
                 onFocus={() => {
-                  setSelectedSkipper(null);
                   console.log(selectedSkipper);
                 }}
               />
@@ -288,7 +298,9 @@ export default function JudgingType({ navigation, route }) {
               />
             </View>
             {incorrectId && (
-              <Text style={styles.errorLabel}>THAT SKIPPER DOES NOT EXIST</Text>
+              <Text style={styles.errorLabel}>
+                THE FIELDS ARE NOT PROPERLY COMPLETED
+              </Text>
             )}
             <CustomButton
               style={{ marginTop: 80 }}
