@@ -29,6 +29,9 @@ export default function SelectSkpperToView({ navigation, route }) {
   const [skippersList, setSkippersList] = useState([]);
 
   const [selectedSkipper, setSelectedSkipper] = useState(null);
+
+  const [incorrectId, setIncorrectId] = useState(false);
+
   const fetchSkipperDetails = async () => {
     const allSkippers = await getDocs(
       collection(db, `tournaments/${tournamentId}/skippers`)
@@ -49,10 +52,9 @@ export default function SelectSkpperToView({ navigation, route }) {
 
   const updateQuery = (input) => {
     console.log("input: ", input);
-
     const showList = input.length == 0 ? false : true;
-    setShowNames(showList);
 
+    setShowNames(showList);
     setSearch(input);
     let query = input.toLowerCase().replace(/ /g, "");
     const filtered = skippersList.filter((skipper) => {
@@ -66,8 +68,39 @@ export default function SelectSkpperToView({ navigation, route }) {
     console.log("clicked ", skipper);
     setSearch(`${skipper.firstName} ${skipper.lastName}`);
     setShowNames(false);
-    setSelectedSkipper(skipper);
   };
+
+  const onViewScoresPress = () => {
+    setSelectedSkipper(null);
+    const query = search.toLowerCase().replace(/ /g, "");
+    let foundSkipper = false;
+    console.log(query);
+
+    skippersList.forEach((skipper) => {
+      if (
+        `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}` ==
+        query
+      ) {
+        console.log(skipper);
+        setSelectedSkipper(skipper);
+        foundSkipper = true;
+      }
+    });
+    if (!foundSkipper) {
+      setIncorrectId(true);
+      return;
+    }
+  };
+  useEffect(() => {
+    if (selectedSkipper !== null) {
+      navigation.navigate("ViewScores", {
+        tournamentId,
+        tournamentName,
+        skipper: selectedSkipper,
+      });
+    }
+  }, [selectedSkipper]);
+
   return (
     <TouchableWithoutFeedback onPressIn={() => Keyboard.dismiss()}>
       <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -135,17 +168,16 @@ export default function SelectSkpperToView({ navigation, route }) {
               </View>
             )}
           </View>
+          {incorrectId && (
+            <Text style={styles.errorLabel}>
+              THE FIELDS ARE NOT PROPERLY COMPLETED
+            </Text>
+          )}
 
           <CustomButton
             text={"VIEW SCORES"}
             style={{ marginTop: 100 }}
-            onPressHandler={() =>
-              navigation.navigate("ViewScores", {
-                tournamentId,
-                tournamentName,
-                skipper: selectedSkipper,
-              })
-            }
+            onPressHandler={onViewScoresPress}
           />
         </View>
       </SafeAreaView>
@@ -209,5 +241,13 @@ const styles = StyleSheet.create({
     width: dimensions.width * 0.85,
     borderRadius: 10,
     overflow: "hidden",
+  },
+  errorLabel: {
+    paddingLeft: 5,
+    letterSpacing: 1.5,
+    fontFamily: "Roboto_400Regular",
+    fontSize: 14,
+    color: "red",
+    marginBottom: -14,
   },
 });

@@ -68,17 +68,6 @@ export default function JudgingType({ navigation, route }) {
     setFilteredSkippersList(skippersList);
   }, []);
 
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     setSelectedSkipper(null);
-  //     console.log(selectedSkipper);
-  //   }, [search])
-  // );
-
-  useEffect(() => {
-    setSelectedSkipper(null);
-  }, []);
-
   const updateQuery = (input) => {
     setSearch(input);
     const showList = input.length == 0 ? false : true;
@@ -94,7 +83,6 @@ export default function JudgingType({ navigation, route }) {
 
   const startJudgingPress = (value) => {
     setSelectedSkipper(null);
-    console.log("search", search);
     const query = search.toLowerCase().replace(/ /g, "");
     let foundSkipper = false;
     console.log(query);

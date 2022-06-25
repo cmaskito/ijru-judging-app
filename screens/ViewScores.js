@@ -10,7 +10,7 @@ export default function ViewScores({ navigation, route }) {
     <View style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
       <View style={styles.container}>
-        <Text style={styles.titleText}>CONNECT TO TOURNAMENT</Text>
+        <Text style={styles.titleText}>VIEW SCORES</Text>
         <View style={styles.tournamentDetailsWrapper}>
           <Text
             style={styles.tournamentDetailsText}
