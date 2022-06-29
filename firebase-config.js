@@ -1,9 +1,5 @@
 import { initializeApp } from "firebase/app";
-import {
-  getFirestore,
-  connectFirestoreEmulator,
-  initializeFirestore,
-} from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 // // Initialize Firebase
 const firebaseApp = initializeApp({
