@@ -1,3 +1,5 @@
+// This file is used to connect the project to the firestore database.
+
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 
@@ -13,4 +15,6 @@ const firebaseApp = initializeApp({
 });
 
 const db = getFirestore();
+
+// Exports db (the reference to the firestore database) so that it can be used in other files
 export { db };

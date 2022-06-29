@@ -1,3 +1,4 @@
+// This screen allows the user to type in a tournament ID and connect to a tournament.
 import {
   StyleSheet,
   View,
@@ -22,12 +23,16 @@ export default function Connect({ navigation, route }) {
 
   const { tournamentId } = route.params;
 
+  // If the user is sent to this screen from the end of the submit scores screen, then the tournament ID will be autofilled with this function
   useEffect(() => {
     setUserInput[tournamentId];
   }, []);
 
+  // Triggers when the connect button is pressed.
+  // Checks if the tournament ID that is entered actually exists in the database
+  // If it does, the user is sent to the "JudgeOrView" screen
+  // If not, then an error message will be given stating "THAT TOURNAMENT DOES NOT EXIST"
   const onConnectButtonPress = async () => {
-    console.log("press");
     try {
       const tournamentDoc = await getDoc(doc(db, "tournaments", userInput));
       if (tournamentDoc.data() === undefined) {
@@ -36,8 +41,8 @@ export default function Connect({ navigation, route }) {
         console.log(tournamentDoc.data());
         navigation.navigate("JudgeOrView", tournamentDoc.data());
       }
-    } catch (e) {
-      console.log("error:", e);
+    } catch (error) {
+      console.log("error:", error);
       setIncorrectId(true);
     }
   };

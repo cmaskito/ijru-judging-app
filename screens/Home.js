@@ -1,11 +1,11 @@
-import { Roboto_700Bold } from "@expo-google-fonts/roboto";
+// This is the first screen that is loaded when the app is launched.
 import { StyleSheet, View, Text, SafeAreaView } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
-import functions from "@react-native-firebase/functions";
 
 export default function Home({ navigation }) {
+  // These functions will be triggered when a button is pressed. They each navigate to a different screen.
   const onPressConnectButton = () => {
     navigation.navigate("Connect", { tournamentId: "" });
   };

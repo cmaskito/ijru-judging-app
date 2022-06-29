@@ -1,6 +1,8 @@
+// This 'screen' is what is first loaded when the app launches. It holds the stack navigator and loads the fonts, but doesn't directly display elements to the screen.
+// It 'connects' all the screens together
+
 import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import {
   useFonts,
   Roboto_100Thin,
@@ -19,18 +21,12 @@ import {
 import AppLoading from "expo-app-loading";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import colours from "./assets/colours";
 import Home from "./screens/Home";
-import AndroidSafeArea from "./assets/SafeArea";
 import Connect from "./screens/Connect";
 import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
 import PresentationForm from "./screens/PresentationForm";
 import RequiredElements from "./screens/RequiredElements";
-import CreateTournament from "./screens/CreateTournament";
-import { useEffect } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "./firebase-config";
 import TournamentCreated from "./screens/TournamentCreated";
 import JudgeOrView from "./screens/JudgeOrView";
 import ScoreSummary from "./screens/ScoreSummary";
@@ -41,6 +37,7 @@ import ViewScores from "./screens/ViewScores";
 const Stack = createStackNavigator();
 
 export default function App() {
+  // imports Roboto fonts
   const [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_100Thin_Italic,
@@ -84,12 +81,3 @@ export default function App() {
     </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
