@@ -1,4 +1,6 @@
-﻿import { StyleSheet, View, Text, SafeAreaView } from "react-native";
+﻿// This screen allows users to select an event (so far there is only single rope freestyle)
+// and see the scores of the skippers that competed in that event
+import { StyleSheet, View, Text } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";

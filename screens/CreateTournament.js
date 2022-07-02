@@ -1,3 +1,6 @@
+// This screen will allow users to upload a .csv file with all of the skippers details. The .csv file must be formatted correctly
+// They also give the tournament a name
+// When they create the tournament, a new tournament collection will be made on the database
 import {
   StyleSheet,
   View,
@@ -21,15 +24,17 @@ import { db } from "../firebase-config";
 import generateTournamentId from "../assets/tournamentIdGenerator";
 
 export default function CreateTournament({ navigation }) {
-  const [fileName, setFileName] = useState(undefined);
+  const [fileName, setFileName] = useState(undefined); // Name to display on file input (shows chosen file)
   const [tournamentName, setTournamentName] = useState("");
   const [parsedSkipperDetails, setParsedSkipperDetails] = useState([]);
 
   const [attemptedSubmitError, setAttemptedSubmitError] = useState(false);
 
+  // Triggers when the user presses on the file input
   const getSkipperDetailsCSV = async () => {
-    const doc = await DocumentPicker.getDocumentAsync();
+    const doc = await DocumentPicker.getDocumentAsync(); // allow the user to select a file.
 
+    // Checks if the selected file is a .csv file
     if (doc.type !== "cancel") {
       if (doc.mimeType !== "text/comma-separated-values") {
         setFileName(undefined);
@@ -39,11 +44,12 @@ export default function CreateTournament({ navigation }) {
         );
         return;
       }
-
       setFileName(doc.name);
-      const docContents = await FileSystem.readAsStringAsync(doc.uri);
-      const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, "");
 
+      const docContents = await FileSystem.readAsStringAsync(doc.uri); // Gets the contents of the selected .csv file
+      const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, ""); // Removes the spaces / special characters from the contents
+
+      // Parses contents of the .csv files
       Papa.parse(fixedContents, {
         header: true,
         dynamicTyping: true,
@@ -51,25 +57,30 @@ export default function CreateTournament({ navigation }) {
           console.log("error:", error);
         },
         complete: function (results) {
-          setParsedSkipperDetails(results.data);
+          setParsedSkipperDetails(results.data); // saves the contents to this state variable
         },
       });
     }
   };
 
+  // Creates the tournament when the user presses the Create Tournament button
   const onSubmit = async () => {
     if (tournamentName !== "" && fileName !== undefined) {
-      const tournamentId = await generateTournamentId();
+      //ensures that there is a tournament name and a file selected
+      const tournamentId = await generateTournamentId(); //generate a unique 6 digit tournament id
       try {
+        // Creates a document with id: tournamentId
         await setDoc(doc(db, "tournaments", `${tournamentId}`), {
           tournamentId: tournamentId,
           tournamentName: tournamentName,
         });
+        // Creates a document for each skipper in the skippers subcollection
         parsedSkipperDetails.forEach((skipper) => {
           addDoc(collection(db, `tournaments/${tournamentId}/skippers`), {
             ...skipper,
           });
         });
+        // moves to the tournament created screen
         navigation.navigate("TournamentCreated", {
           tournamentName,
           tournamentId,
@@ -78,7 +89,7 @@ export default function CreateTournament({ navigation }) {
         console.error(e);
       }
     } else {
-      setAttemptedSubmitError(true);
+      setAttemptedSubmitError(true); // if there is no tournament name or file selected, then an error message will show up.
     }
   };
 
@@ -89,49 +100,44 @@ export default function CreateTournament({ navigation }) {
         onPressIn={() => Keyboard.dismiss()}
         style={styles.dismissKeyboard}
       >
+        {/* Title */}
         <View style={styles.container}>
           <Text style={styles.titleText}>CREATE TOURNAMENT</Text>
-
+          {/* Grey Text Input */}
           <GreyTextInput
             wrapperStyle={{ marginTop: 100 }}
             label={"TOURNAMENT NAME"}
             placeholder={"TOURNAMENT NAME"}
             onChangeText={(value) => setTournamentName(value)}
           />
+          {/* Grey File Input */}
           <View style={styles.buttonWrapper}>
             <View style={{ width: "100%", paddingHorizontal: "7.5%" }}>
               <Text style={styles.buttonLabel}>SKIPPER DETAILS</Text>
               <CustomButton
-                style={{
-                  backgroundColor: colours.lightGrey,
-                  borderRadius: 15,
-                  width: "100%",
-                  height: 50,
-                  alignItems: "flex-start",
-                }}
+                style={styles.greyFileInput}
                 touchableOpacityStyle={{
                   height: 50,
                 }}
                 text={fileName === undefined ? "SELECT A .CSV FILE" : fileName}
                 textStyle={{
-                  fontSize: 14,
-                  fontFamily: "Roboto_400Regular",
-                  letterSpacing: 0.5,
+                  ...styles.greyFileInputText,
                   color:
                     fileName === undefined
                       ? colours.placeholderText
                       : colours.textDark,
-                  paddingLeft: 10,
                 }}
                 onPressHandler={getSkipperDetailsCSV}
               />
             </View>
           </View>
+          {/* Error Message */}
           {attemptedSubmitError && (
             <Text style={styles.errorLabel}>
               INVALID TOURNAMENT NAME OR FILE
             </Text>
           )}
+          {/* Create Tournament Button */}
           <CustomButton
             text="CREATE TOURNAMENT"
             style={{ marginTop: 60 }}
@@ -197,5 +203,18 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_400Regular",
     fontSize: 14,
     color: "red",
+  },
+  greyFileInput: {
+    backgroundColor: colours.lightGrey,
+    borderRadius: 15,
+    width: "100%",
+    height: 50,
+    alignItems: "flex-start",
+  },
+  greyFileInputText: {
+    fontSize: 14,
+    fontFamily: "Roboto_400Regular",
+    letterSpacing: 0.5,
+    paddingLeft: 10,
   },
 });

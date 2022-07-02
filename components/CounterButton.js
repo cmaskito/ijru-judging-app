@@ -1,6 +1,7 @@
+// A juding button counter that can be reused on the judging screens
 import CustomButton from "./CustomButton";
 import colours from "../assets/colours";
-import { View, Text, StyleSheet, Vibration, Alert } from "react-native";
+import { StyleSheet, Vibration } from "react-native";
 import dimensions from "../assets/Dimensions";
 
 export default function CounterButton({
@@ -10,6 +11,8 @@ export default function CounterButton({
   setSelectedButton,
   style,
 }) {
+  // Triggered when the button is pressed
+  // Vibrates the phone and increments the counter by 1
   const onJudgingButtonPress = (counter) => {
     Vibration.vibrate(70);
     const newCounter = { ...counter[0], counter: counter[0].counter + 1 };

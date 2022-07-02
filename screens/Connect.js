@@ -52,18 +52,22 @@ export default function Connect({ navigation, route }) {
       <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
         <BackButton />
         <View style={styles.container}>
+          {/* Title */}
           <Text style={styles.titleText}>CONNECT TO COMPETITION</Text>
+          {/* Text Input */}
           <GreyTextInput
             wrapperStyle={{ marginTop: 150 }}
             placeholder={"TOURNAMENT ID"}
             label={"TOURNAMENT ID"}
             onChangeText={(value) => setUserInput(value)}
           />
+          {/* Error Message */}
           {incorrectId && (
             <Text style={styles.errorLabel}>
               THAT TOURNAMENT DOES NOT EXIST
             </Text>
           )}
+          {/* Connect Button */}
           <CustomButton
             touchableOpacityStyle={styles.connectButton}
             text="CONNECT"

@@ -1,3 +1,6 @@
+// Allows judges to choose what category / type they will be judging from the routine
+// Also allows judges to select the skipper that they will be judging
+// If the user access this page from the practice mode button, it will look different
 import {
   StyleSheet,
   View,
@@ -10,7 +13,6 @@ import {
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import { SearchBar } from "react-native-elements";
-
 import { useState, useEffect } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import CustomButton from "../components/CustomButton";
@@ -19,22 +21,15 @@ import { db } from "../firebase-config";
 import { getDocs, collection } from "firebase/firestore";
 import dimensions from "../assets/Dimensions";
 import { FlatList } from "react-native-gesture-handler";
-import { useFocusEffect } from "@react-navigation/native";
 
 export default function JudgingType({ navigation, route }) {
+  // State variables needed for dropdown picker
   const [judgingTypeOpen, setJudgingTypeOpen] = useState(false);
   const [judgingTypeValue, setJudgingTypeValue] = useState(null);
   const [judgingTypeItems, setJudgingTypeItems] = useState([
     { label: "Difficulty", value: "difficulty" },
     { label: "Presentation Form", value: "presentationForm" },
     { label: "Required Elements", value: "requiredElements" },
-  ]);
-  const [eventOpen, setEventOpen] = useState(false);
-  const [eventValue, setEventValue] = useState(null);
-  const [eventItems, setEventItems] = useState([
-    { label: "30s Speed", value: "30s" },
-    { label: "3min Speed", value: "3min" },
-    { label: "Individual Freestyle", value: "freestyle" },
   ]);
 
   const [showNames, setShowNames] = useState(false);
@@ -48,13 +43,13 @@ export default function JudgingType({ navigation, route }) {
 
   const { practice, tournamentId, tournamentName } = route.params;
 
-  let input_ = "";
-
   const fetchSkipperDetails = async () => {
+    // Fetches skipper details
     const allSkippers = await getDocs(
       collection(db, `tournaments/${tournamentId}/skippers`)
     );
 
+    // Saves skipper details in a state variable
     allSkippers.forEach((skipper) => {
       setSkippersList((prevState) => [
         ...prevState,
@@ -63,17 +58,20 @@ export default function JudgingType({ navigation, route }) {
     });
   };
 
+  // runs as soon as the screen is loaded
   useEffect(() => {
     fetchSkipperDetails();
     setFilteredSkippersList(skippersList);
   }, []);
 
+  // Runs each time the search bar 'query' is updated
   const updateQuery = (input) => {
     setSearch(input);
-    const showList = input.length == 0 ? false : true;
+    const showList = input.length == 0 ? false : true; // checks if there is a query in the search bar
     setShowNames(showList);
-
     let query = input.toLowerCase().replace(/ /g, "");
+
+    // Creates a filtered list of skippers that fit the query and displays them under the search bar
     const filtered = skippersList.filter((skipper) => {
       const fullName = `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}`;
       return fullName.includes(query);
@@ -81,12 +79,15 @@ export default function JudgingType({ navigation, route }) {
     setFilteredSkippersList(filtered);
   };
 
+  // Triggers when the user presses start judging button
   const startJudgingPress = (value) => {
     setSelectedSkipper(null);
     const query = search.toLowerCase().replace(/ /g, "");
     let foundSkipper = false;
     console.log(query);
 
+    // Loops thorugh each skipper to check if the query matches a name
+    // If it finds a matching name, it selects it as the selected skipper
     skippersList.forEach((skipper) => {
       if (
         `${skipper.firstName.toLowerCase()}${skipper.lastName.toLowerCase()}` ==
@@ -98,11 +99,13 @@ export default function JudgingType({ navigation, route }) {
       }
     });
     if (!foundSkipper) {
-      setIncorrectId(true);
+      setIncorrectId(true); // if a skipper is not found, an error message is created
       return;
     }
   };
 
+  // Whenever a selected skipper is selected (which only happens when the user presses the start judging button)
+  // Then the user will be taken to the screen that coreesponds to their selected judging type
   useEffect(() => {
     if (selectedSkipper !== null) {
       setIncorrectId(false);
@@ -138,21 +141,22 @@ export default function JudgingType({ navigation, route }) {
     }
   }, [selectedSkipper]);
 
+  // Runs when the user presses the name that appears when they type into the search bar
+  // Autofills the search bar with the name selected
   const onAutoFillNamePress = (skipper) => {
-    console.log("clicked ", skipper);
     setSearch(`${skipper.firstName} ${skipper.lastName}`);
-    input_ = `${skipper.firstName} ${skipper.lastName}`;
-    console.log(input_);
-    console.log(search);
     setShowNames(false);
   };
 
   if (practice === true) {
+    // This if statement changes what is rendered depending on whether is is a practice session or real session.
     return (
       <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
         <BackButton />
         <View style={styles.container}>
+          {/* Title */}
           <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
+          {/* Dropdown picker */}
           <View style={styles.pickerWrapper}>
             <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
             <DropDownPicker
@@ -173,6 +177,7 @@ export default function JudgingType({ navigation, route }) {
               }}
             />
           </View>
+          {/* Start Judging button */}
           <CustomButton
             style={{ marginTop: 190 }}
             text="START JUDGING"
@@ -187,7 +192,9 @@ export default function JudgingType({ navigation, route }) {
         <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
           <BackButton />
           <View style={styles.container}>
+            {/* title */}
             <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
+            {/* Search Bar */}
             <View style={styles.searchBarWrapper}>
               <Text style={styles.pickerLabelText}>SKIPPER NAME</Text>
               <SearchBar
@@ -196,35 +203,20 @@ export default function JudgingType({ navigation, route }) {
                 placeholder="SKIPPER NAME"
                 round={true}
                 lightTheme
-                containerStyle={{
-                  backgroundColor: "white",
-                  borderColor: "white",
-                  width: dimensions.width * 0.85,
-                  padding: 0,
-                  borderBottomColor: "transparent",
-                  borderTopColor: "transparent",
-                }}
-                inputContainerStyle={{
-                  backgroundColor: colours.lightGrey,
-                  padding: 0,
-                  borderWidth: 0,
-                  height: 50,
-                }}
+                containerStyle={styles.searchBarContainerStyle}
+                inputContainerStyle={styles.searchBarInputContainerStyle}
                 placeholderTextColor={colours.placeholderText}
                 placeholderStyle={styles.pickerText}
                 inputStyle={{ ...styles.pickerText, color: colours.textDark }}
-                onFocus={() => {
-                  console.log(selectedSkipper);
-                }}
               />
             </View>
+            {/* List of names under search bar */}
             {showNames && (
               <View style={styles.flatListWrapper}>
                 <FlatList
                   data={filteredSkippersList}
                   keyExtractor={(i) => i.id}
                   extraData={search}
-                  // style={styles.flatList}
                   renderItem={({ item }) => {
                     return (
                       <TouchableOpacity
@@ -243,27 +235,7 @@ export default function JudgingType({ navigation, route }) {
                 />
               </View>
             )}
-            {/* <View style={styles.pickerWrapper}>
-              <Text style={styles.pickerLabelText}>EVENT</Text>
-              <DropDownPicker
-                style={styles.picker}
-                textStyle={styles.pickerText}
-                labelStyle={styles.pickerText}
-                open={eventOpen}
-                value={eventValue}
-                items={eventItems}
-                setOpen={setEventOpen}
-                setValue={setEventValue}
-                setItems={setEventItems}
-                placeholder="SELECT EVENT"
-                placeholderStyle={styles.pickerText}
-                dropDownContainerStyle={{
-                  backgroundColor: "#fafafa",
-                  borderWidth: 0,
-                }}
-                maxHeight={70}
-              />
-            </View> */}
+            {/* Dropdown picker */}
             <View style={styles.pickerWrapper}>
               <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
               <DropDownPicker
@@ -285,11 +257,13 @@ export default function JudgingType({ navigation, route }) {
                 maxHeight={70}
               />
             </View>
+            {/* Error Message */}
             {incorrectId && (
               <Text style={styles.errorLabel}>
                 THE FIELDS ARE NOT PROPERLY COMPLETED
               </Text>
             )}
+            {/* Start Judging button */}
             <CustomButton
               style={{ marginTop: 80 }}
               text="START JUDGING"
@@ -362,5 +336,19 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "red",
     marginBottom: -14,
+  },
+  searchBarContainerStyle: {
+    backgroundColor: "white",
+    borderColor: "white",
+    width: dimensions.width * 0.85,
+    padding: 0,
+    borderBottomColor: "transparent",
+    borderTopColor: "transparent",
+  },
+  searchBarInputContainerStyle: {
+    backgroundColor: colours.lightGrey,
+    padding: 0,
+    borderWidth: 0,
+    height: 50,
   },
 });

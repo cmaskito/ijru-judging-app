@@ -1,6 +1,7 @@
+// An undo button component that is reused in the judging screens
 import CustomButton from "./CustomButton";
 import colours from "../assets/colours";
-import { View, Text, StyleSheet, Vibration } from "react-native";
+import { View, StyleSheet, Vibration } from "react-native";
 import dimensions from "../assets/Dimensions";
 
 export default function UndoButton({
@@ -9,6 +10,8 @@ export default function UndoButton({
   selectedButton,
   wrapperStyle,
 }) {
+  // Triggers when the undo button is pressed
+  // Undoes the last button press and deselects the selected button
   const onUndoButtonPress = () => {
     if (selectedButton === null) return;
     Vibration.vibrate(150);

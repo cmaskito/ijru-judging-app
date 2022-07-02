@@ -1,12 +1,9 @@
-﻿//user chooses if they want to view scores or judge when the connect
-
+﻿// Screen shows confirmation that the scores have been submitted
 import { StyleSheet, View, Text } from "react-native";
 import AndroidSafeArea from "../assets/SafeArea";
 import colours from "../assets/colours";
 import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
-import BackButton from "../components/BackButton";
-import { useEffect } from "react";
 
 export default function ScoresSubmitted({ navigation, route }) {
   const { tournamentId } = route.params;
@@ -14,7 +11,9 @@ export default function ScoresSubmitted({ navigation, route }) {
   return (
     <View style={AndroidSafeArea.AndroidSafeArea}>
       <View style={styles.container}>
+        {/* Title */}
         <Text style={styles.titleText}>SCORES SUBMITTED</Text>
+        {/* Return to homescreen button */}
         <CustomButton
           text="RETURN TO HOMESCREEN"
           touchableOpacityStyle={styles.touchableOpacityStyle}

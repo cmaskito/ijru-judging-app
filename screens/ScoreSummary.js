@@ -1,4 +1,5 @@
-﻿import {
+﻿// A screen with a summary of the buttons pressed when judging
+import {
   StyleSheet,
   View,
   Text,
@@ -21,36 +22,29 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
-import dimensions from "../assets/Dimensions";
-import { Edit3, Navigation } from "react-native-feather";
+import { Edit3 } from "react-native-feather";
 import _, { sortBy } from "underscore";
-import { useEffect } from "react";
 
 export default function ScoreSummary({ route, navigation }) {
-  const { counters, eventDetails } = route.params;
+  const { counters, eventDetails } = route.params; // parameters passed from previous judging screen
 
-  let categoryScore = 0;
+  // Triggers when user presses the submit button
   const onSubmitPress = async () => {
     let scores = {};
     try {
+      // Adds data from the cournters array to the scores object
       counters.forEach((counter) => {
         scores[counter.title] = counter.counter;
       });
+
+      // // Checks if there is an existing document for that skipper and score type
+      // Creates an alert if there is asking to overwrite
       const q = query(
         collection(db, `tournaments/${eventDetails.tournamentId}/scores`),
         where("judgingType", "==", eventDetails.judgingType.toLowerCase()),
         where("skipperId", "==", eventDetails.skipper.id)
       );
       const querySnapshot = await getDocs(q);
-      switch (eventDetails.judgingType.toLowerCase()) {
-        case "difficulty":
-          categoryScore = calcDifficultyScore();
-          break;
-        case "presentation":
-          categoryScore = calcPresentationScore();
-          break;
-      }
-
       if (!querySnapshot.empty) {
         Alert.alert(
           "Submit Scores",
@@ -59,6 +53,7 @@ export default function ScoreSummary({ route, navigation }) {
             { text: "Cancel" },
             {
               text: "OK",
+              // Overwrites the existing document
               onPress: async () => {
                 await setDoc(
                   doc(
@@ -70,9 +65,6 @@ export default function ScoreSummary({ route, navigation }) {
                     ...scores,
                     skipperId: eventDetails.skipper.id,
                     judgingType: eventDetails.judgingType.toLowerCase(),
-                    // Make sure to replace spaces
-                    [`${eventDetails.judgingType.toLowerCase()}Score`]:
-                      categoryScore,
                   }
                 );
                 navigation.navigate("ScoresSubmitted", {
@@ -89,7 +81,6 @@ export default function ScoreSummary({ route, navigation }) {
             ...scores,
             skipperId: eventDetails.skipper.id,
             judgingType: eventDetails.judgingType.toLowerCase(),
-            [`${eventDetails.judgingType.toLowerCase()}Score`]: categoryScore,
           }
         );
 
@@ -102,8 +93,11 @@ export default function ScoreSummary({ route, navigation }) {
     }
   };
 
+  // Calculates the difficulty score locally. This can be done as all the inputs to the algorithm only comes from one judge, so it can be calculated locally
+  // However, this function is not being used as the all the scores should ultimately be calculated in the backend database.
   const calcDifficultyScore = () => {
     let difficultyScore = 0;
+    // For each value in the counter, add a certain number of points depending on the level of the trick
     counters.forEach((counter) => {
       const level = parseFloat(counter.title.split(" ")[1]);
       difficultyScore +=
@@ -113,16 +107,17 @@ export default function ScoreSummary({ route, navigation }) {
     return difficultyScore;
   };
 
-  const calcPresentationScore = () => {};
-
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
+      {/* Displays a List of the score details */}
       <FlatList
         ListHeaderComponent={
           <View style={styles.container}>
+            {/* Title */}
             <Text style={styles.titleText}>SCORE SUMMARY</Text>
 
+            {/* Event Details header */}
             <View style={styles.subHeadingWrapper}>
               <Text style={styles.subHeading}>EVENT DETAILS</Text>
               <Edit3
@@ -131,6 +126,7 @@ export default function ScoreSummary({ route, navigation }) {
                 style={{ marginLeft: 30 }}
               />
             </View>
+            {/* Event Details */}
             <View style={styles.listWrapper}>
               <Text
                 style={styles.listText}
@@ -145,6 +141,8 @@ export default function ScoreSummary({ route, navigation }) {
                 {`Skipper Name: ${eventDetails.skipper.firstName} ${eventDetails.skipper.lastName}`}{" "}
               </Text>
             </View>
+
+            {/* Scores header */}
             <View style={styles.subHeadingWrapper}>
               <Text style={styles.subHeading}>SCORES</Text>
               <Edit3
@@ -156,6 +154,7 @@ export default function ScoreSummary({ route, navigation }) {
           </View>
         }
         ListFooterComponent={
+          // Submit scores button
           <View>
             <CustomButton
               touchableOpacityStyle={styles.connectButton}
@@ -164,6 +163,7 @@ export default function ScoreSummary({ route, navigation }) {
             />
           </View>
         }
+        // Score details
         scrollEnabled
         data={_.sortBy(counters, "title")}
         keyExtractor={(item) => item.title}

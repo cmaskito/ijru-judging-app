@@ -1,4 +1,4 @@
-import { Roboto_500Medium } from "@expo-google-fonts/roboto";
+// A custom header component that is reused in juding screens
 import { View, Text, StyleSheet } from "react-native";
 import colours from "../assets/colours";
 

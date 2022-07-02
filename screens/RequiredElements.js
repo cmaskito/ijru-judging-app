@@ -1,8 +1,6 @@
-import { Roboto_400Regular, Roboto_500Medium } from "@expo-google-fonts/roboto";
+// Required Elements Judging Screen
 import {
   StyleSheet,
-  View,
-  Text,
   SafeAreaView,
   Vibration,
   Alert,
@@ -10,11 +8,9 @@ import {
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
-import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
-import { NavigationRouteContext } from "@react-navigation/native";
 import Header from "../components/Header";
 import RedButtons from "../components/RedButtons";
 import UndoButton from "../components/UndoButton";
@@ -56,7 +52,7 @@ export default function RequiredElements({ navigation, route }) {
   const { practice } = route.params;
   const [selectedButton, setSelectedButton] = useState(null);
 
-  // Makes an alert pop up if the user tries to leave the screen
+  // Makes an alert pop up if the user tries to leave the screen using the android hardware back button
   useEffect(() => {
     const backAction = () => {
       Vibration.vibrate(200);
@@ -106,6 +102,7 @@ export default function RequiredElements({ navigation, route }) {
       />
 
       {/* Counter Grid */}
+      {/* Uses a Grid package to layout the buttons */}
       <Grid style={styles.countersButtonsWrapper}>
         <Row size={26.5}>
           {counters.slice(0, 1).map((counter, index) => (

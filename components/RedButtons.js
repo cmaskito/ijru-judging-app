@@ -1,6 +1,7 @@
+// A custom component that allows the 'red' buttons on the judging buttons to be reused.
 import CustomButton from "./CustomButton";
 import colours from "../assets/colours";
-import { View, Text, StyleSheet, Vibration, Alert } from "react-native";
+import { View, StyleSheet, Vibration, Alert } from "react-native";
 import dimensions from "../assets/Dimensions";
 
 export default function RedButtons({
@@ -10,6 +11,7 @@ export default function RedButtons({
   practice,
   eventDetails,
 }) {
+  // Resets the counters
   const onResetButtonPress = () => {
     Vibration.vibrate(200);
     Alert.alert("Reset?", "Are you sure you want to reset?", [
@@ -28,6 +30,7 @@ export default function RedButtons({
     ]);
   };
 
+  // Causes the user to go back to the previous screen
   const onCancelButtonPress = () => {
     Vibration.vibrate(200);
     Alert.alert(
@@ -46,6 +49,7 @@ export default function RedButtons({
     );
   };
 
+  // Causes the user to move to the score summary screen
   const onDoneButtonPress = () => {
     const counterValues = [];
     counters.forEach((counter) => {

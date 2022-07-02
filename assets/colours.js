@@ -1,3 +1,4 @@
+// A file with all the hex codes for colours used in the app
 const colours = {
   textDark: "#313234",
   button: "#BCD5FF",

@@ -1,3 +1,4 @@
+// This screen provides the user with confirmation taht the tournament was created, and the details of the tournament
 import { StyleSheet, View, Text } from "react-native";
 import AndroidSafeArea from "../assets/SafeArea";
 import colours from "../assets/colours";
@@ -8,8 +9,10 @@ export default function TournamentCreated({ navigation, route }) {
 
   return (
     <View style={AndroidSafeArea.AndroidSafeArea}>
+      {/* Title */}
       <Text style={styles.titleText}>TOURNAMENT CREATED</Text>
       <Text style={styles.tournamentDetailsTitle}>TOURNAMENT DETAILS</Text>
+      {/* Tournament Details */}
       <View style={styles.tournamentDetailsWrapper}>
         <Text
           style={styles.tournamentDetailsText}
@@ -20,6 +23,7 @@ export default function TournamentCreated({ navigation, route }) {
           selectable
         >{`Tournament ID: ${tournamentId}`}</Text>
       </View>
+      {/* Return to home button */}
       <CustomButton
         style={styles.returnButton}
         text="RETURN TO HOME"

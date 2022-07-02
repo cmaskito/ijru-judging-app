@@ -4,7 +4,6 @@ import { StyleSheet, View, Text } from "react-native";
 import AndroidSafeArea from "../assets/SafeArea";
 import colours from "../assets/colours";
 import CustomButton from "../components/CustomButton";
-import { SafeAreaView } from "react-native-safe-area-context";
 import BackButton from "../components/BackButton";
 
 export default function JudgeOrView({ navigation, route }) {
@@ -15,7 +14,9 @@ export default function JudgeOrView({ navigation, route }) {
     <View style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
       <View style={styles.container}>
+        {/* Title */}
         <Text style={styles.titleText}>CONNECT TO TOURNAMENT</Text>
+        {/* Tournament Details */}
         <View style={styles.tournamentDetailsWrapper}>
           <Text
             style={styles.tournamentDetailsText}
@@ -26,6 +27,7 @@ export default function JudgeOrView({ navigation, route }) {
             selectable
           >{`Tournament ID: ${tournamentId}`}</Text>
         </View>
+        {/* Judge button */}
         <CustomButton
           text="JUDGE"
           touchableOpacityStyle={styles.touchableOpacityStyle}
@@ -37,6 +39,7 @@ export default function JudgeOrView({ navigation, route }) {
             })
           }
         />
+        {/* View Scores Button */}
         <CustomButton
           text="VIEW SCORES"
           touchableOpacityStyle={styles.touchableOpacityStyle}

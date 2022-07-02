@@ -1,8 +1,8 @@
-import { Roboto_400Regular, Roboto_500Medium } from "@expo-google-fonts/roboto";
+// The difficulty judging page
+
 import {
   StyleSheet,
   View,
-  Text,
   SafeAreaView,
   Vibration,
   Alert,
@@ -10,7 +10,6 @@ import {
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
-import CustomButton from "../components/CustomButton";
 import dimensions from "../assets/Dimensions";
 import { useState, useEffect } from "react";
 import nextId from "react-id-generator";
@@ -21,6 +20,7 @@ import UndoButton from "../components/UndoButton";
 import CounterButton from "../components/CounterButton";
 
 export default function Difficulty({ navigation, route }) {
+  // list of counters that track how often the counters are pressed
   const levelCounters = [
     ([levelOneCounter, setLevelOneCounter] = useState({
       title: "Level 1",
@@ -60,10 +60,11 @@ export default function Difficulty({ navigation, route }) {
     })),
   ];
 
-  const [selectedButton, setSelectedButton] = useState(null);
-  const { practice, skipper, tournamentName, tournamentId } = route.params;
+  const [selectedButton, setSelectedButton] = useState(null); // records last pressed counter button
 
-  // Makes an alert pop up if the user tries to leave the screen
+  const { practice, skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
+
+  // Makes an alert pop up if the user tries to leave the screen using the hardware back button
   useEffect(() => {
     const backAction = () => {
       Vibration.vibrate(200);

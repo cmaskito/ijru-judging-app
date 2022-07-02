@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+// A back button component that allows users to navigate to the previous screen
+import { View, TouchableOpacity, StyleSheet } from "react-native";
 import { ChevronLeft } from "react-native-feather";
 import colours from "../assets/colours";
 import { useNavigation } from "@react-navigation/native";

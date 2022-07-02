@@ -1,12 +1,5 @@
-import {
-  StyleSheet,
-  View,
-  Text,
-  SafeAreaView,
-  TextInput,
-  TouchableWithoutFeedback,
-  Keyboard,
-} from "react-native";
+// A custom text input component that is reused in many screens
+import { StyleSheet, View, Text, TextInput } from "react-native";
 import colours from "../assets/colours";
 
 export default function GreyTextInput({

@@ -1,8 +1,6 @@
-import { Roboto_400Regular, Roboto_500Medium } from "@expo-google-fonts/roboto";
+// PresentationForm Juding Screen
 import {
   StyleSheet,
-  View,
-  Text,
   SafeAreaView,
   Vibration,
   Alert,
@@ -42,7 +40,7 @@ export default function PresentationForm({ navigation, route }) {
   const [selectedButton, setSelectedButton] = useState(null);
   const { practice, skipper, tournamentName, tournamentId } = route.params;
 
-  // Makes an alert pop up if the user tries to leave the screen
+  // Makes an alert pop up if the user tries to leave the screen with android hardware back button
   useEffect(() => {
     const backAction = () => {
       Vibration.vibrate(200);
@@ -69,13 +67,6 @@ export default function PresentationForm({ navigation, route }) {
 
     return () => backHandler.remove();
   }, []);
-
-  const onJudgingButtonPress = (counter) => {
-    Vibration.vibrate(70);
-    const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
-    counter[1](newCounter);
-    setSelectedButton(counter[0].title);
-  };
 
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
@@ -104,7 +95,7 @@ export default function PresentationForm({ navigation, route }) {
       />
 
       {/* Counters */}
-
+      {/* Uses a Grid package to layout the buttons */}
       <Grid style={styles.countersButtonsWrapper}>
         {counters.map((counter, index) => {
           if (counter[0].title === "Mistakes") return;

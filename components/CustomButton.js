@@ -1,11 +1,5 @@
-import { Roboto_500Medium } from "@expo-google-fonts/roboto";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Vibration,
-  TouchableOpacity,
-} from "react-native";
+// A custom button component that is reused in many screens and components
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import colours from "../assets/colours";
 
 export default function CustomButton({

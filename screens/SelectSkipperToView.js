@@ -149,7 +149,6 @@ export default function SelectSkpperToView({ navigation, route }) {
                   data={filteredSkippersList}
                   keyExtractor={(i) => i.id}
                   extraData={search}
-                  // style={styles.flatList}
                   renderItem={({ item }) => {
                     return (
                       <TouchableOpacity
