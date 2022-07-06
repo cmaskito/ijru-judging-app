@@ -47,7 +47,7 @@ export default function CreateTournament({ navigation }) {
       setFileName(doc.name);
 
       const docContents = await FileSystem.readAsStringAsync(doc.uri); // Gets the contents of the selected .csv file
-      const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, ""); // Removes the spaces / special characters from the contents
+      const fixedContents = docContents.replace(/[^a-zA-Z0-9 /, \n]/g, ""); // Removes the spaces / special / hidden characters from the contents
 
       // Parses contents of the .csv files
       Papa.parse(fixedContents, {

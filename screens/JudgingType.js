@@ -108,7 +108,10 @@ export default function JudgingType({ navigation, route }) {
   // Whenever a selected skipper is selected (which only happens when the user presses the start judging button)
   // Then the user will be taken to the screen that coreesponds to their selected judging type
   useEffect(() => {
+    console.log(selectedSkipper);
+    console.log("hello");
     if (selectedSkipper !== null) {
+      setSelectedSkipper(null);
       setIncorrectId(false);
       switch (judgingTypeValue) {
         case "difficulty":
