@@ -33,6 +33,8 @@ import ScoreSummary from "./screens/ScoreSummary";
 import ScoresSubmitted from "./screens/ScoresSubmitted";
 import SelectSkipperToView from "./screens/SelectSkipperToView";
 import ViewScores from "./screens/ViewScores";
+import CreateTournament from "./screens/CreateTournament";
+import RoutinePresentation from "./screens/RoutinePresentation";
 
 const Stack = createStackNavigator();
 
@@ -77,6 +79,10 @@ export default function App() {
           component={SelectSkipperToView}
         />
         <Stack.Screen name="ViewScores" component={ViewScores} />
+        <Stack.Screen
+          name="RoutinePresentation"
+          component={RoutinePresentation}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

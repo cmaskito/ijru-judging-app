@@ -49,7 +49,7 @@ export default function RequiredElements({ navigation, route }) {
     })),
   ];
 
-  const { practice } = route.params;
+  const { practice, skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
   const [selectedButton, setSelectedButton] = useState(null);
 
   // Makes an alert pop up if the user tries to leave the screen using the android hardware back button
@@ -88,9 +88,7 @@ export default function RequiredElements({ navigation, route }) {
         bracket="Bracket"
         judgingType="Elements"
         skipperName={
-          practice
-            ? "Practice"
-            : `${skipper[0].firstName} ${skipper[0].lastName}`
+          practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
         }
       />
 

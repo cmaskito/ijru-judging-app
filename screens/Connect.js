@@ -34,10 +34,12 @@ export default function Connect({ navigation, route }) {
   // If not, then an error message will be given stating "THAT TOURNAMENT DOES NOT EXIST"
   const onConnectButtonPress = async () => {
     try {
-      const tournamentDoc = await getDoc(doc(db, "tournaments", userInput));
+      const tournamentDoc = await getDoc(doc(db, "tournaments", userInput)); // Tries to fetch a tournament document that matches the tournment id
       if (tournamentDoc.data() === undefined) {
+        // If false show an error message
         setIncorrectId(true);
       } else {
+        // if true, move to the judge or view screen
         console.log(tournamentDoc.data());
         navigation.navigate("JudgeOrView", tournamentDoc.data());
       }

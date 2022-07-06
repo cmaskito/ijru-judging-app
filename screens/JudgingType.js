@@ -30,6 +30,7 @@ export default function JudgingType({ navigation, route }) {
     { label: "Difficulty", value: "difficulty" },
     { label: "Presentation Form", value: "presentationForm" },
     { label: "Required Elements", value: "requiredElements" },
+    { label: "Routine Presentation", value: "routinePresentation" },
   ]);
 
   const [showNames, setShowNames] = useState(false);
@@ -135,6 +136,13 @@ export default function JudgingType({ navigation, route }) {
             tournamentId,
           });
           break;
+        case "routinePresentation":
+          navigation.navigate("RoutinePresentation", {
+            practice,
+            skipper: selectedSkipper,
+            tournamentName,
+            tournamentId,
+          });
         default:
           break;
       }
@@ -254,7 +262,6 @@ export default function JudgingType({ navigation, route }) {
                   backgroundColor: "#fafafa",
                   borderWidth: 0,
                 }}
-                maxHeight={70}
               />
             </View>
             {/* Error Message */}
@@ -265,7 +272,7 @@ export default function JudgingType({ navigation, route }) {
             )}
             {/* Start Judging button */}
             <CustomButton
-              style={{ marginTop: 80 }}
+              style={{ marginTop: 170 }}
               text="START JUDGING"
               onPressHandler={() => startJudgingPress(judgingTypeValue)}
             />
