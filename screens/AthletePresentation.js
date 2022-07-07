@@ -1,4 +1,4 @@
-// PresentationForm Juding Screen
+// Athlete Presentation Juding Screen
 import {
   StyleSheet,
   SafeAreaView,
@@ -17,7 +17,7 @@ import UndoButton from "../components/UndoButton";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import CounterButton from "../components/CounterButton";
 
-export default function PresentationForm({ navigation, route }) {
+export default function AthletePresentation({ navigation, route }) {
   const counters = [
     ([plusCounter, setPlusCounter] = useState({
       title: "+",
@@ -74,7 +74,7 @@ export default function PresentationForm({ navigation, route }) {
       <Header
         eventName="Event Name"
         bracket="Bracket"
-        judgingType="Presentation Form"
+        judgingType="Athlete Presentation"
         skipperName={
           practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
         }
@@ -88,7 +88,7 @@ export default function PresentationForm({ navigation, route }) {
         practice={practice}
         eventDetails={{
           tournamentName: tournamentName,
-          judgingType: "Presentation Form",
+          judgingType: "Athlete Presentation",
           skipper: skipper,
           tournamentId: tournamentId,
         }}

@@ -25,7 +25,7 @@ import Home from "./screens/Home";
 import Connect from "./screens/Connect";
 import JudgingType from "./screens/JudgingType";
 import Difficulty from "./screens/Difficulty";
-import PresentationForm from "./screens/PresentationForm";
+import AthletePresentation from "./screens/AthletePresentation";
 import RequiredElements from "./screens/RequiredElements";
 import TournamentCreated from "./screens/TournamentCreated";
 import JudgeOrView from "./screens/JudgeOrView";
@@ -35,6 +35,7 @@ import SelectSkipperToView from "./screens/SelectSkipperToView";
 import ViewScores from "./screens/ViewScores";
 import CreateTournament from "./screens/CreateTournament";
 import RoutinePresentation from "./screens/RoutinePresentation";
+import RepeatedSkills from "./screens/RepeatedSkills";
 
 const Stack = createStackNavigator();
 
@@ -67,7 +68,10 @@ export default function App() {
         <Stack.Screen name="Connect" component={Connect} />
         <Stack.Screen name="JudgingType" component={JudgingType} />
         <Stack.Screen name="Difficulty" component={Difficulty} />
-        <Stack.Screen name="PresentationForm" component={PresentationForm} />
+        <Stack.Screen
+          name="AthletePresentation"
+          component={AthletePresentation}
+        />
         <Stack.Screen name="RequiredElements" component={RequiredElements} />
         <Stack.Screen name="CreateTournament" component={CreateTournament} />
         <Stack.Screen name="TournamentCreated" component={TournamentCreated} />
@@ -83,6 +87,7 @@ export default function App() {
           name="RoutinePresentation"
           component={RoutinePresentation}
         />
+        <Stack.Screen name="RepeatedSkills" component={RepeatedSkills}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

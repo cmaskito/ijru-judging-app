@@ -28,7 +28,7 @@ export default function JudgingType({ navigation, route }) {
   const [judgingTypeValue, setJudgingTypeValue] = useState(null);
   const [judgingTypeItems, setJudgingTypeItems] = useState([
     { label: "Difficulty", value: "difficulty" },
-    { label: "Presentation Form", value: "presentationForm" },
+    { label: "Athlete Presentation", value: "athletePresentation" },
     { label: "Required Elements", value: "requiredElements" },
     { label: "Routine Presentation", value: "routinePresentation" },
   ]);
@@ -81,7 +81,7 @@ export default function JudgingType({ navigation, route }) {
   };
 
   // Triggers when the user presses start judging button
-  const startJudgingPress = (value) => {
+  const startJudgingPress = () => {
     setSelectedSkipper(null);
     const query = search.toLowerCase().replace(/ /g, "");
     let foundSkipper = false;
@@ -108,8 +108,6 @@ export default function JudgingType({ navigation, route }) {
   // Whenever a selected skipper is selected (which only happens when the user presses the start judging button)
   // Then the user will be taken to the screen that coreesponds to their selected judging type
   useEffect(() => {
-    console.log(selectedSkipper);
-    console.log("hello");
     if (selectedSkipper !== null) {
       setSelectedSkipper(null);
       setIncorrectId(false);
@@ -123,8 +121,8 @@ export default function JudgingType({ navigation, route }) {
             tournamentId,
           });
           break;
-        case "presentationForm":
-          navigation.navigate("PresentationForm", {
+        case "athletePresentation":
+          navigation.navigate("AthletePresentation", {
             practice,
             skipper: selectedSkipper,
             tournamentName,
@@ -277,7 +275,7 @@ export default function JudgingType({ navigation, route }) {
             <CustomButton
               style={{ marginTop: 170 }}
               text="START JUDGING"
-              onPressHandler={() => startJudgingPress(judgingTypeValue)}
+              onPressHandler={() => startJudgingPress()}
             />
           </View>
         </SafeAreaView>
