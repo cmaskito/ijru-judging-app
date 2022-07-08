@@ -7,6 +7,7 @@ import {
   BackHandler,
   View,
   Text,
+  ViewPagerAndroidBase,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -52,6 +53,7 @@ export default function RequiredElements({ navigation, route }) {
     })),
   ];
 
+  const [lastRepeatedSkillsChange, setLastRepeatedSkillsChange] = useState({});
   const { practice, skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
   const [selectedButton, setSelectedButton] = useState(null);
   const [selectRepeatedSkill, setSelectRepeatedSkill] = useState(false);
@@ -85,16 +87,26 @@ export default function RequiredElements({ navigation, route }) {
   }, []);
 
   const onRepeatedSkillsPress = () => {
+    Vibration.vibrate(70);
     setSelectRepeatedSkill(true);
   };
-  const onButtonPress = (level) => {
+  const onLevelButtonPress = (level) => {
     Vibration.vibrate(70);
     setSelectedButton(counters[0][0].title);
-    const repeatedSkillsScore = Math.round(100 * 0.1 * 1.8 ** level) / 100;
+    const repeatedSkillsScore = parseFloat((0.1 * 1.8 ** level).toFixed(2));
+    setLastRepeatedSkillsChange(repeatedSkillsScore);
     setRepeatedSkills({
       title: "Repeated Skills",
-      counter: repeatedSkills.counter + repeatedSkillsScore,
+      counter: parseFloat(
+        (repeatedSkills.counter + repeatedSkillsScore).toFixed(2)
+      ),
     });
+    setSelectRepeatedSkill(false);
+    console.log(lastRepeatedSkillsChange);
+  };
+
+  const onGoBackPress = () => {
+    Vibration.vibrate(150);
     setSelectRepeatedSkill(false);
   };
 
@@ -144,6 +156,10 @@ export default function RequiredElements({ navigation, route }) {
                   borderWidth: 7,
                   alignSelf: "center",
                 }}
+                touchableOpacityStyle={{
+                  ...styles.counterButton,
+                  alignSelf: "center",
+                }}
                 text={`Repeated Skills\n${repeatedSkills.counter}`}
                 textStyle={styles.buttonText}
                 onPressHandler={onRepeatedSkillsPress}
@@ -180,6 +196,7 @@ export default function RequiredElements({ navigation, route }) {
                 counters={counters}
                 selectedButton={selectedButton}
                 setSelectedButton={setSelectedButton}
+                lastRepeatedSkillsChange={lastRepeatedSkillsChange}
               />
             }
           </Row>
@@ -205,9 +222,13 @@ export default function RequiredElements({ navigation, route }) {
                   borderWidth: 7,
                   alignSelf: "flex-end",
                 }}
+                touchableOpacityStyle={{
+                  ...styles.counterButton,
+                  alignSelf: "flex-end",
+                }}
                 text="Level 4"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(4)}
+                onPressHandler={() => onLevelButtonPress(4)}
               />
             </Col>
           </Row>
@@ -222,9 +243,13 @@ export default function RequiredElements({ navigation, route }) {
                   borderWidth: 7,
                   alignSelf: "center",
                 }}
+                touchableOpacityStyle={{
+                  ...styles.counterButton,
+                  alignSelf: "center",
+                }}
                 text="Level 7"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(7)}
+                onPressHandler={() => onLevelButtonPress(7)}
               />
             </Col>
             <Col>
@@ -238,7 +263,7 @@ export default function RequiredElements({ navigation, route }) {
                 }}
                 text="Level 5"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(5)}
+                onPressHandler={() => onLevelButtonPress(5)}
               />
             </Col>
           </Row>
@@ -254,7 +279,7 @@ export default function RequiredElements({ navigation, route }) {
                 }}
                 text="Level 3"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(3)}
+                onPressHandler={() => onLevelButtonPress(3)}
               />
             </Col>
             <Col>
@@ -268,7 +293,7 @@ export default function RequiredElements({ navigation, route }) {
                 }}
                 text="Level 8"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(8)}
+                onPressHandler={() => onLevelButtonPress(8)}
               />
             </Col>
             <Col>
@@ -280,14 +305,19 @@ export default function RequiredElements({ navigation, route }) {
                   borderWidth: 7,
                   alignSelf: "flex-end",
                 }}
-                text="Level 9"
+                text="Level 6"
                 textStyle={styles.buttonText}
-                onPressHandler={() => onButtonPress(9)}
+                onPressHandler={() => onLevelButtonPress(6)}
               />
             </Col>
           </Row>
           <Row size={20.5}>
-            <UndoButton />
+            <CustomButton
+              text="Go Back"
+              textStyle={styles.buttonText}
+              style={styles.goBackButton}
+              onPressHandler={onGoBackPress}
+            />
           </Row>
         </Grid>
       </SafeAreaView>
@@ -354,5 +384,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     paddingTop: 20,
     letterSpacing: 6,
+  },
+  goBackButton: {
+    width: dimensions.width - 30,
+    height: dimensions.height * 0.115,
+    backgroundColor: colours.undoButton,
   },
 });

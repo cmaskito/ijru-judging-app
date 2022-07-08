@@ -9,6 +9,7 @@ export default function UndoButton({
   setSelectedButton,
   selectedButton,
   wrapperStyle,
+  lastRepeatedSkillsChange,
 }) {
   // Triggers when the undo button is pressed
   // Undoes the last button press and deselects the selected button
@@ -16,6 +17,20 @@ export default function UndoButton({
     if (selectedButton === null) return;
     Vibration.vibrate(150);
     let counter = null;
+    console.log(selectedButton);
+
+    if (selectedButton == "Repeated Skills") {
+      counters[0][1]({
+        ...counters[0][0],
+        counter: parseFloat(
+          (counters[0][0].counter - lastRepeatedSkillsChange).toFixed(2)
+        ),
+      });
+      console.log(counters[0][0]);
+      setSelectedButton(null);
+      return;
+    }
+
     counters.forEach((counter_) => {
       if (counter_[0].title === selectedButton) {
         counter = counter_;

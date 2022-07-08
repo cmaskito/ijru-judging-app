@@ -144,13 +144,12 @@ export default function RoutinePresentation({ navigation, route }) {
           );
         })}
         <Row size={20.5}>
-          {
-            <UndoButton
-              counters={counters}
-              selectedButton={selectedButton}
-              setSelectedButton={setSelectedButton}
-            />
-          }
+          <UndoButton
+            counters={counters}
+            selectedButton={selectedButton}
+            setSelectedButton={setSelectedButton}
+            testProp={"test"}
+          />
         </Row>
       </Grid>
     </SafeAreaView>

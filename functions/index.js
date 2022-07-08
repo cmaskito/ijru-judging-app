@@ -20,8 +20,9 @@ admin.initializeApp({
 //   res.json({ result: `Message with ID: ${writeResult.id} added.` });
 // });
 
-exports.countScoreUpload = functions.region("australia-southeast1").firestore
-  .document("/tournaments/{tournamentId}/scores/{scoreDoc}")
+exports.countScoreUpload = functions
+  .region("australia-southeast1")
+  .firestore.document("/tournaments/{tournamentId}/scores/{scoreDoc}")
   .onWrite(async (change, context) => {
     const scoreData = change.after.data();
     const tournamentId = context.params.tournamentId;
@@ -48,26 +49,26 @@ exports.countScoreUpload = functions.region("australia-southeast1").firestore
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           switch (doc.data().judgingType) {
-          case "difficulty":
-            difficultyUploaded = true;
-            console.log("difficulty uploaded");
-            difficultyRawScores = doc.data();
-            break;
-          case "routine presentation":
-            presentationRUploaded = true;
-            console.log("pres R uploaded");
-            presentationRRawScores = doc.data();
-            break;
-          case "athlete presentation":
-            presentationAUploaded = true;
-            console.log("pres A uploaded");
-            presentationARawScores = doc.data();
-            break;
-          case "required elements":
-            requiredElementsUploaded = true;
-            console.log("re uploaded");
-            requiredElementsRawScores = doc.data();
-            break;
+            case "difficulty":
+              difficultyUploaded = true;
+              console.log("difficulty uploaded");
+              difficultyRawScores = doc.data();
+              break;
+            case "routine presentation":
+              presentationRUploaded = true;
+              console.log("pres R uploaded");
+              presentationRRawScores = doc.data();
+              break;
+            case "athlete presentation":
+              presentationAUploaded = true;
+              console.log("pres A uploaded");
+              presentationARawScores = doc.data();
+              break;
+            case "required elements":
+              requiredElementsUploaded = true;
+              console.log("re uploaded");
+              requiredElementsRawScores = doc.data();
+              break;
           }
         });
         if (
@@ -80,7 +81,7 @@ exports.countScoreUpload = functions.region("australia-southeast1").firestore
             difficultyRawScores,
             presentationRRawScores,
             presentationARawScores,
-            requiredElementsRawScores,
+            requiredElementsRawScores
           );
         }
       });
@@ -90,7 +91,7 @@ const calculateRoutineScore = (
   difficultyRawScores,
   presentationRRawScores,
   presentationARawScores,
-  requiredElementsRawScores,
+  requiredElementsRawScores
 ) => {
   console.log("calculating routine score...");
   console.log(difficultyRawScores);
@@ -105,14 +106,13 @@ const calculateDifficultyScore = (difficultyRawScores) => {
   // For each value in the counter, add a certain number of points
   // depending on the level of the trick
 
-  Object.keys(difficultyRawScores).filter((item) => item.includes("Level"))
+  Object.keys(difficultyRawScores)
+    .filter((item) => item.includes("Level"))
     .forEach((scoreKey) => {
       const counter = difficultyRawScores[scoreKey];
       const level = parseFloat(scoreKey.split(" ")[1]);
-      difficultyScore +=
-      (Math.round(0.1 * 1.8 ** level * 100) / 100) * counter;
+      difficultyScore += (0.1 * 1.8 ** level).toFixed(2) * counter;
     });
   console.log("diff", difficultyScore);
-  return difficultyScore;
+  return parseInt(difficultyScore.toFixed(2));
 };
-
