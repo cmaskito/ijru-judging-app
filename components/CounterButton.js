@@ -14,7 +14,7 @@ export default function CounterButton({
   // Triggered when the button is pressed
   // Vibrates the phone and increments the counter by 1
   const onJudgingButtonPress = (counter) => {
-    Vibration.vibrate(70);
+    Vibration.vibrate(100);
     const newCounter = { ...counter[0], counter: counter[0].counter + 1 };
     counter[1](newCounter);
     setSelectedButton(counter[0].title);

@@ -8,18 +8,6 @@ admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
 
-// exports.addMessage = functions.https.onRequest(async (req, res) => {
-//   // Grab the text parameter.
-//   const original = req.query.text;
-//   // Push the new message into Firestore using the Firebase Admin SDK.
-//   const writeResult = await admin
-//     .firestore()
-//     .collection("messages")
-//     .add({ original: original });
-//   // Send back a message that we've successfully written the message
-//   res.json({ result: `Message with ID: ${writeResult.id} added.` });
-// });
-
 exports.countScoreUpload = functions
   .region("australia-southeast1")
   .firestore.document("/tournaments/{tournamentId}/scores/{scoreDoc}")
@@ -49,26 +37,26 @@ exports.countScoreUpload = functions
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           switch (doc.data().judgingType) {
-            case "difficulty":
-              difficultyUploaded = true;
-              console.log("difficulty uploaded");
-              difficultyRawScores = doc.data();
-              break;
-            case "routine presentation":
-              presentationRUploaded = true;
-              console.log("pres R uploaded");
-              presentationRRawScores = doc.data();
-              break;
-            case "athlete presentation":
-              presentationAUploaded = true;
-              console.log("pres A uploaded");
-              presentationARawScores = doc.data();
-              break;
-            case "required elements":
-              requiredElementsUploaded = true;
-              console.log("re uploaded");
-              requiredElementsRawScores = doc.data();
-              break;
+          case "difficulty":
+            difficultyUploaded = true;
+            console.log("difficulty uploaded");
+            difficultyRawScores = doc.data();
+            break;
+          case "routine presentation":
+            presentationRUploaded = true;
+            console.log("pres R uploaded");
+            presentationRRawScores = doc.data();
+            break;
+          case "athlete presentation":
+            presentationAUploaded = true;
+            console.log("pres A uploaded");
+            presentationARawScores = doc.data();
+            break;
+          case "required elements":
+            requiredElementsUploaded = true;
+            console.log("re uploaded");
+            requiredElementsRawScores = doc.data();
+            break;
           }
         });
         if (
@@ -77,12 +65,13 @@ exports.countScoreUpload = functions
           presentationAUploaded &&
           presentationRUploaded
         ) {
-          calculateRoutineScore(
+          const routineScore = calculateRoutineScore(
             difficultyRawScores,
             presentationRRawScores,
             presentationARawScores,
-            requiredElementsRawScores
+            requiredElementsRawScores,
           );
+          console.log(routineScore);
         }
       });
   });
@@ -91,14 +80,52 @@ const calculateRoutineScore = (
   difficultyRawScores,
   presentationRRawScores,
   presentationARawScores,
-  requiredElementsRawScores
+  requiredElementsRawScores,
 ) => {
   console.log("calculating routine score...");
-  console.log(difficultyRawScores);
-  console.log(presentationARawScores);
-  console.log(presentationRRawScores);
-  console.log(requiredElementsRawScores);
-  console.log(calculateDifficultyScore(difficultyRawScores));
+  const difficultyScore = calculateDifficultyScore(difficultyRawScores);
+
+  const presentationScore = calculatePresentationScore(
+    presentationARawScores,
+    presentationRRawScores,
+  );
+
+  const deductionScore = calculateDeductionScore(
+    presentationARawScores,
+    requiredElementsRawScores,
+  );
+
+  const requiredElementsScore = calculateRequiredElementsScore(
+    requiredElementsRawScores,
+  );
+
+  let repetitionScore = requiredElementsRawScores["Repeated Skills"];
+
+  repetitionScore = difficultyScore > repetitionScore ? repetitionScore : 0;
+
+  const routineScore = parseFloat(
+    (
+      (difficultyScore - repetitionScore) *
+      presentationScore *
+      deductionScore *
+      requiredElementsScore
+    ).toFixed(2),
+  );
+
+  console.log("difficulty score ", difficultyScore);
+  console.log("presentationScore ", presentationScore);
+  console.log("deductionscore", deductionScore);
+  console.log("required elements score", requiredElementsScore);
+  console.log("repetition score", repetitionScore);
+  console.log("Routine score ", routineScore);
+  return {
+    difficultyScore,
+    presentationScore,
+    deductionScore,
+    requiredElementsScore,
+    repetitionScore,
+    routineScore,
+  };
 };
 
 const calculateDifficultyScore = (difficultyRawScores) => {
@@ -114,5 +141,80 @@ const calculateDifficultyScore = (difficultyRawScores) => {
       difficultyScore += (0.1 * 1.8 ** level).toFixed(2) * counter;
     });
   console.log("diff", difficultyScore);
-  return parseInt(difficultyScore.toFixed(2));
+  return parseFloat(difficultyScore.toFixed(2));
+};
+
+const calculatePresentationScore = (
+  presentationARawScores,
+  presentationRRawScores,
+) => {
+  console.log(presentationRRawScores);
+  console.log("musicality tick", presentationRRawScores["Musicality ✓"]);
+  const formScore =
+    (0.5 * (-1 * presentationARawScores["-"] + presentationARawScores["+"])) /
+    (presentationARawScores["-"] +
+      presentationARawScores["✓"] +
+      presentationARawScores["+"]);
+  const musicalityScore =
+    (0.25 *
+      (-1 * presentationRRawScores["Musicality -"] +
+        presentationRRawScores["Musicality +"])) /
+    (presentationRRawScores["Musicality -"] +
+      presentationRRawScores["Musicality ✓"] +
+      presentationRRawScores["Musicality +"]);
+  const entertainmentScore =
+    (0.25 *
+      (-1 * presentationRRawScores["Entertainment -"] +
+        presentationRRawScores["Entertainment +"])) /
+    (presentationRRawScores["Entertainment -"] +
+      presentationRRawScores["Entertainment ✓"] +
+      presentationRRawScores["Entertainment +"]);
+
+  let presentationScore = 1 + formScore + musicalityScore + entertainmentScore;
+  console.log(formScore);
+  console.log(musicalityScore);
+  console.log(entertainmentScore);
+
+  presentationScore = Math.min(Math.max(presentationScore, 0.4), 1.6);
+
+  return parseFloat(presentationScore.toFixed(2));
+};
+
+const calculateDeductionScore = (
+  presentationARawScores,
+  requiredElementsRawScores,
+) => {
+  const averageMisses = Math.round(
+    (presentationARawScores["Mistakes"] +
+      requiredElementsRawScores["Mistakes"]) /
+      2,
+  );
+  const deductionScore = Math.max(
+    0,
+    1 -
+      0.025 *
+        (averageMisses +
+          requiredElementsRawScores["Space Violations"] +
+          requiredElementsRawScores["Time Violations"]),
+  );
+
+  return deductionScore;
+};
+
+const calculateRequiredElementsScore = (requiredElementsRawScores) => {
+  const missingMultiples = Math.max(
+    0,
+    4 - requiredElementsRawScores["Multiples"],
+  );
+  const missingGymPower = Math.max(
+    0,
+    4 - requiredElementsRawScores["Gymnastics / Power"],
+  );
+  const missingWrapsReleases = Math.max(
+    0,
+    4 - requiredElementsRawScores["Wraps / Releases"],
+  );
+  const requiredElementsScore =
+    1 - 0.025 * (missingMultiples + missingGymPower + missingWrapsReleases);
+  return requiredElementsScore;
 };

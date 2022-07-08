@@ -12,7 +12,7 @@ export default function CustomButton({
 }) {
   return (
     <TouchableOpacity
-      onPressIn={onPressHandler}
+      onPress={onPressHandler}
       activeOpacity={activeOpacity}
       style={{ ...touchableOpacityStyle }}
     >
