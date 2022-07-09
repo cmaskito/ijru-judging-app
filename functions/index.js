@@ -19,11 +19,18 @@ exports.countScoreUpload = functions
     console.log(tournamentId);
     console.log(scoreData.skipperId);
 
+    if (scoreData.judgingType === "finalScores") {
+      console.log("final scores doc changed");
+      return;
+    }
+    console.log("not final scores");
+
     let difficultyUploaded = false;
     let requiredElementsUploaded = false;
     let presentationAUploaded = false;
     let presentationRUploaded = false;
 
+    let existingFinalScoresDoc = null;
     let difficultyRawScores = null;
     let presentationARawScores = null;
     let presentationRRawScores = null;
@@ -36,6 +43,7 @@ exports.countScoreUpload = functions
       .get()
       .then((snapshot) => {
         snapshot.forEach((doc) => {
+          console.log("judgingtype: ", doc.data().judgingType);
           switch (doc.data().judgingType) {
           case "difficulty":
             difficultyUploaded = true;
@@ -57,6 +65,10 @@ exports.countScoreUpload = functions
             console.log("re uploaded");
             requiredElementsRawScores = doc.data();
             break;
+          case "finalScores":
+            console.log("final scores uploaded in document: ", doc.id);
+            existingFinalScoresDoc = doc.id;
+            break;
           }
         });
         if (
@@ -65,16 +77,59 @@ exports.countScoreUpload = functions
           presentationAUploaded &&
           presentationRUploaded
         ) {
-          const routineScore = calculateRoutineScore(
+          const finalScores = calculateRoutineScore(
             difficultyRawScores,
             presentationRRawScores,
             presentationARawScores,
             requiredElementsRawScores,
           );
-          console.log(routineScore);
+          uploadRoutineScore(
+            finalScores,
+            tournamentId,
+            scoreData.skipperId,
+            existingFinalScoresDoc,
+          );
         }
       });
   });
+
+const uploadRoutineScore = async (
+  finalScores,
+  tournamentId,
+  skipperId,
+  existingFinalScoresDoc,
+) => {
+  const scoreData = {
+    skipperId,
+    judgingType: "finalScores",
+  };
+
+  Object.assign(scoreData, finalScores);
+
+  console.log("Existing final scores doc: ", existingFinalScoresDoc);
+
+  if (existingFinalScoresDoc !== null) {
+    admin
+      .firestore()
+      .collection(`tournaments/${tournamentId}/scores`)
+      .doc(existingFinalScoresDoc)
+      .set(scoreData)
+      .catch((error) => {
+        console.log("error adding document: ", error);
+      });
+  } else {
+    admin
+      .firestore()
+      .collection(`tournaments/${tournamentId}/scores`)
+      .add(scoreData)
+      .then((docRef) => {
+        console.log("document written with id:", docRef.id);
+      })
+      .catch((error) => {
+        console.log("error adding document: ", error);
+      });
+  }
+};
 
 const calculateRoutineScore = (
   difficultyRawScores,

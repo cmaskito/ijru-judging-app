@@ -93,20 +93,6 @@ export default function ScoreSummary({ route, navigation }) {
     }
   };
 
-  // Calculates the difficulty score locally. This can be done as all the inputs to the algorithm only comes from one judge, so it can be calculated locally
-  // However, this function is not being used as the all the scores should ultimately be calculated in the backend database.
-  const calcDifficultyScore = () => {
-    let difficultyScore = 0;
-    // For each value in the counter, add a certain number of points depending on the level of the trick
-    counters.forEach((counter) => {
-      const level = parseFloat(counter.title.split(" ")[1]);
-      difficultyScore +=
-        (Math.round(0.1 * 1.8 ** level * 100) / 100) * counter.counter;
-    });
-    console.log("diff", difficultyScore);
-    return difficultyScore;
-  };
-
   return (
     <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
