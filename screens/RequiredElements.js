@@ -7,7 +7,6 @@ import {
   BackHandler,
   View,
   Text,
-  ViewPagerAndroidBase,
 } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";

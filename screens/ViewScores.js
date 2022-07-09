@@ -1,13 +1,83 @@
 ﻿// This screen allows users to select an event (so far there is only single rope freestyle)
 // and see the scores of the skippers that competed in that event
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, Alert } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
 import CustomButton from "../components/CustomButton";
 import BackButton from "../components/BackButton";
+import { db } from "../firebase-config";
+import {
+  getDocs,
+  query,
+  where,
+  collection,
+  getDoc,
+  doc,
+} from "firebase/firestore";
+import * as FileSystem from "expo-file-system";
+import { StorageAccessFramework } from "expo-file-system";
+import Papa from "papaparse";
 
 export default function ViewScores({ navigation, route }) {
   const { tournamentId, tournamentName, skipper } = route.params;
+
+  const onExportPress = async () => {
+    console.log("on export pressed");
+    let unparsedScoreData = [];
+    const q = query(
+      collection(db, `tournaments/${tournamentId}/scores`),
+      where("judgingType", "==", "finalScores")
+    );
+    const querySnapshot = await getDocs(q);
+
+    for (const scoreDoc of querySnapshot.docs) {
+      let scores = scoreDoc.data();
+      delete scores.judgingType;
+      console.log(scores);
+      const skipperDoc = await getDoc(
+        doc(db, `tournaments/${tournamentId}/skippers`, scores.skipperId)
+      );
+      scores.skipperName = `${skipperDoc.data().firstName} ${
+        skipperDoc.data().lastName
+      }`;
+      delete scores.skipperId;
+      const objectOrder = {
+        skipperName: null,
+        difficultyScore: null,
+        repetitionScore: null,
+        requiredElementsScore: null,
+        presentationScore: null,
+        deductionScore: null,
+        routineScore: null,
+      };
+      scores = Object.assign(objectOrder, scores);
+      unparsedScoreData.push(scores);
+    }
+
+    const permission =
+      await StorageAccessFramework.requestDirectoryPermissionsAsync();
+    if (!permission.granted) return;
+
+    const scoreDataCsv = Papa.unparse(unparsedScoreData);
+
+    try {
+      const scoreFileUri = await StorageAccessFramework.createFileAsync(
+        permission.directoryUri,
+        `${tournamentName}_scores.csv`,
+        "text/csv"
+      );
+      await FileSystem.writeAsStringAsync(scoreFileUri, scoreDataCsv, {
+        encoding: FileSystem.EncodingType.UTF8,
+      });
+      Alert.alert(
+        "File Saved",
+        "The tournament scores have been saved to the selected folder"
+      );
+    } catch (e) {
+      console.log("error", e);
+    }
+  };
+
   return (
     <View style={AndroidSafeArea.AndroidSafeArea}>
       <BackButton />
@@ -23,27 +93,11 @@ export default function ViewScores({ navigation, route }) {
             selectable
           >{`Tournament ID: ${tournamentId}`}</Text>
         </View>
+
         <CustomButton
-          text="JUDGE"
+          text="EXPORT AS .CSV"
           touchableOpacityStyle={styles.touchableOpacityStyle}
-          onPressHandler={() =>
-            navigation.navigate("JudgingType", {
-              practice,
-              tournamentId,
-              tournamentName,
-            })
-          }
-        />
-        <CustomButton
-          text="VIEW SCORES"
-          touchableOpacityStyle={styles.touchableOpacityStyle}
-          onPressHandler={() =>
-            navigation.navigate("SelectSkipperToView", {
-              practice,
-              tournamentId,
-              tournamentName,
-            })
-          }
+          onPressHandler={onExportPress}
         />
       </View>
     </View>
