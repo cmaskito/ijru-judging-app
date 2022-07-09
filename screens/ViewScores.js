@@ -18,11 +18,21 @@ import * as FileSystem from "expo-file-system";
 import { StorageAccessFramework } from "expo-file-system";
 import Papa from "papaparse";
 
-export default function ViewScores({ navigation, route }) {
-  const { tournamentId, tournamentName, skipper } = route.params;
+export default function ViewScores({ route }) {
+  const { tournamentId, tournamentName } = route.params;
 
   const onExportPress = async () => {
     console.log("on export pressed");
+    const scoreDataCsv = await parseScoreData();
+
+    await saveScoresToStorage(scoreDataCsv);
+    Alert.alert(
+      "File Saved",
+      "The tournament scores have been saved to the selected folder"
+    );
+  };
+
+  const parseScoreData = async () => {
     let unparsedScoreData = [];
     const q = query(
       collection(db, `tournaments/${tournamentId}/scores`),
@@ -53,13 +63,14 @@ export default function ViewScores({ navigation, route }) {
       scores = Object.assign(objectOrder, scores);
       unparsedScoreData.push(scores);
     }
+    const scoreDataCsv = Papa.unparse(unparsedScoreData);
+    return scoreDataCsv;
+  };
 
+  const saveScoresToStorage = async (scoreDataCsv) => {
     const permission =
       await StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (!permission.granted) return;
-
-    const scoreDataCsv = Papa.unparse(unparsedScoreData);
-
     try {
       const scoreFileUri = await StorageAccessFramework.createFileAsync(
         permission.directoryUri,
@@ -69,10 +80,6 @@ export default function ViewScores({ navigation, route }) {
       await FileSystem.writeAsStringAsync(scoreFileUri, scoreDataCsv, {
         encoding: FileSystem.EncodingType.UTF8,
       });
-      Alert.alert(
-        "File Saved",
-        "The tournament scores have been saved to the selected folder"
-      );
     } catch (e) {
       console.log("error", e);
     }
