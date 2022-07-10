@@ -1,5 +1,5 @@
-﻿// This screen allows users to select an event (so far there is only single rope freestyle)
-// and see the scores of the skippers that competed in that event
+﻿// This screen allows users to export the final scores on the database as a .csv file
+// to be saved on the local storage of the device.
 import { StyleSheet, View, Text, Alert } from "react-native";
 import colours from "../assets/colours";
 import AndroidSafeArea from "../assets/SafeArea";
@@ -22,35 +22,44 @@ export default function ViewScores({ route }) {
   const { tournamentId, tournamentName } = route.params;
 
   const onExportPress = async () => {
-    console.log("on export pressed");
-    const scoreDataCsv = await parseScoreData();
+    const scoreDataCsv = await parseScoreData(); // returns a string in a .csv format containing all the final score data
+    await saveScoresToStorage(scoreDataCsv); // Saves the score data to a .csv file on the users local storate
 
-    await saveScoresToStorage(scoreDataCsv);
+    // Alerts the user that the file has been successfully saved onto local storage
     Alert.alert(
       "File Saved",
       "The tournament scores have been saved to the selected folder"
     );
   };
 
+  // returns a string in a .csv format containing all the final score data
   const parseScoreData = async () => {
     let unparsedScoreData = [];
+
+    // Queries for all documents in the scores collection with the 'finalScores' attribute
     const q = query(
       collection(db, `tournaments/${tournamentId}/scores`),
       where("judgingType", "==", "finalScores")
     );
     const querySnapshot = await getDocs(q);
 
+    // Loops through the documents that were fetched from the database
     for (const scoreDoc of querySnapshot.docs) {
       let scores = scoreDoc.data();
-      delete scores.judgingType;
-      console.log(scores);
+      delete scores.judgingType; // Removes the 'judgingType' field
+
+      // Uses the skipper ID to query for the name of the skipper
       const skipperDoc = await getDoc(
         doc(db, `tournaments/${tournamentId}/skippers`, scores.skipperId)
       );
+      // Adds the skippers name to the scores object
       scores.skipperName = `${skipperDoc.data().firstName} ${
         skipperDoc.data().lastName
       }`;
-      delete scores.skipperId;
+      delete scores.skipperId; // Removes the 'skipperId' field
+
+      // this object defines the order of the scores object
+      // so that the order of the columns on the .csv will be correct
       const objectOrder = {
         skipperName: null,
         difficultyScore: null,
@@ -60,23 +69,32 @@ export default function ViewScores({ route }) {
         deductionScore: null,
         routineScore: null,
       };
-      scores = Object.assign(objectOrder, scores);
-      unparsedScoreData.push(scores);
+      scores = Object.assign(objectOrder, scores); // reorders the scores object to follow the objectOrder object
+      unparsedScoreData.push(scores); // Adds the scores object to an array of score objects
     }
-    const scoreDataCsv = Papa.unparse(unparsedScoreData);
+    const scoreDataCsv = Papa.unparse(unparsedScoreData); // parses the array of score data into a .csv string format
     return scoreDataCsv;
   };
 
+  // Takes the .csv string and saves it to a .csv file to the local storage of the device
   const saveScoresToStorage = async (scoreDataCsv) => {
+    // Gets permission for the app to access the local storage
+    // The user selects a specific folder where the .csv file would be saved
+    // returns an object with a boolean of whether permission was granted and a string of the directory URI
     const permission =
       await StorageAccessFramework.requestDirectoryPermissionsAsync();
     if (!permission.granted) return;
+
     try {
+      // Creates a .csv file at the directory with the name "tournamentName_scores.csv"
+      // returns the uri for that file
       const scoreFileUri = await StorageAccessFramework.createFileAsync(
         permission.directoryUri,
         `${tournamentName}_scores.csv`,
         "text/csv"
       );
+
+      // Writes the score data to the created file
       await FileSystem.writeAsStringAsync(scoreFileUri, scoreDataCsv, {
         encoding: FileSystem.EncodingType.UTF8,
       });
