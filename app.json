@@ -1,9 +1,15 @@
 {
   "expo": {
-    "name": "ijru-judging-app",
+    "name": "IJRU Judging",
     "slug": "ijru-judging-app",
     "version": "1.0.0",
     "orientation": "portrait",
+    "icon": "./assets/Icon.png",
+    "splash": {
+      "image": "./assets/Icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#BCD5FF"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -12,8 +18,10 @@
       "supportsTablet": true
     },
     "android": {
+      "package": "com.ijrujudging.app",
       "adaptiveIcon": {
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/Icon.png",
+        "backgroundColor": "#BCD5FF"
       }
     },
     "web": {

@@ -53,7 +53,7 @@ export default function RequiredElements({ navigation, route }) {
   ];
 
   const [lastRepeatedSkillsChange, setLastRepeatedSkillsChange] = useState({});
-  const { practice, skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
+  const { skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
   const [selectedButton, setSelectedButton] = useState(null);
   const [selectRepeatedSkill, setSelectRepeatedSkill] = useState(false);
 
@@ -117,9 +117,7 @@ export default function RequiredElements({ navigation, route }) {
           eventName="Event Name"
           bracket="Bracket"
           judgingType="Elements"
-          skipperName={
-            practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
-          }
+          skipperName={`${skipper.firstName} ${skipper.lastName}`}
         />
 
         {/* Red Buttons */}

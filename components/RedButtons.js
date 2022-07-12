@@ -8,7 +8,6 @@ export default function RedButtons({
   counters,
   navigation,
   setSelectedButton,
-  practice,
   eventDetails,
 }) {
   // Resets the counters
@@ -56,7 +55,6 @@ export default function RedButtons({
       counterValues.push(counter[0]);
     });
     navigation.navigate("ScoreSummary", {
-      practice,
       counters: counterValues,
       eventDetails,
     });

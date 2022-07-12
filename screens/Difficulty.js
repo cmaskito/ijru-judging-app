@@ -62,7 +62,7 @@ export default function Difficulty({ navigation, route }) {
 
   const [selectedButton, setSelectedButton] = useState(null); // records last pressed counter button
 
-  const { practice, skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
+  const { skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
 
   // Makes an alert pop up if the user tries to leave the screen using the hardware back button
   useEffect(() => {
@@ -99,9 +99,7 @@ export default function Difficulty({ navigation, route }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Difficulty"
-        skipperName={
-          practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
-        }
+        skipperName={`${skipper.firstName} ${skipper.lastName}`}
       />
 
       {/* Red Buttons */}
@@ -109,7 +107,6 @@ export default function Difficulty({ navigation, route }) {
         counters={levelCounters}
         setSelectedButton={setSelectedButton}
         navigation={navigation}
-        practice={practice}
         eventDetails={{
           tournamentName: tournamentName,
           judgingType: "Difficulty",

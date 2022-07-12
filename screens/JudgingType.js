@@ -1,6 +1,5 @@
 // Allows judges to choose what category / type they will be judging from the routine
 // Also allows judges to select the skipper that they will be judging
-// If the user access this page from the practice mode button, it will look different
 import {
   StyleSheet,
   View,
@@ -42,7 +41,7 @@ export default function JudgingType({ navigation, route }) {
 
   const [incorrectId, setIncorrectId] = useState(false);
 
-  const { practice, tournamentId, tournamentName } = route.params;
+  const { tournamentId, tournamentName } = route.params;
 
   const fetchSkipperDetails = async () => {
     // Fetches skipper details
@@ -115,7 +114,6 @@ export default function JudgingType({ navigation, route }) {
         case "difficulty":
           console.log(selectedSkipper);
           navigation.navigate("Difficulty", {
-            practice,
             skipper: selectedSkipper,
             tournamentName,
             tournamentId,
@@ -123,7 +121,6 @@ export default function JudgingType({ navigation, route }) {
           break;
         case "athletePresentation":
           navigation.navigate("AthletePresentation", {
-            practice,
             skipper: selectedSkipper,
             tournamentName,
             tournamentId,
@@ -131,7 +128,6 @@ export default function JudgingType({ navigation, route }) {
           break;
         case "requiredElements":
           navigation.navigate("RequiredElements", {
-            practice,
             skipper: selectedSkipper,
             tournamentName,
             tournamentId,
@@ -139,7 +135,6 @@ export default function JudgingType({ navigation, route }) {
           break;
         case "routinePresentation":
           navigation.navigate("RoutinePresentation", {
-            practice,
             skipper: selectedSkipper,
             tournamentName,
             tournamentId,
@@ -157,14 +152,54 @@ export default function JudgingType({ navigation, route }) {
     setShowNames(false);
   };
 
-  if (practice === true) {
-    // This if statement changes what is rendered depending on whether is is a practice session or real session.
-    return (
+  return (
+    <TouchableWithoutFeedback onPressIn={() => Keyboard.dismiss()}>
       <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
         <BackButton />
         <View style={styles.container}>
-          {/* Title */}
+          {/* title */}
           <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
+          {/* Search Bar */}
+          <View style={styles.searchBarWrapper}>
+            <Text style={styles.pickerLabelText}>SKIPPER NAME</Text>
+            <SearchBar
+              value={search}
+              onChangeText={updateQuery}
+              placeholder="SKIPPER NAME"
+              round={true}
+              lightTheme
+              containerStyle={styles.searchBarContainerStyle}
+              inputContainerStyle={styles.searchBarInputContainerStyle}
+              placeholderTextColor={colours.placeholderText}
+              placeholderStyle={styles.pickerText}
+              inputStyle={{ ...styles.pickerText, color: colours.textDark }}
+            />
+          </View>
+          {/* List of names under search bar */}
+          {showNames && (
+            <View style={styles.flatListWrapper}>
+              <FlatList
+                data={filteredSkippersList}
+                keyExtractor={(i) => i.id}
+                extraData={search}
+                renderItem={({ item }) => {
+                  return (
+                    <TouchableOpacity
+                      onPressIn={() => onAutoFillNamePress(item)}
+                      style={{
+                        ...styles.flatListItemWrapper,
+                        flex: 1,
+                      }}
+                    >
+                      <Text
+                        style={styles.flatListText}
+                      >{`${item.firstName} ${item.lastName}`}</Text>
+                    </TouchableOpacity>
+                  );
+                }}
+              />
+            </View>
+          )}
           {/* Dropdown picker */}
           <View style={styles.pickerWrapper}>
             <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
@@ -186,102 +221,22 @@ export default function JudgingType({ navigation, route }) {
               }}
             />
           </View>
+          {/* Error Message */}
+          {incorrectId && (
+            <Text style={styles.errorLabel}>
+              THE FIELDS ARE NOT PROPERLY COMPLETED
+            </Text>
+          )}
           {/* Start Judging button */}
           <CustomButton
-            style={{ marginTop: 190 }}
+            style={{ marginTop: 170 }}
             text="START JUDGING"
-            onPressHandler={() => startJudgingPress(judgingTypeValue)}
+            onPressHandler={() => startJudgingPress()}
           />
         </View>
       </SafeAreaView>
-    );
-  } else {
-    return (
-      <TouchableWithoutFeedback onPressIn={() => Keyboard.dismiss()}>
-        <SafeAreaView style={AndroidSafeArea.AndroidSafeArea}>
-          <BackButton />
-          <View style={styles.container}>
-            {/* title */}
-            <Text style={styles.titleText}>{"JUDGING\nTYPE"}</Text>
-            {/* Search Bar */}
-            <View style={styles.searchBarWrapper}>
-              <Text style={styles.pickerLabelText}>SKIPPER NAME</Text>
-              <SearchBar
-                value={search}
-                onChangeText={updateQuery}
-                placeholder="SKIPPER NAME"
-                round={true}
-                lightTheme
-                containerStyle={styles.searchBarContainerStyle}
-                inputContainerStyle={styles.searchBarInputContainerStyle}
-                placeholderTextColor={colours.placeholderText}
-                placeholderStyle={styles.pickerText}
-                inputStyle={{ ...styles.pickerText, color: colours.textDark }}
-              />
-            </View>
-            {/* List of names under search bar */}
-            {showNames && (
-              <View style={styles.flatListWrapper}>
-                <FlatList
-                  data={filteredSkippersList}
-                  keyExtractor={(i) => i.id}
-                  extraData={search}
-                  renderItem={({ item }) => {
-                    return (
-                      <TouchableOpacity
-                        onPressIn={() => onAutoFillNamePress(item)}
-                        style={{
-                          ...styles.flatListItemWrapper,
-                          flex: 1,
-                        }}
-                      >
-                        <Text
-                          style={styles.flatListText}
-                        >{`${item.firstName} ${item.lastName}`}</Text>
-                      </TouchableOpacity>
-                    );
-                  }}
-                />
-              </View>
-            )}
-            {/* Dropdown picker */}
-            <View style={styles.pickerWrapper}>
-              <Text style={styles.pickerLabelText}>JUDGING TYPE</Text>
-              <DropDownPicker
-                style={styles.picker}
-                textStyle={styles.pickerText}
-                labelStyle={styles.pickerText}
-                open={judgingTypeOpen}
-                value={judgingTypeValue}
-                items={judgingTypeItems}
-                setOpen={setJudgingTypeOpen}
-                setValue={setJudgingTypeValue}
-                setItems={setJudgingTypeItems}
-                placeholder="SELECT JUDGING TYPE"
-                placeholderStyle={styles.pickerText}
-                dropDownContainerStyle={{
-                  backgroundColor: "#fafafa",
-                  borderWidth: 0,
-                }}
-              />
-            </View>
-            {/* Error Message */}
-            {incorrectId && (
-              <Text style={styles.errorLabel}>
-                THE FIELDS ARE NOT PROPERLY COMPLETED
-              </Text>
-            )}
-            {/* Start Judging button */}
-            <CustomButton
-              style={{ marginTop: 170 }}
-              text="START JUDGING"
-              onPressHandler={() => startJudgingPress()}
-            />
-          </View>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
-    );
-  }
+    </TouchableWithoutFeedback>
+  );
 }
 
 const styles = StyleSheet.create({

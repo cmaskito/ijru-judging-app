@@ -38,7 +38,7 @@ export default function AthletePresentation({ navigation, route }) {
   ];
 
   const [selectedButton, setSelectedButton] = useState(null);
-  const { practice, skipper, tournamentName, tournamentId } = route.params;
+  const { skipper, tournamentName, tournamentId } = route.params;
 
   // Makes an alert pop up if the user tries to leave the screen with android hardware back button
   useEffect(() => {
@@ -75,9 +75,7 @@ export default function AthletePresentation({ navigation, route }) {
         eventName="Event Name"
         bracket="Bracket"
         judgingType="Athlete Presentation"
-        skipperName={
-          practice ? "Practice" : `${skipper.firstName} ${skipper.lastName}`
-        }
+        skipperName={`${skipper.firstName} ${skipper.lastName}`}
       />
 
       {/* Red Buttons */}
@@ -85,7 +83,6 @@ export default function AthletePresentation({ navigation, route }) {
         navigation={navigation}
         counters={counters}
         setSelectedButton={setSelectedButton}
-        practice={practice}
         eventDetails={{
           tournamentName: tournamentName,
           judgingType: "Athlete Presentation",

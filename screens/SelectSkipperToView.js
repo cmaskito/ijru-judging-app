@@ -21,7 +21,7 @@ import { getDocs, collection } from "firebase/firestore";
 import dimensions from "../assets/Dimensions";
 
 export default function SelectSkpperToView({ navigation, route }) {
-  const { practice, tournamentId, tournamentName } = route.params;
+  const { tournamentId, tournamentName } = route.params;
 
   const [showNames, setShowNames] = useState(false);
   const [search, setSearch] = useState("");

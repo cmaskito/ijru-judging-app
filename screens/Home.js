@@ -10,10 +10,6 @@ export default function Home({ navigation }) {
     navigation.navigate("Connect", { tournamentId: "" });
   };
 
-  const onPressPracticeButton = () => {
-    navigation.navigate("JudgingType", { practice: true });
-  };
-
   const onPressCreateButton = () => {
     navigation.navigate("CreateTournament");
   };
@@ -30,11 +26,6 @@ export default function Home({ navigation }) {
           text="CONNECT TO COMPETITION"
           onPressHandler={onPressConnectButton}
           style={{ marginTop: 60 }}
-        />
-        <CustomButton
-          text={"PRACTICE\nJUDGING"}
-          style={{ marginTop: 60 }}
-          onPressHandler={onPressPracticeButton}
         />
       </View>
     </SafeAreaView>
