@@ -22,7 +22,6 @@ import {
   setDoc,
   doc,
 } from "firebase/firestore";
-import { Edit3 } from "react-native-feather";
 import _, { sortBy } from "underscore";
 
 export default function ScoreSummary({ route, navigation }) {
@@ -106,11 +105,6 @@ export default function ScoreSummary({ route, navigation }) {
             {/* Event Details header */}
             <View style={styles.subHeadingWrapper}>
               <Text style={styles.subHeading}>EVENT DETAILS</Text>
-              <Edit3
-                stroke={colours.textDark}
-                height={24}
-                style={{ marginLeft: 30 }}
-              />
             </View>
             {/* Event Details */}
             <View style={styles.listWrapper}>
@@ -131,11 +125,6 @@ export default function ScoreSummary({ route, navigation }) {
             {/* Scores header */}
             <View style={styles.subHeadingWrapper}>
               <Text style={styles.subHeading}>SCORES</Text>
-              <Edit3
-                stroke={colours.textDark}
-                height={24}
-                style={{ marginLeft: 30 }}
-              />
             </View>
           </View>
         }
