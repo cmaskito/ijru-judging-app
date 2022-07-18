@@ -4,8 +4,6 @@ import {
   SafeAreaView,
   Vibration,
   Alert,
-  View,
-  Text,
   BackHandler,
 } from "react-native";
 import colours from "../assets/colours";

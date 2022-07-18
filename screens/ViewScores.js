@@ -52,16 +52,26 @@ export default function ViewScores({ route }) {
       const skipperDoc = await getDoc(
         doc(db, `tournaments/${tournamentId}/skippers`, scores.skipperId)
       );
-      // Adds the skippers name to the scores object
-      scores.skipperName = `${skipperDoc.data().firstName} ${
-        skipperDoc.data().lastName
-      }`;
+      // Adds the skippers first name, last name,
+      // DOB, state, gender and club to the scores object
+      scores.firstName = skipperDoc.data().firstName;
+      scores.lastName = skipperDoc.data().lastName;
+      scores.club = skipperDoc.data().club;
+      scores.state = skipperDoc.data().state;
+      scores.gender = skipperDoc.data().gender;
+      scores.DOB = skipperDoc.data().DOB;
+
       delete scores.skipperId; // Removes the 'skipperId' field
 
       // this object defines the order of the scores object
       // so that the order of the columns on the .csv will be correct
       const objectOrder = {
-        skipperName: null,
+        firstName: null,
+        lastName: null,
+        DOB: null,
+        state: null,
+        gender: null,
+        club: null,
         difficultyScore: null,
         repetitionScore: null,
         requiredElementsScore: null,

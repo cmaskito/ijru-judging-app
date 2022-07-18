@@ -41,6 +41,7 @@ export default function Connect({ navigation, route }) {
       } else {
         // if true, move to the judge or view screen
         console.log(tournamentDoc.data());
+        setIncorrectId(false);
         navigation.navigate("JudgeOrView", tournamentDoc.data());
       }
     } catch (error) {

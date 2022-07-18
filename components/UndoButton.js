@@ -19,6 +19,9 @@ export default function UndoButton({
     let counter = null;
     console.log(selectedButton);
 
+    // If the last pressed button is "repeated skills"
+    // Then decrement the counter by the last change
+    // because this counter does not increment by 1
     if (selectedButton == "Repeated Skills") {
       counters[0][1]({
         ...counters[0][0],
@@ -32,15 +35,19 @@ export default function UndoButton({
     }
 
     counters.forEach((counter_) => {
+      // if the counter title matches the selected button
       if (counter_[0].title === selectedButton) {
         counter = counter_;
       }
     });
+    // If the selected counter has a counter > 0
     if (counter[0].counter > 0) {
+      // decrements the counter
       counter[1]({
         ...counter[0],
         counter: counter[0].counter - 1,
       });
+      // resets the last selected button
       setSelectedButton(null);
     }
   };

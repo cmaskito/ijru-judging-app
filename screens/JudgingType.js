@@ -32,14 +32,14 @@ export default function JudgingType({ navigation, route }) {
     { label: "Routine Presentation", value: "routinePresentation" },
   ]);
 
-  const [showNames, setShowNames] = useState(false);
-  const [search, setSearch] = useState("");
-  const [filteredSkippersList, setFilteredSkippersList] = useState([]);
-  const [skippersList, setSkippersList] = useState([]);
+  const [showNames, setShowNames] = useState(false); // boolean to show or hide names below search bar
+  const [search, setSearch] = useState(""); // search bar contents
+  const [filteredSkippersList, setFilteredSkippersList] = useState([]); // list of skippers filtered by searchbar query
+  const [skippersList, setSkippersList] = useState([]); // full list of skippers
 
-  const [selectedSkipper, setSelectedSkipper] = useState(null);
+  const [selectedSkipper, setSelectedSkipper] = useState(null); // skipper that is selected
 
-  const [incorrectId, setIncorrectId] = useState(false);
+  const [incorrectId, setIncorrectId] = useState(false); // boolean to indicate that the selected skipper doesn't exist
 
   const { tournamentId, tournamentName } = route.params;
 

@@ -35,7 +35,6 @@ import SelectSkipperToView from "./screens/SelectSkipperToView";
 import ViewScores from "./screens/ViewScores";
 import CreateTournament from "./screens/CreateTournament";
 import RoutinePresentation from "./screens/RoutinePresentation";
-import RepeatedSkills from "./screens/RepeatedSkills";
 
 const Stack = createStackNavigator();
 
@@ -87,7 +86,6 @@ export default function App() {
           name="RoutinePresentation"
           component={RoutinePresentation}
         />
-        <Stack.Screen name="RepeatedSkills" component={RepeatedSkills}/>
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -52,10 +52,11 @@ export default function RequiredElements({ navigation, route }) {
     })),
   ];
 
-  const [lastRepeatedSkillsChange, setLastRepeatedSkillsChange] = useState({});
+  const [lastRepeatedSkillsChange, setLastRepeatedSkillsChange] =
+    useState(null); // Last repeated skills change that occurred.
   const { skipper, tournamentName, tournamentId } = route.params; // parameters passed from the previous screen
   const [selectedButton, setSelectedButton] = useState(null);
-  const [selectRepeatedSkill, setSelectRepeatedSkill] = useState(false);
+  const [selectRepeatedSkill, setSelectRepeatedSkill] = useState(false); // boolean to check if the repeated skills button was last pressed
 
   // Makes an alert pop up if the user tries to leave the screen using the android hardware back button
   useEffect(() => {
@@ -89,6 +90,7 @@ export default function RequiredElements({ navigation, route }) {
     Vibration.vibrate(70);
     setSelectRepeatedSkill(true);
   };
+
   const onLevelButtonPress = (level) => {
     Vibration.vibrate(70);
     setSelectedButton(counters[0][0].title);
@@ -125,7 +127,6 @@ export default function RequiredElements({ navigation, route }) {
           counters={counters}
           setSelectedButton={setSelectedButton}
           navigation={navigation}
-          practice={practice}
           eventDetails={{
             tournamentName: tournamentName,
             judgingType: "Required Elements",
