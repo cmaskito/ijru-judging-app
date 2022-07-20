@@ -2,7 +2,7 @@
   "expo": {
     "name": "IJRU Judging",
     "slug": "ijru-judging-app",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/Icon.png",
     "splash": {

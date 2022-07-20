@@ -17,7 +17,6 @@ export default function UndoButton({
     if (selectedButton === null) return;
     Vibration.vibrate(150);
     let counter = null;
-    console.log(selectedButton);
 
     // If the last pressed button is "repeated skills"
     // Then decrement the counter by the last change
@@ -29,7 +28,6 @@ export default function UndoButton({
           (counters[0][0].counter - lastRepeatedSkillsChange).toFixed(2)
         ),
       });
-      console.log(counters[0][0]);
       setSelectedButton(null);
       return;
     }
