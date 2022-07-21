@@ -98,14 +98,6 @@ export default function RoutinePresentation({ navigation, route }) {
           tournamentId: tournamentId,
         }}
       />
-
-      {/* Subheadings */}
-
-      {/* <View style={styles.subheadingWrapper}>
-        <Text style={styles.subheadingText}>Entertainment</Text>
-        <Text style={styles.subheadingText}>Musicality</Text>
-      </View> */}
-
       {/* Counters */}
       {/* Uses a Grid package to layout the buttons */}
       <Grid style={styles.countersButtonsWrapper}>

@@ -43,21 +43,21 @@ exports.countScoreUpload = functions
       .then((snapshot) => {
         snapshot.forEach((doc) => {
           switch (doc.data().judgingType) {
-            case "difficulty":
-              difficultyRawScores = doc.data();
-              break;
-            case "routine presentation":
-              presentationRRawScores = doc.data();
-              break;
-            case "athlete presentation":
-              presentationARawScores = doc.data();
-              break;
-            case "required elements":
-              requiredElementsRawScores = doc.data();
-              break;
-            case "finalScores":
-              existingFinalScoresDoc = doc.id;
-              break;
+          case "difficulty":
+            difficultyRawScores = doc.data();
+            break;
+          case "routine presentation":
+            presentationRRawScores = doc.data();
+            break;
+          case "athlete presentation":
+            presentationARawScores = doc.data();
+            break;
+          case "required elements":
+            requiredElementsRawScores = doc.data();
+            break;
+          case "finalScores":
+            existingFinalScoresDoc = doc.id;
+            break;
           }
         });
         // If all the components of the final score are uploaded
@@ -73,14 +73,14 @@ exports.countScoreUpload = functions
             difficultyRawScores,
             presentationRRawScores,
             presentationARawScores,
-            requiredElementsRawScores
+            requiredElementsRawScores,
           );
           // uploads final scores as a document to the scores collection
           uploadRoutineScore(
             finalScores,
             tournamentId,
             scoreData.skipperId,
-            existingFinalScoresDoc
+            existingFinalScoresDoc,
           );
         }
       });
@@ -91,7 +91,7 @@ const uploadRoutineScore = async (
   finalScores,
   tournamentId,
   skipperId,
-  existingFinalScoresDoc
+  existingFinalScoresDoc,
 ) => {
   // creates an object with the final scores in addition to the
   // skipper id and 'judgingType' of finalScores
@@ -132,27 +132,31 @@ const calculateRoutineScore = (
   difficultyRawScores,
   presentationRRawScores,
   presentationARawScores,
-  requiredElementsRawScores
+  requiredElementsRawScores,
 ) => {
   const difficultyScore = calculateDifficultyScore(difficultyRawScores);
 
   const presentationScore = calculatePresentationScore(
     presentationARawScores,
-    presentationRRawScores
+    presentationRRawScores,
   );
 
   const deductionScore = calculateDeductionScore(
     presentationARawScores,
-    requiredElementsRawScores
+    requiredElementsRawScores,
   );
 
   const requiredElementsScore = calculateRequiredElementsScore(
-    requiredElementsRawScores
+    requiredElementsRawScores,
   );
 
   let repetitionScore = requiredElementsRawScores["Repeated Skills"];
 
-  repetitionScore = difficultyScore > repetitionScore ? repetitionScore : 0;
+  // If the repetition scores is larger than the difficulty score,
+  // set the repetition score to the difficulty score.
+  // ensures the repetition score is not larger
+  repetitionScore =
+    difficultyScore > repetitionScore ? repetitionScore : difficultyScore;
 
   const routineScore = parseFloat(
     (
@@ -160,7 +164,7 @@ const calculateRoutineScore = (
       presentationScore *
       deductionScore *
       requiredElementsScore
-    ).toFixed(2)
+    ).toFixed(2),
   );
   return {
     difficultyScore,
@@ -191,7 +195,7 @@ const calculateDifficultyScore = (difficultyRawScores) => {
 
 const calculatePresentationScore = (
   presentationARawScores,
-  presentationRRawScores
+  presentationRRawScores,
 ) => {
   // Calculates form score
   const formScore =
@@ -230,13 +234,13 @@ const calculatePresentationScore = (
 
 const calculateDeductionScore = (
   presentationARawScores,
-  requiredElementsRawScores
+  requiredElementsRawScores,
 ) => {
   // calculates average mistakes
   const averageMisses = Math.round(
     (presentationARawScores["Mistakes"] +
       requiredElementsRawScores["Mistakes"]) /
-      2
+      2,
   );
 
   // Calculates deduction score my multiplying number of
@@ -248,7 +252,7 @@ const calculateDeductionScore = (
       0.025 *
         (averageMisses +
           requiredElementsRawScores["Space Violations"] +
-          requiredElementsRawScores["Time Violations"])
+          requiredElementsRawScores["Time Violations"]),
   );
 
   return deductionScore;
@@ -258,15 +262,15 @@ const calculateRequiredElementsScore = (requiredElementsRawScores) => {
   // Finds how many elements were missing from the routine
   const missingMultiples = Math.max(
     0,
-    4 - requiredElementsRawScores["Multiples"]
+    4 - requiredElementsRawScores["Multiples"],
   );
   const missingGymPower = Math.max(
     0,
-    4 - requiredElementsRawScores["Gymnastics / Power"]
+    4 - requiredElementsRawScores["Gymnastics / Power"],
   );
   const missingWrapsReleases = Math.max(
     0,
-    4 - requiredElementsRawScores["Wraps / Releases"]
+    4 - requiredElementsRawScores["Wraps / Releases"],
   );
   // For each missing element, subtract 0.025 by 1
   const requiredElementsScore =

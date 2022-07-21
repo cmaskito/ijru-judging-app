@@ -86,16 +86,20 @@ export default function RequiredElements({ navigation, route }) {
     return () => backHandler.remove();
   }, []);
 
+  // Triggers when the repeated skills button is pressed
   const onRepeatedSkillsPress = () => {
     Vibration.vibrate(70);
     setSelectRepeatedSkill(true);
   };
 
+  // Triggers when one of the level buttons on the repeated skils screen is pressed
   const onLevelButtonPress = (level) => {
     Vibration.vibrate(70);
-    setSelectedButton(counters[0][0].title);
-    const repeatedSkillsScore = parseFloat((0.1 * 1.8 ** level).toFixed(2));
-    setLastRepeatedSkillsChange(repeatedSkillsScore);
+    setSelectedButton(counters[0][0].title); // sets the repeated skills button the the last selected button
+    const repeatedSkillsScore = parseFloat((0.1 * 1.8 ** level).toFixed(2)); // calculates score of the level of the repeated skill
+    setLastRepeatedSkillsChange(repeatedSkillsScore); // records last change so it can be undone if needed
+
+    //
     setRepeatedSkills({
       title: "Repeated Skills",
       counter: parseFloat(
